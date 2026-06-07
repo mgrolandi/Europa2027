@@ -108,9 +108,28 @@
       .timeline-track{min-width:500px}
       .transport-grid,.city-grid{grid-template-columns:1fr}
     }
+    #auth-overlay{position:fixed;inset:0;background:var(--paper);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
+    #auth-overlay.hidden{display:none}
+    .auth-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:48px 36px;width:100%;max-width:360px;text-align:center}
+    .auth-box h2{font-family:'Playfair Display',serif;font-size:30px;margin-bottom:6px}
+    .auth-box p{font-size:12px;color:var(--muted);margin-bottom:28px;letter-spacing:.04em}
+    .auth-input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:16px;background:var(--paper);color:var(--ink);outline:none;text-align:center;letter-spacing:.14em}
+    .auth-input:focus{border-color:var(--gold)}
+    .auth-btn{margin-top:12px;width:100%;padding:13px;background:var(--ink);color:var(--paper);border:none;border-radius:4px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.08em;cursor:pointer}
+    .auth-btn:hover{background:#2d2d2a}
+    .auth-error{margin-top:12px;font-size:12px;color:var(--red);min-height:18px}
   </style>
 </head>
 <body>
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h2>Europa 2027</h2>
+    <p>Ingresá la clave del grupo</p>
+    <input class="auth-input" id="auth-input" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="auth-btn" id="auth-btn">Entrar →</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
 
 <nav class="city-nav">
   <a href="index.html" class="nav-brand">Europa 2027</a>
@@ -503,5 +522,22 @@
 
 </div>
 
+<script>
+(function(){
+  var KEY='e27_auth',PASS='Europa2027';
+  var overlay=document.getElementById('auth-overlay');
+  var input=document.getElementById('auth-input');
+  var btn=document.getElementById('auth-btn');
+  var err=document.getElementById('auth-error');
+  if(sessionStorage.getItem(KEY)==='ok'){overlay.classList.add('hidden');return;}
+  function tryAuth(){
+    if(input.value===PASS){sessionStorage.setItem(KEY,'ok');overlay.classList.add('hidden');}
+    else{err.textContent='Clave incorrecta — intentá de nuevo';input.value='';input.focus();}
+  }
+  btn.addEventListener('click',tryAuth);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')tryAuth();});
+  input.focus();
+})();
+</script>
 </body>
 </html>
