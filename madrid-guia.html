@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Madrid — Europa 2027</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    :root{--ink:#1a1a18;--paper:#f5f0e8;--cream:#ede7d9;--red:#c0392b;--gold:#b8860b;--muted:#7a7468;--border:#c8bfaa}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--paper);color:var(--ink);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6}
+    h1,h2,h3,h4{font-family:'Playfair Display',serif}
+    .city-nav{background:var(--ink);padding:10px 20px;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+    .city-nav a{color:var(--paper);text-decoration:none;padding:5px 14px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:background .15s}
+    .city-nav a:hover{background:rgba(255,255,255,.12)}
+    .city-nav a.active{background:var(--gold);color:var(--ink);font-weight:500}
+    .nav-brand{font-family:'Playfair Display',serif!important;font-size:15px;font-weight:700;color:var(--paper);margin-right:8px;text-decoration:none}
+    .page{max-width:960px;margin:0 auto;padding:0 24px 80px}
+    .city-header{padding:52px 0 36px;border-bottom:2px solid var(--border);margin-bottom:40px}
+    .city-header .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .city-header h1{font-size:52px;font-weight:700;line-height:1.05;margin-bottom:10px}
+    .city-header .dates{font-size:13px;color:var(--muted)}
+    .section{margin-bottom:52px}
+    .section-title{font-size:24px;font-weight:600;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .section-title small{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.06em}
+    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .hotel-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:20px}
+    .hotel-card .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px}
+    .hotel-card h3{font-size:15px;margin-bottom:4px}
+    .hotel-card .hotel-addr{font-size:12px;color:var(--muted);margin-bottom:14px}
+    .hotel-card .hotel-meta{font-size:12px;color:var(--muted);line-height:1.9}
+    .hotel-card .hotel-meta strong{color:var(--ink)}
+    .hotel-card .hotel-tip{margin-top:14px;padding:10px 14px;background:var(--cream);border-left:3px solid var(--gold);font-size:12px;line-height:1.5}
+    .hotel-card a{color:var(--red);font-size:12px;text-decoration:none}
+    .hotel-card a:hover{text-decoration:underline}
+    .pending-hotel{background:var(--cream);border:1px dashed var(--border);border-radius:6px;padding:20px;color:var(--muted);font-size:13px;font-style:italic}
+    .pending-hotel .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--muted);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px;font-style:normal}
+    .transport-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .transport-list li{padding:12px 16px;background:var(--cream);border-left:3px solid var(--gold);font-size:13px;line-height:1.5}
+    .pend-grid{display:flex;flex-direction:column;gap:8px}
+    .pend-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:4px}
+    .pend-item.urgente{border-left:4px solid var(--red)}
+    .pend-item.proximo{border-left:4px solid var(--gold)}
+    .pend-item.ok{border-left:4px solid #27ae60}
+    .pend-circle{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px}
+    .pend-circle.done{background:#27ae60;border-color:#27ae60}
+    .pend-name{font-size:13px;font-weight:500;margin-bottom:4px}
+    .pend-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:3px;margin-right:4px}
+    .pend-badge.urgente{background:#fde8e8;color:var(--red)}
+    .pend-badge.proximo{background:#fff3cd;color:#6b4c00}
+    .pend-badge.ok{background:#d4edda;color:#1e5c2e}
+    .pend-obs{font-size:11px;color:var(--muted);margin-top:4px}
+    .places-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+    .place-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:18px;display:flex;flex-direction:column}
+    .place-zona{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+    .place-card h3{font-size:16px;margin-bottom:8px}
+    .place-desc{font-size:12px;line-height:1.65;color:#383834;margin-bottom:12px;flex:1}
+    .place-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .price-free{background:#d4edda;color:#1e5c2e;border:1px solid #a3d4ac;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-paid{background:#fde8e8;color:#7a1f1f;border:1px solid #f0aaaa;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-reservation{background:#fff3cd;color:#6b4c00;border:1px solid #e6cc80;padding:2px 8px;border-radius:3px;font-size:11px}
+    .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
+    a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
+    a.maps-link:hover{text-decoration:underline}
+    .no-pendientes{padding:16px 20px;background:var(--cream);border:1px solid var(--border);border-radius:4px;font-size:13px;color:var(--muted);font-style:italic}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav class="city-nav">
+  <a href="index.html" class="nav-brand">Europa 2027</a>
+  <a href="londres-guia.html">Londres</a>
+  <a href="paris-guia.html">París</a>
+  <a href="bruselas-guia.html">Bruselas</a>
+  <a href="roma-guia.html">Roma</a>
+  <a href="madrid-guia.html" class="active">Madrid</a>
+</nav>
+
+<div class="page">
+
+  <div class="city-header">
+    <div class="label">Europa 2027 — Etapa 05</div>
+    <h1>Madrid</h1>
+    <div class="dates">11 — 15 feb 2027 &nbsp;·&nbsp; 4 noches &nbsp;·&nbsp; España</div>
+  </div>
+
+  <!-- ALOJAMIENTO -->
+  <div class="section">
+    <h2 class="section-title">Alojamiento <small>CARRETAS APARTMENTS MADRID</small></h2>
+    <div class="hotel-grid">
+
+      <div class="hotel-card">
+        <div class="family-badge">Barrera</div>
+        <h3>Carretas Apartments Madrid</h3>
+        <div class="hotel-addr">
+          <a href="https://maps.google.com/?q=Carretas+8+Madrid+28012" target="_blank" rel="noopener">Carretas 8, 28012 Madrid</a>
+        </div>
+        <div class="hotel-meta">
+          <div><strong>Confirmacion:</strong> 73408485414202</div>
+          <div><strong>Apartamento:</strong> Apt 301</div>
+          <div><strong>Total:</strong> EUR 585,00</div>
+        </div>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Nader</div>
+        <h3>Carretas Apartments Madrid</h3>
+        <div class="hotel-addr">
+          <a href="https://maps.google.com/?q=Carretas+8+Madrid+28012" target="_blank" rel="noopener">Carretas 8, 28012 Madrid</a>
+        </div>
+        <div class="hotel-meta">
+          <div><strong>Confirmacion:</strong> 73406500259432</div>
+          <div><strong>Apartamento:</strong> Apt 101</div>
+          <div><strong>Total:</strong> EUR 585,00</div>
+        </div>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Ahmad</div>
+        <h3>Carretas Apartments Madrid</h3>
+        <div class="hotel-addr">
+          <a href="https://maps.google.com/?q=Carretas+8+Madrid+28012" target="_blank" rel="noopener">Carretas 8, 28012 Madrid</a>
+        </div>
+        <div class="hotel-meta">
+          <div><strong>Confirmacion:</strong> 73408794452079</div>
+          <div><strong>Apartamento:</strong> Apt 201</div>
+          <div><strong>Total:</strong> EUR 585,00</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:16px">
+      <ul class="transport-list">
+        <li><strong>Traslado aeropuerto:</strong> Metro Linea 8 (rosa) hasta Nuevos Ministerios + transbordo. O taxi directo ~30 min.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TRANSPORTE -->
+  <div class="section">
+    <h2 class="section-title">Transporte en la ciudad</h2>
+    <ul class="transport-list">
+      <li>Metro Linea 8 desde aeropuerto requiere suplemento aeropuerto (~EUR 3).</li>
+      <li>Tarjeta Multi de 10 viajes conviene para el grupo.</li>
+    </ul>
+  </div>
+
+  <!-- PENDIENTES -->
+  <div class="section">
+    <h2 class="section-title">Pendientes <small>ENTRADAS & RESERVAS</small></h2>
+    <div class="no-pendientes">Sin pendientes de entradas para esta ciudad.</div>
+  </div>
+
+  <!-- MIRADORES -->
+  <div class="section">
+    <h2 class="section-title">Miradores <small>VISTAS DE LA CAPITAL</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro</div>
+        <h3>Circulo de Bellas Artes — Rooftop</h3>
+        <p class="place-desc">La mejor terraza de Madrid. Vista 360 sobre los tejados y la Gran Via. Con bar y ambiente cultural.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 5 (incluye consumicion)</span>
+        </div>
+        <div class="place-tip">Al atardecer es magico — la Gran Via iluminada es espectacular.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Circulo+de+Bellas+Artes+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Gran Vía</div>
+        <h3>El Corte Ingles Callao — Terraza</h3>
+        <p class="place-desc">Terraza del 9no piso con vista directa sobre la Gran Via y el skyline de Madrid. Acceso libre.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis (consumicion opcional)</span>
+        </div>
+        <div class="place-tip">El restaurante del techo tiene las mejores vistas del centro — abre al mediodia.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=El+Corte+Ingles+Callao+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Retiro</div>
+        <h3>Parque del Retiro</h3>
+        <p class="place-desc">El gran pulmon verde de Madrid. 350 hectareas con palacio de cristal, lago con barcas y jardines.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">El Palacio de Cristal tiene exposiciones gratuitas. Las barcas estan disponibles en febrero.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Parque+del+Retiro+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BARES & TAPAS -->
+  <div class="section">
+    <h2 class="section-title">Bares & Tapas <small>LA CULTURA DEL VERMUT</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro — Lavapiés</div>
+        <h3>Salmon Guru</h3>
+        <p class="place-desc">Elegido uno de los 50 mejores bares del mundo. Cocteles de autor con tecnica de vanguardia.</p>
+        <div class="place-badges">
+          <span class="price-paid">Cocteles ~EUR 14–20</span>
+          <span class="price-reservation">Reservar</span>
+        </div>
+        <div class="place-tip">Reservar para fin de semana — entre semana suele haber lugar.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Salmon+Guru+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro — Sol</div>
+        <h3>Bodega de los Secretos</h3>
+        <p class="place-desc">Cocteleria y restaurante en bodega medieval del siglo XIII. 800 anos de historia bajo Madrid.</p>
+        <div class="place-badges">
+          <span class="price-paid">Cocteles ~EUR 12–16</span>
+          <span class="price-reservation">Reservar</span>
+        </div>
+        <div class="place-tip">El espacio subterraneo es unico — vale la pena aunque solo sea a tomar algo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Bodega+de+los+Secretos+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro — Sol</div>
+        <h3>Mercado de San Miguel</h3>
+        <p class="place-desc">Mercado gourmet del s.XX en estructura de hierro. Tapas, ostras, vinos y vermut entre locales y turistas.</p>
+        <div class="place-badges">
+          <span class="price-paid">Tapa ~EUR 2–5</span>
+          <span class="price-paid">Vino ~EUR 3–5</span>
+        </div>
+        <div class="place-tip">El mejor vermut del mercado: Bodegas Marin. Ir entre 12 y 14hs.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Mercado+de+San+Miguel+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Chueca</div>
+        <h3>El Tigre</h3>
+        <p class="place-desc">Bar legendario de tapas abundantes y gratuitas con cada cana. Cerveza y plato de jamon incluido.</p>
+        <div class="place-badges">
+          <span class="price-paid">Cerveza ~EUR 3</span>
+          <span class="price-free">Tapa gratis</span>
+        </div>
+        <div class="place-tip">No es glamoroso pero las tapas son abundantes y muy economico.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=El+Tigre+Madrid+Chueca" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Lavapiés</div>
+        <h3>Sala Equis</h3>
+        <p class="place-desc">Cine-bar alternativo en patio interior del s.XIX. Vermut los sabados, proyecciones de cine independiente.</p>
+        <div class="place-badges">
+          <span class="price-paid">Consumicion ~EUR 5–8</span>
+        </div>
+        <div class="place-tip">El patio descubierto es especial incluso en invierno con braseros.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Sala+Equis+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LUGARES ICONICOS -->
+  <div class="section">
+    <h2 class="section-title">Lugares Icónicos <small>LO ESENCIAL DE MADRID</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Paseo del Arte</div>
+        <h3>Museo del Prado</h3>
+        <p class="place-desc">Uno de los museos mas importantes del mundo. Velazquez (Las Meninas), Goya (Los Fusilamientos), El Greco. 8000 obras.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 15 adulto</span>
+          <span class="price-free">Gratis -18</span>
+          <span class="price-free">Gratis ultimas 2hs</span>
+        </div>
+        <div class="place-tip">Gratis ultimas 2 horas pero con cola larga. Dedicarle minimo 3 horas.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Museo+del+Prado+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Paseo del Arte</div>
+        <h3>Museo Reina Sofia</h3>
+        <p class="place-desc">El Guernica de Picasso. Dali, Miro y las vanguardias del siglo XX.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 12 adulto</span>
+          <span class="price-free">Gratis -18</span>
+          <span class="price-free">Gratis sabados 19hs</span>
+        </div>
+        <div class="place-tip">El Guernica esta en la segunda planta — sin perderlo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Museo+Reina+Sofia+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">La Latina / Lavapiés</div>
+        <h3>El Rastro</h3>
+        <p class="place-desc">El mercadillo mas famoso de Espana, desde el s.XVIII. 3500 puestos de antiguedades, ropa vintage, viniles.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Solo domingos y festivos — 14 feb es domingo. Ir antes de las 11hs.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=El+Rastro+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro histórico</div>
+        <h3>Barrio de las Letras</h3>
+        <p class="place-desc">Barrio del Siglo de Oro. Versos de Lope de Vega y Quevedo grabados en las calles. Cervantes murio a una cuadra.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">La Calle Huertas tiene los mejores bares del barrio y mucho ambiente.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Barrio+de+las+Letras+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Ópera</div>
+        <h3>Palacio Real</h3>
+        <p class="place-desc">El palacio real mas grande de Europa Occidental. 3418 habitaciones, armeria real, jardines de Sabatini.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 14 adulto</span>
+          <span class="price-paid">EUR 7 nino</span>
+        </div>
+        <div class="place-tip">El cambio de guardia es el primer miercoles del mes — febrero tiene uno.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Palacio+Real+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Chueca</div>
+        <h3>Mercado de San Anton</h3>
+        <p class="place-desc">Mercado gourmet de tres plantas en el barrio de Chueca. Productos gourmet, restaurantes y terraza en el techo.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis entrada</span>
+        </div>
+        <div class="place-tip">La terraza del techo tiene vistas al barrio y es mas tranquila que San Miguel.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Mercado+San+Anton+Chueca+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MUSICA & SHOWS -->
+  <div class="section">
+    <h2 class="section-title">Música & Shows <small>AGENDA CULTURAL</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro — Gran Vía</div>
+        <h3>Sala El Sol</h3>
+        <p class="place-desc">Sala emblematica de La Movida Madrilena. Abierta desde 1979, aqui se forjo el rock espanol. Indie, pop, electronica.</p>
+        <div class="place-badges">
+          <span class="price-paid">Entrada ~EUR 8–15</span>
+        </div>
+        <div class="place-tip">Revisar agenda en febrero — es una de las salas mas historicas de Madrid.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Sala+El+Sol+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Ópera</div>
+        <h3>Teatro Real</h3>
+        <p class="place-desc">La opera mas importante de Espana. Programa de primer nivel mundial con directores y cantantes internacionales.</p>
+        <div class="place-badges">
+          <span class="price-paid">Desde EUR 10 (paraiso)</span>
+          <span class="price-reservation">Reservar</span>
+        </div>
+        <div class="place-tip">Las entradas de paraiso (EUR 10–20) son la mejor relacion calidad-precio de Madrid.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Teatro+Real+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Almagro</div>
+        <h3>Sala Clamores</h3>
+        <p class="place-desc">El club de jazz de referencia en Madrid desde 1978. Ambiente intimo, buena acustica, programa constante.</p>
+        <div class="place-badges">
+          <span class="price-paid">Entrada ~EUR 8–12</span>
+        </div>
+        <div class="place-tip">Los martes son los conciertos mas economicos con musicos residentes.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Sala+Clamores+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro — Sol</div>
+        <h3>Joy Eslava</h3>
+        <p class="place-desc">Discoteca en el teatro historico Eslava del siglo XIX. Tres pisos, electronica y pop espanol, mix de edades.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 15–20 (incluye consumicion)</span>
+        </div>
+        <div class="place-tip">El edificio neoclasico con la pista de baile abajo es un lugar unico.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Joy+Eslava+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
