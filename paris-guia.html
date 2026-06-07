@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>París — Europa 2027</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a1a18">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    :root{--ink:#1a1a18;--paper:#f5f0e8;--cream:#ede7d9;--red:#c0392b;--gold:#b8860b;--muted:#7a7468;--border:#c8bfaa}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--paper);color:var(--ink);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6}
+    h1,h2,h3,h4{font-family:'Playfair Display',serif}
+    .city-nav{background:var(--ink);padding:10px 20px;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+    .city-nav a{color:var(--paper);text-decoration:none;padding:5px 14px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:background .15s}
+    .city-nav a:hover{background:rgba(255,255,255,.12)}
+    .city-nav a.active{background:var(--gold);color:var(--ink);font-weight:500}
+    .nav-brand{font-family:'Playfair Display',serif!important;font-size:15px;font-weight:700;color:var(--paper);margin-right:8px;text-decoration:none}
+    .page{max-width:960px;margin:0 auto;padding:0 24px 80px}
+    .city-header{padding:52px 0 36px;border-bottom:2px solid var(--border);margin-bottom:40px}
+    .city-header .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .city-header h1{font-size:52px;font-weight:700;line-height:1.05;margin-bottom:10px}
+    .city-header .dates{font-size:13px;color:var(--muted)}
+    .section{margin-bottom:52px}
+    .section-title{font-size:24px;font-weight:600;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .section-title small{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.06em}
+    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .hotel-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:20px}
+    .hotel-card .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px}
+    .hotel-card h3{font-size:15px;margin-bottom:4px}
+    .hotel-card .hotel-addr{font-size:12px;color:var(--muted);margin-bottom:14px}
+    .hotel-card .hotel-meta{font-size:12px;color:var(--muted);line-height:1.9}
+    .hotel-card .hotel-meta strong{color:var(--ink)}
+    .hotel-card .hotel-tip{margin-top:14px;padding:10px 14px;background:var(--cream);border-left:3px solid var(--gold);font-size:12px;line-height:1.5}
+    .hotel-card a{color:var(--red);font-size:12px;text-decoration:none}
+    .hotel-card a:hover{text-decoration:underline}
+    .pending-hotel{background:var(--cream);border:1px dashed var(--border);border-radius:6px;padding:20px;color:var(--muted);font-size:13px;font-style:italic}
+    .pending-hotel .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--muted);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px;font-style:normal}
+    .info-box{padding:16px 20px;background:var(--cream);border-left:4px solid var(--gold);border-radius:0 6px 6px 0;font-size:13px;line-height:1.6;margin-bottom:20px}
+    .info-box strong{color:var(--ink)}
+    .transport-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .transport-list li{padding:12px 16px;background:var(--cream);border-left:3px solid var(--gold);font-size:13px;line-height:1.5}
+    .pend-grid{display:flex;flex-direction:column;gap:8px}
+    .pend-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:4px}
+    .pend-item.urgente{border-left:4px solid var(--red)}
+    .pend-item.proximo{border-left:4px solid var(--gold)}
+    .pend-item.ok{border-left:4px solid #27ae60}
+    .pend-circle{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px}
+    .pend-circle.done{background:#27ae60;border-color:#27ae60}
+    .pend-name{font-size:13px;font-weight:500;margin-bottom:4px}
+    .pend-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:3px;margin-right:4px}
+    .pend-badge.urgente{background:#fde8e8;color:var(--red)}
+    .pend-badge.proximo{background:#fff3cd;color:#6b4c00}
+    .pend-badge.ok{background:#d4edda;color:#1e5c2e}
+    .pend-obs{font-size:11px;color:var(--muted);margin-top:4px}
+    .places-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+    .place-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:18px;display:flex;flex-direction:column}
+    .place-zona{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+    .place-card h3{font-size:16px;margin-bottom:8px}
+    .place-desc{font-size:12px;line-height:1.65;color:#383834;margin-bottom:12px;flex:1}
+    .place-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .price-free{background:#d4edda;color:#1e5c2e;border:1px solid #a3d4ac;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-paid{background:#fde8e8;color:#7a1f1f;border:1px solid #f0aaaa;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-reservation{background:#fff3cd;color:#6b4c00;border:1px solid #e6cc80;padding:2px 8px;border-radius:3px;font-size:11px}
+    .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
+    a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
+    a.maps-link:hover{text-decoration:underline}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    #auth-overlay{position:fixed;inset:0;background:var(--paper);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
+    #auth-overlay.hidden{display:none}
+    .auth-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:48px 36px;width:100%;max-width:360px;text-align:center}
+    .auth-box h2{font-family:'Playfair Display',serif;font-size:30px;margin-bottom:6px}
+    .auth-box p{font-size:12px;color:var(--muted);margin-bottom:28px;letter-spacing:.04em}
+    .auth-input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:16px;background:var(--paper);color:var(--ink);outline:none;text-align:center;letter-spacing:.14em}
+    .auth-input:focus{border-color:var(--gold)}
+    .auth-btn{margin-top:12px;width:100%;padding:13px;background:var(--ink);color:var(--paper);border:none;border-radius:4px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.08em;cursor:pointer}
+    .auth-btn:hover{background:#2d2d2a}
+    .auth-error{margin-top:12px;font-size:12px;color:var(--red);min-height:18px}
+  </style>
+</head>
+<body>
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h2>Europa 2027</h2>
+    <p>Ingresá la clave del grupo</p>
+    <input class="auth-input" id="auth-input" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="auth-btn" id="auth-btn">Entrar →</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<nav class="city-nav">
+  <a href="index.html" class="nav-brand">Europa 2027</a>
+  <a href="londres-guia.html">Londres</a>
+  <a href="paris-guia.html" class="active">París</a>
+  <a href="bruselas-guia.html">Bruselas</a>
+  <a href="roma-guia.html">Roma</a>
+  <a href="madrid-guia.html">Madrid</a>
+</nav>
+
+<div class="page">
+
+  <div class="city-header">
+    <div class="label">Europa 2027 · Etapa 2 de 5</div>
+    <h1>París</h1>
+    <div class="dates">02 — 06 feb 2027 · 4 noches · Alojamiento separado por familia</div>
+  </div>
+
+  <!-- ALOJAMIENTO -->
+  <div class="section">
+    <div class="section-title">Alojamiento <small>separado por familia</small></div>
+    <div class="hotel-grid">
+
+      <div class="pending-hotel">
+        <div class="family-badge">Familia Barrera</div>
+        <div style="margin-top:4px">Alojamiento por confirmar.<br>Sin nombre, dirección ni número de reserva aún.</div>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Familia Nader</div>
+        <h3>Sweett - Pavillon Opera</h3>
+        <div class="hotel-addr">7 Rue Monsigny, 75002 Paris</div>
+        <div class="hotel-meta">
+          <strong>Check-in:</strong> 02 feb 2027<br>
+          <strong>Check-out:</strong> 06 feb 2027<br>
+          <strong>Confirmación:</strong> 996116490<br>
+          <strong>Precio:</strong> EUR 1265.56
+        </div>
+        <div style="margin-top:12px">
+          <a href="https://maps.google.com/?q=7+Rue+Monsigny+Paris+75002" target="_blank" rel="noopener">Ver en Google Maps →</a>
+        </div>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Familia Ahmad</div>
+        <h3>Sublime Apartment Louvre Concorde Museum</h3>
+        <div class="hotel-addr">Rue de l'Oratoire 6, 75001 Paris</div>
+        <div class="hotel-meta">
+          <strong>Check-in:</strong> 02 feb 2027<br>
+          <strong>Check-out:</strong> 06 feb 2027<br>
+          <strong>Confirmación:</strong> 73405723297848<br>
+          <strong>Precio:</strong> EUR 944.33
+        </div>
+        <div style="margin-top:12px">
+          <a href="https://maps.google.com/?q=Rue+de+l+Oratoire+6+Paris+75001" target="_blank" rel="noopener">Ver en Google Maps →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AEROPUERTO -->
+  <div class="section">
+    <div class="section-title">Cómo llegar desde el aeropuerto <small>CDG → centro</small></div>
+    <div class="info-box">
+      Desde <strong>CDG</strong> tomar <strong>RER B</strong> directo hasta el centro de París (Châtelet-Les Halles, Saint-Michel, entre otras).<br>
+      <strong>Marcar al ENTRAR y al SALIR</strong> — sin salida se cobra tarifa máxima.<br>
+      Duración aprox. 30-40 min hasta el centro. Frecuencia cada 10-15 min.
+    </div>
+  </div>
+
+  <!-- TRANSPORTE -->
+  <div class="section">
+    <div class="section-title">Transporte en la ciudad</div>
+    <ul class="transport-list">
+      <li><strong>Marcar al ENTRAR y al SALIR</strong> en metro y RER — sin salida se cobra tarifa máxima en RER.</li>
+      <li><strong>Navigo Découverte semanal</strong> conviene si se usa mucho el transporte. Cubre metro, RER, bus dentro de París.</li>
+      <li><strong>RER B desde CDG</strong> directo al centro. Mismo billete que el metro dentro de París (zonas 1-2) no sirve para CDG — necesita ticket especial.</li>
+    </ul>
+  </div>
+
+  <!-- PENDIENTES PARIS -->
+  <div class="section">
+    <div class="section-title">Pendientes — París</div>
+    <div class="pend-grid">
+
+      <div class="pend-item ok">
+        <div class="pend-circle"></div>
+        <div>
+          <div class="pend-name">Louvre — Reserva de entradas</div>
+          <span class="pend-badge ok">Antes 02/12/2026</span>
+          <div class="pend-obs">EUR 22 adulto / Gratis menores de 18. Reservar obligatorio — colas de horas sin reserva.</div>
+        </div>
+      </div>
+
+      <div class="pend-item ok">
+        <div class="pend-circle"></div>
+        <div>
+          <div class="pend-name">Torre Eiffel — Reserva de entradas</div>
+          <span class="pend-badge ok">Antes 02/12/2026</span>
+          <div class="pend-obs">~EUR 29 adulto / EUR 7.50 niño. Sold out habitual — reservar con meses de anticipación.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MIRADORES -->
+  <div class="section">
+    <div class="section-title">Miradores <small>4 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Champ de Mars</div>
+        <h3>Torre Eiffel</h3>
+        <div class="place-desc">El icono de París. Tres pisos con vistas legendarias. 330m de altura, construida en 1889 para la Exposición Universal.</div>
+        <div class="place-badges">
+          <span class="price-paid">~EUR 29 adulto / EUR 7.50 niño</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar con meses de anticipación — sold out habitual.</div>
+        <a href="https://maps.google.com/?q=Tour+Eiffel+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Champs-Élysées</div>
+        <h3>Arc de Triomphe — Terraza</h3>
+        <div class="place-desc">Subir al arco (284 escalones) para vista sobre los 12 bulevares que irradian desde la Place de l'Étoile.</div>
+        <div class="place-badges">
+          <span class="price-paid">~EUR 13 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+        </div>
+        <div class="place-tip">Al atardecer los bulevares iluminados son impresionantes.</div>
+        <a href="https://maps.google.com/?q=Arc+de+Triomphe+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Montmartre</div>
+        <h3>Sacré-Cœur — Butte Montmartre</h3>
+        <div class="place-desc">La basílica blanca sobre la colina más alta de París. Vista 30km en día claro. La escalinata es parte del paisaje.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Ir temprano para evitar el gentío en las escaleras.</div>
+        <a href="https://maps.google.com/?q=Sacre+Coeur+Montmartre+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Beaubourg</div>
+        <h3>Centre Pompidou — Terraza</h3>
+        <div class="place-desc">Museo de arte contemporáneo con terraza en el techo. Vista sobre los tejados del Marais y Notre-Dame.</div>
+        <div class="place-badges">
+          <span class="price-paid">~EUR 15 entrada museo (incluye terraza)</span>
+        </div>
+        <div class="place-tip">El edificio de colores primarios en sí es arquitectura icónica.</div>
+        <a href="https://maps.google.com/?q=Centre+Pompidou+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BARES & CAFES -->
+  <div class="section">
+    <div class="section-title">Bares &amp; Cafés <small>4 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Saint-Germain-des-Prés</div>
+        <h3>Café de Flore</h3>
+        <div class="place-desc">Café histórico de 1887. Sartre y Simone de Beauvoir escribían aquí. El croissant y café con leche más fotografiado de París.</div>
+        <div class="place-badges">
+          <span class="price-free">Café ~EUR 5</span>
+          <span class="price-paid">Plato ~EUR 18-25</span>
+        </div>
+        <div class="place-tip">Ir a desayunar, no de noche — la magia es el ambiente diurno.</div>
+        <a href="https://maps.google.com/?q=Cafe+de+Flore+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Opéra</div>
+        <h3>Harry's New York Bar</h3>
+        <div class="place-desc">Fundado en 1911. Aquí nacieron el Bloody Mary y el club sandwich. Frecuentado por Hemingway y Gershwin.</div>
+        <div class="place-badges">
+          <span class="price-paid">Cócteles ~EUR 16-22</span>
+        </div>
+        <div class="place-tip">Pedir el Bloody Mary original — la receta es de este bar.</div>
+        <a href="https://maps.google.com/?q=Harrys+New+York+Bar+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Marais</div>
+        <h3>Le Mary Celeste</h3>
+        <div class="place-desc">Cocktail bar de culto en el corazón del Marais. Ostras frescas y mezcales de autor.</div>
+        <div class="place-badges">
+          <span class="price-paid">Cócteles ~EUR 14-18</span>
+        </div>
+        <div class="place-tip">Llegar antes de las 20hs o hay fila.</div>
+        <a href="https://maps.google.com/?q=Le+Mary+Celeste+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Quartier Latin</div>
+        <h3>Caveau de la Huchette</h3>
+        <div class="place-desc">Jazz y swing en vivo en bodega medieval del s.XIII desde 1946. El club más antiguo de París.</div>
+        <div class="place-badges">
+          <span class="price-paid">Entrada ~EUR 15</span>
+        </div>
+        <div class="place-tip">Hay que bailar — los parisinos van a bailar swing, no solo a escuchar.</div>
+        <a href="https://maps.google.com/?q=Caveau+de+la+Huchette+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LUGARES ICONICOS -->
+  <div class="section">
+    <div class="section-title">Lugares Icónicos <small>5 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">1er arrondissement</div>
+        <h3>Musée du Louvre</h3>
+        <div class="place-desc">El museo más visitado del mundo. Mona Lisa, Venus de Milo, código Hammurabi. 35.000 obras.</div>
+        <div class="place-badges">
+          <span class="price-paid">EUR 22 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar obligatorio — colas de horas sin reserva. Gratis menores de 18.</div>
+        <a href="https://maps.google.com/?q=Louvre+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Île de la Cité</div>
+        <h3>Notre-Dame de Paris</h3>
+        <div class="place-desc">Catedral gótica del siglo XII, reabierta en diciembre 2024 tras el incendio de 2019. Completamente restaurada.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis exterior</span>
+          <span class="price-reservation">Interior con reserva</span>
+        </div>
+        <div class="place-tip">Reservar online — afluencia masiva tras la reapertura.</div>
+        <a href="https://maps.google.com/?q=Notre-Dame+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">7ème arrondissement</div>
+        <h3>Musée d'Orsay</h3>
+        <div class="place-desc">La colección impresionista más importante del mundo en una antigua estación de tren. Monet, Renoir, Van Gogh, Degas.</div>
+        <div class="place-badges">
+          <span class="price-paid">EUR 16 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Dedicarle mínimo 3 horas. Los Van Gogh en el 5to piso son una revelación.</div>
+        <a href="https://maps.google.com/?q=Musee+Orsay+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">3ème y 4ème arrondissement</div>
+        <h3>Le Marais</h3>
+        <div class="place-desc">Barrio histórico judío con galerías, tiendas vintage, la Place des Vosges (la plaza más antigua de París) y el mejor falafel de Europa.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">El falafel de L'As du Fallafel en Rue des Rosiers vale la visita.</div>
+        <a href="https://maps.google.com/?q=Le+Marais+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Versailles · 30 min en RER</div>
+        <h3>Versailles</h3>
+        <div class="place-desc">El palacio barroco de Luis XIV y los jardines de Le Nôtre. 800 hectáreas, 1400 fuentes. El mayor palacio de Europa.</div>
+        <div class="place-badges">
+          <span class="price-paid">EUR 21 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Salir temprano — tour de medio día mínimo. Jardines incluidos.</div>
+        <a href="https://maps.google.com/?q=Chateau+de+Versailles" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MUSICA & SHOWS -->
+  <div class="section">
+    <div class="section-title">Música &amp; Shows <small>4 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Pigalle</div>
+        <h3>Moulin Rouge</h3>
+        <div class="place-desc">El cabaret más famoso del mundo desde 1889. Cancán, plumas y lentejuelas. Espectáculo Féerie con 60 artistas.</div>
+        <div class="place-badges">
+          <span class="price-paid">Desde EUR 115 (solo show)</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar con meses de anticipación. La cena es cara y prescindible.</div>
+        <a href="https://maps.google.com/?q=Moulin+Rouge+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">9ème arrondissement</div>
+        <h3>Olympia</h3>
+        <div class="place-desc">La sala de conciertos más legendaria de Francia. Aquí debutaron Édith Piaf, Jacques Brel y Los Beatles en Europa.</div>
+        <div class="place-badges">
+          <span class="price-paid">Varía según artista</span>
+        </div>
+        <div class="place-tip">Revisar agenda en febrero — siempre hay algo bueno.</div>
+        <a href="https://maps.google.com/?q=Olympia+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Pigalle</div>
+        <h3>La Cigale</h3>
+        <div class="place-desc">Sala art-déco de 2000 personas. Rock, indie, electrónica internacional. Acústica perfecta.</div>
+        <div class="place-badges">
+          <span class="price-paid">Varía según artista</span>
+        </div>
+        <div class="place-tip">Ubicada en Pigalle, cerca del Moulin Rouge.</div>
+        <a href="https://maps.google.com/?q=La+Cigale+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">La Villette</div>
+        <h3>Philharmonie de Paris</h3>
+        <div class="place-desc">Sala de conciertos de clase mundial diseñada por Jean Nouvel. Programa clásico y jazz de primer nivel.</div>
+        <div class="place-badges">
+          <span class="price-paid">Desde EUR 10</span>
+        </div>
+        <div class="place-tip">El edificio en sí es una obra arquitectónica.</div>
+        <a href="https://maps.google.com/?q=Philharmonie+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var KEY='e27_auth',PASS='Europa2027';
+  var overlay=document.getElementById('auth-overlay');
+  var input=document.getElementById('auth-input');
+  var btn=document.getElementById('auth-btn');
+  var err=document.getElementById('auth-error');
+  if(sessionStorage.getItem(KEY)==='ok'){overlay.classList.add('hidden');return;}
+  function tryAuth(){
+    if(input.value===PASS){sessionStorage.setItem(KEY,'ok');overlay.classList.add('hidden');}
+    else{err.textContent='Clave incorrecta — intentá de nuevo';input.value='';input.focus();}
+  }
+  btn.addEventListener('click',tryAuth);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')tryAuth();});
+  input.focus();
+})();
+</script>
+</body>
+</html>

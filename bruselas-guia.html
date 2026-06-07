@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bruselas — Europa 2027</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a1a18">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    :root{--ink:#1a1a18;--paper:#f5f0e8;--cream:#ede7d9;--red:#c0392b;--gold:#b8860b;--muted:#7a7468;--border:#c8bfaa}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--paper);color:var(--ink);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6}
+    h1,h2,h3,h4{font-family:'Playfair Display',serif}
+    .city-nav{background:var(--ink);padding:10px 20px;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+    .city-nav a{color:var(--paper);text-decoration:none;padding:5px 14px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:background .15s}
+    .city-nav a:hover{background:rgba(255,255,255,.12)}
+    .city-nav a.active{background:var(--gold);color:var(--ink);font-weight:500}
+    .nav-brand{font-family:'Playfair Display',serif!important;font-size:15px;font-weight:700;color:var(--paper);margin-right:8px;text-decoration:none}
+    .page{max-width:960px;margin:0 auto;padding:0 24px 80px}
+    .city-header{padding:52px 0 36px;border-bottom:2px solid var(--border);margin-bottom:40px}
+    .city-header .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .city-header h1{font-size:52px;font-weight:700;line-height:1.05;margin-bottom:10px}
+    .city-header .dates{font-size:13px;color:var(--muted)}
+    .section{margin-bottom:52px}
+    .section-title{font-size:24px;font-weight:600;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .section-title small{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.06em}
+    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .hotel-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:20px}
+    .hotel-card .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px}
+    .hotel-card h3{font-size:15px;margin-bottom:4px}
+    .hotel-card .hotel-addr{font-size:12px;color:var(--muted);margin-bottom:14px}
+    .hotel-card .hotel-meta{font-size:12px;color:var(--muted);line-height:1.9}
+    .hotel-card .hotel-meta strong{color:var(--ink)}
+    .hotel-card .hotel-tip{margin-top:14px;padding:10px 14px;background:var(--cream);border-left:3px solid var(--gold);font-size:12px;line-height:1.5}
+    .hotel-card a{color:var(--red);font-size:12px;text-decoration:none}
+    .hotel-card a:hover{text-decoration:underline}
+    .pending-hotel{background:var(--cream);border:1px dashed var(--border);border-radius:6px;padding:20px;color:var(--muted);font-size:13px;font-style:italic}
+    .pending-hotel .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--muted);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px;font-style:normal}
+    .transport-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .transport-list li{padding:12px 16px;background:var(--cream);border-left:3px solid var(--gold);font-size:13px;line-height:1.5}
+    .pend-grid{display:flex;flex-direction:column;gap:8px}
+    .pend-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:4px}
+    .pend-item.urgente{border-left:4px solid var(--red)}
+    .pend-item.proximo{border-left:4px solid var(--gold)}
+    .pend-item.ok{border-left:4px solid #27ae60}
+    .pend-circle{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px}
+    .pend-circle.done{background:#27ae60;border-color:#27ae60}
+    .pend-name{font-size:13px;font-weight:500;margin-bottom:4px}
+    .pend-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:3px;margin-right:4px}
+    .pend-badge.urgente{background:#fde8e8;color:var(--red)}
+    .pend-badge.proximo{background:#fff3cd;color:#6b4c00}
+    .pend-badge.ok{background:#d4edda;color:#1e5c2e}
+    .pend-obs{font-size:11px;color:var(--muted);margin-top:4px}
+    .places-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+    .place-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:18px;display:flex;flex-direction:column}
+    .place-zona{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+    .place-card h3{font-size:16px;margin-bottom:8px}
+    .place-desc{font-size:12px;line-height:1.65;color:#383834;margin-bottom:12px;flex:1}
+    .place-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .price-free{background:#d4edda;color:#1e5c2e;border:1px solid #a3d4ac;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-paid{background:#fde8e8;color:#7a1f1f;border:1px solid #f0aaaa;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-reservation{background:#fff3cd;color:#6b4c00;border:1px solid #e6cc80;padding:2px 8px;border-radius:3px;font-size:11px}
+    .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
+    a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
+    a.maps-link:hover{text-decoration:underline}
+    .no-pendientes{padding:16px 20px;background:var(--cream);border:1px solid var(--border);border-radius:4px;font-size:13px;color:var(--muted);font-style:italic}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    #auth-overlay{position:fixed;inset:0;background:var(--paper);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
+    #auth-overlay.hidden{display:none}
+    .auth-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:48px 36px;width:100%;max-width:360px;text-align:center}
+    .auth-box h2{font-family:'Playfair Display',serif;font-size:30px;margin-bottom:6px}
+    .auth-box p{font-size:12px;color:var(--muted);margin-bottom:28px;letter-spacing:.04em}
+    .auth-input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:16px;background:var(--paper);color:var(--ink);outline:none;text-align:center;letter-spacing:.14em}
+    .auth-input:focus{border-color:var(--gold)}
+    .auth-btn{margin-top:12px;width:100%;padding:13px;background:var(--ink);color:var(--paper);border:none;border-radius:4px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.08em;cursor:pointer}
+    .auth-btn:hover{background:#2d2d2a}
+    .auth-error{margin-top:12px;font-size:12px;color:var(--red);min-height:18px}
+  </style>
+</head>
+<body>
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h2>Europa 2027</h2>
+    <p>Ingresá la clave del grupo</p>
+    <input class="auth-input" id="auth-input" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="auth-btn" id="auth-btn">Entrar →</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<nav class="city-nav">
+  <a href="index.html" class="nav-brand">Europa 2027</a>
+  <a href="londres-guia.html">Londres</a>
+  <a href="paris-guia.html">París</a>
+  <a href="bruselas-guia.html" class="active">Bruselas</a>
+  <a href="roma-guia.html">Roma</a>
+  <a href="madrid-guia.html">Madrid</a>
+</nav>
+
+<div class="page">
+
+  <div class="city-header">
+    <div class="label">Europa 2027 — Etapa 03</div>
+    <h1>Bruselas</h1>
+    <div class="dates">06 — 07 feb 2027 &nbsp;·&nbsp; 1 noche &nbsp;·&nbsp; Bélgica</div>
+  </div>
+
+  <!-- ALOJAMIENTO -->
+  <div class="section">
+    <h2 class="section-title">Alojamiento <small>POR CONFIRMAR</small></h2>
+    <div class="hotel-grid">
+
+      <div class="pending-hotel">
+        <div class="family-badge">Barrera</div>
+        <div>Por confirmar — hotel por definir</div>
+      </div>
+
+      <div class="pending-hotel">
+        <div class="family-badge">Nader</div>
+        <div>Por confirmar — hotel por definir</div>
+      </div>
+
+      <div class="pending-hotel">
+        <div class="family-badge">Ahmad</div>
+        <div>Por confirmar — hotel por definir</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:16px">
+      <ul class="transport-list">
+        <li><strong>Traslado aeropuerto:</strong> Desde BRU tomar tren directo a Bruxelles-Central (cada 15 min). Marcar siempre aunque no haya control visible.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TRANSPORTE -->
+  <div class="section">
+    <h2 class="section-title">Transporte en la ciudad</h2>
+    <ul class="transport-list">
+      <li>Marcar SIEMPRE aunque no haya molinete ni control visible — multa si no se valida.</li>
+      <li>Tren directo desde BRU a Bruxelles-Central cada 15 min.</li>
+    </ul>
+  </div>
+
+  <!-- PENDIENTES -->
+  <div class="section">
+    <h2 class="section-title">Pendientes <small>ENTRADAS & RESERVAS</small></h2>
+    <div class="no-pendientes">Sin pendientes de entradas para esta ciudad.</div>
+  </div>
+
+  <!-- MIRADORES -->
+  <div class="section">
+    <h2 class="section-title">Miradores <small>VISTAS DE LA CIUDAD</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Laeken</div>
+        <h3>Atomium</h3>
+        <p class="place-desc">Estructura futurista en forma de atomo de hierro gigantesco, construida para la Expo 1958. Vista panoramica desde la esfera superior.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 16 adulto</span>
+          <span class="price-paid">EUR 9 nino</span>
+        </div>
+        <div class="place-tip">A 15 min del centro en metro. Los ninos flipan con el ascensor tubular.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Atomium+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Marolles</div>
+        <h3>Palais de Justice — Terraza</h3>
+        <p class="place-desc">Tribunales neoclasicos enormes (1883) con terraza libre. Vista sobre los tejados de Bruselas hacia la Grand-Place.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Acceso libre en horario de oficina.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Palais+de+Justice+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Mont des Arts</div>
+        <h3>Place Royale — Barrio Real</h3>
+        <p class="place-desc">Centro neoclasico de Bruselas. Vista sobre el skyline de la ciudad baja. Rodeado de los mejores museos.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">En febrero puede haber nieve — el lugar mas fotografiado nevado.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Place+Royale+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BARES & CERVECERIAS -->
+  <div class="section">
+    <h2 class="section-title">Bares & Cervecerías <small>CULTURA DE LA CERVEZA BELGA</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro histórico</div>
+        <h3>Delirium Cafe</h3>
+        <p class="place-desc">Bar con mas de 3000 tipos de cerveza segun el Libro Guinness. La cerveza Delirium Tremens (rosa con elefantes) es iconica.</p>
+        <div class="place-badges">
+          <span class="price-paid">Cerveza ~EUR 4–7</span>
+        </div>
+        <div class="place-tip">Llegar antes de las 22hs o hay fila para entrar.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Delirium+Cafe+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro histórico</div>
+        <h3>A la Mort Subite</h3>
+        <p class="place-desc">Pub belga de 1910 con interior art deco intacto. Especialidad: lambic y gueuze (cervezas de fermentacion espontanea).</p>
+        <div class="place-badges">
+          <span class="price-paid">Cerveza ~EUR 3–5</span>
+        </div>
+        <div class="place-tip">El lambic framboise (frambuesa) es perfecto para no beerlovers.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=A+la+Mort+Subite+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Saint-Gilles</div>
+        <h3>Moeder Lambic Fontainas</h3>
+        <p class="place-desc">Bar de culto con 50 cervezas de barril rotativas. Solo cervezas belgas independientes, nada industrial.</p>
+        <div class="place-badges">
+          <span class="price-paid">Cerveza ~EUR 4–8</span>
+        </div>
+        <div class="place-tip">Pedir recomendacion al barman — son expertos apasionados.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Moeder+Lambic+Fontainas+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Rue du Marché au Charbon</div>
+        <h3>Mappa Mundo</h3>
+        <p class="place-desc">Bar cosmopolita en la calle mas animada del centro. Mezcla de locales y viajeros.</p>
+        <div class="place-badges">
+          <span class="price-paid">Cerveza/Coctel ~EUR 4–8</span>
+        </div>
+        <div class="place-tip">La rue du Marche au Charbon tiene 10 bares seguidos — ideal para ir de bar en bar.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Mappa+Mundo+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LUGARES ICONICOS -->
+  <div class="section">
+    <h2 class="section-title">Lugares Icónicos <small>LO ESENCIAL DE BRUSELAS</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro histórico</div>
+        <h3>Grand-Place</h3>
+        <p class="place-desc">Una de las plazas mas hermosas del mundo segun Victor Hugo. UNESCO. Guildhalls barrocos del s.XVII. De noche iluminada.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Verla de dia Y de noche — la iluminacion nocturna es espectacular.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Grand-Place+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro histórico</div>
+        <h3>Manneken Pis</h3>
+        <p class="place-desc">La estatuilla mas famosa de Bruselas: un nino orinando. Ironico simbolo de la identidad belga. Suele estar disfrazado.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">A 2 cuadras de la Grand-Place. Buscar la vitrina con los 1000 trajes que tiene.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Manneken+Pis+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Mont des Arts</div>
+        <h3>Musee Magritte</h3>
+        <p class="place-desc">La coleccion mas grande del mundo del surrealista belga Rene Magritte. El hombre del bombin y la manzana en contexto.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 15 adulto</span>
+          <span class="price-free">Gratis -18</span>
+        </div>
+        <div class="place-tip">Combinarlo con la visita al barrio royal — ambos en Mont des Arts.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Musee+Magritte+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Marolles</div>
+        <h3>Barrio de las Marolles</h3>
+        <p class="place-desc">Barrio popular y bohemio. El mercado del Jeu de Balle: 2000 puestos de antiguedades y ropa vintage todos los dias.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">El mercado abre a las 6am — los mejores objetos se van antes de las 9.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Jeu+de+Balle+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MUSICA & SHOWS -->
+  <div class="section">
+    <h2 class="section-title">Música & Shows <small>AGENDA CULTURAL</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro histórico</div>
+        <h3>Ancienne Belgique (AB)</h3>
+        <p class="place-desc">La sala de conciertos mas importante de Belgica. Indie, rock, folk internacional. Acustica impecable.</p>
+        <div class="place-badges">
+          <span class="price-paid">Entrada varia</span>
+        </div>
+        <div class="place-tip">Revisar agenda — es una noche sola en Bruselas, vale buscar algo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Ancienne+Belgique+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Mont des Arts</div>
+        <h3>Bozar</h3>
+        <p class="place-desc">Centro de bellas artes con programa de clasica, jazz y musica experimental de clase mundial.</p>
+        <div class="place-badges">
+          <span class="price-paid">Entrada desde EUR 10</span>
+        </div>
+        <div class="place-tip">El edificio art-deco de Victor Horta es patrimonio en si mismo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Bozar+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<script>
+(function(){
+  var KEY='e27_auth',PASS='Europa2027';
+  var overlay=document.getElementById('auth-overlay');
+  var input=document.getElementById('auth-input');
+  var btn=document.getElementById('auth-btn');
+  var err=document.getElementById('auth-error');
+  if(sessionStorage.getItem(KEY)==='ok'){overlay.classList.add('hidden');return;}
+  function tryAuth(){
+    if(input.value===PASS){sessionStorage.setItem(KEY,'ok');overlay.classList.add('hidden');}
+    else{err.textContent='Clave incorrecta — intentá de nuevo';input.value='';input.focus();}
+  }
+  btn.addEventListener('click',tryAuth);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')tryAuth();});
+  input.focus();
+})();
+</script>
+</body>
+</html>
