@@ -96,11 +96,12 @@ export default function Gastos() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
           <h1 className="font-serif text-3xl text-ink">Gastos</h1>
-          <div className="flex gap-3 mt-1 flex-wrap">
-            {MONEDAS.filter(m => totalByMoneda[m] > 0).map(m => (
-              <p key={m} className="font-mono text-xs text-ink-light">
-                {m} {totalByMoneda[m].toFixed(2)}
-              </p>
+          <div className="flex gap-4 mt-1">
+            {MONEDAS.map(m => (
+              <div key={m}>
+                <span className="font-mono text-[10px] text-ink-light uppercase tracking-wider">{m} </span>
+                <span className="font-mono text-sm font-medium text-ink">{totalByMoneda[m].toFixed(0)}</span>
+              </div>
             ))}
           </div>
         </div>
@@ -117,14 +118,14 @@ export default function Gastos() {
 
       {/* Summary */}
       <div className="space-y-3 mb-6">
-        {MONEDAS.filter(m => totalByMoneda[m] > 0).map(m => (
-          <div key={m}>
-            <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-2">{m}</p>
-            <div className="grid grid-cols-3 gap-3">
+        {MONEDAS.map(m => (
+          <div key={m} className="card">
+            <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-3">{m}</p>
+            <div className="grid grid-cols-3 gap-2">
               {FAMILIAS.map(f => (
-                <div key={f} className="card text-center py-3">
-                  <FamiliaBadge familia={f} className="mb-1.5" />
-                  <p className="font-mono text-sm font-medium text-ink">
+                <div key={f} className="text-center">
+                  <FamiliaBadge familia={f} className="mb-1" />
+                  <p className="font-mono text-sm font-medium text-ink mt-1">
                     {byFamily[f][m] > 0 ? byFamily[f][m].toFixed(0) : '—'}
                   </p>
                 </div>
