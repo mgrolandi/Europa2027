@@ -1,0 +1,199 @@
+{
+  "proyecto": "Europa 2027",
+  "descripcion": "PWA de planificación de viaje familiar a Europa — 3 familias, 14 personas, 28 ene – 15 feb 2027",
+  "repo": "mgrolandi/Europa2027",
+
+  "stack": {
+    "frontend": "React 18 + Vite + Tailwind CSS 3 + HashRouter",
+    "backend": "Supabase (PostgreSQL + Storage)",
+    "data_fetching": "TanStack React Query v5",
+    "deploy": "Vercel",
+    "login": "PIN único AHBANA → email viaje@europa2027.com"
+  },
+
+  "deploy": {
+    "branches_a_pushear": [
+      "main",
+      "claude/new-session-3xn33z",
+      "claude/new-session-EnuaC"
+    ],
+    "nota": "Siempre pushear a los 3 branches. Vercel mira claude/new-session-EnuaC"
+  },
+
+  "ciudades": [
+    { "nombre": "Londres", "pais": "Reino Unido", "moneda": "GBP" },
+    { "nombre": "Paris",   "pais": "Francia",     "moneda": "EUR" },
+    { "nombre": "Bruselas","pais": "Bélgica",     "moneda": "EUR" },
+    { "nombre": "Roma",    "pais": "Italia",       "moneda": "EUR" },
+    { "nombre": "Madrid",  "pais": "España",       "moneda": "EUR" }
+  ],
+
+  "familias": [
+    {
+      "nombre": "Ahmad",
+      "personas": 4,
+      "notas": "Sin requerimientos especiales de documentación"
+    },
+    {
+      "nombre": "Barrera",
+      "personas": 5,
+      "notas": "Macarena Barrera necesita Acta de autorización"
+    },
+    {
+      "nombre": "Nader",
+      "personas": 5,
+      "pasaportes": [
+        { "nombre": "Gabriela",  "numero": "AAL639979", "vencimiento": "2035-06-10" },
+        { "nombre": "Francisco", "numero": "AAL639978", "vencimiento": "2035-06-10" },
+        { "nombre": "Juan José", "numero": "AAH682644", "vencimiento": "2032-04-22" },
+        { "nombre": "Tomas",     "estado": "renovar" },
+        { "nombre": "Santiago",  "estado": "renovar" }
+      ],
+      "notas": "María Julieta necesita Acta de autorización. Tomas y Santiago deben renovar pasaporte."
+    }
+  ],
+
+  "tablas_supabase": [
+    { "tabla": "viajes",        "descripcion": "Registro del viaje (1 fila)" },
+    { "tabla": "fichas_ciudad", "descripcion": "Info por ciudad: fechas, moneda, cómo llegar desde aeropuerto" },
+    { "tabla": "personas",      "descripcion": "14 personas con familia, pasaporte_numero, pasaporte_vencimiento, pasaporte_status, autorizacion_status" },
+    { "tabla": "hoteles",       "descripcion": "Reservas por ciudad+familia: nombre, checkin/checkout, precio (texto 'USD 1421.53'), confirmacion, maps_url, notas" },
+    { "tabla": "vuelos",        "descripcion": "Vuelos y trenes: tipo, fecha, origen, destino, pnr (JSON por familia), confirmado" },
+    { "tabla": "pendientes",    "descripcion": "Tareas/gestiones por ciudad y categoría (ETA, ETIAS, documentos, etc.)" },
+    { "tabla": "actividades",   "descripcion": "Entradas y reservas culturales por ciudad: nombre, fecha, precio, confirmacion, confirmada" },
+    { "tabla": "gastos",        "descripcion": "Gastos del viaje: monto, moneda (EUR/USD), categoria, pagado_por (familia), ciudad" },
+    { "tabla": "documentos",    "descripcion": "Archivos subidos a Storage: pasaportes, seguros, boarding passes, vouchers" },
+    { "tabla": "lugares",       "descripcion": "Lugares de interés por ciudad (sin uso activo aún)" }
+  ],
+
+  "storage": {
+    "bucket": "documentos-viaje",
+    "paths": {
+      "persona": "persona/{id}/{tipo}-{timestamp}.ext",
+      "vuelo":   "vuelo/{id}/boarding-{timestamp}.ext"
+    }
+  },
+
+  "patches_sql": [
+    { "archivo": "schema.sql",           "descripcion": "Schema inicial completo" },
+    { "archivo": "seed.sql",             "descripcion": "Datos iniciales" },
+    { "archivo": "patch-all-pending.sql","descripcion": "RLS policies, pendientes por ciudad, ETA/ETIAS, Eurostar Nader PNR, autorizacion_status" },
+    { "archivo": "patch-v1.7.sql",       "descripcion": "Columnas pasaporte_numero + pasaporte_vencimiento en personas" },
+    { "archivo": "patch-v1.8.sql",       "descripcion": "Datos pasaporte Nader (Gaby/Francisco/Juan José) + entradas en pendientes" },
+    { "archivo": "patch-v1.9.sql",       "descripcion": "CREATE TABLE actividades + RLS + 16 actividades seed + gastos hoteles" }
+  ],
+
+  "paginas": [
+    {
+      "ruta": "/",
+      "nombre": "Home",
+      "descripcion": "Cards de ciudades con fotos Unsplash, timeline de ruta clickeable (✈️/🚄 abre modal), badge de pendientes, accesos rápidos"
+    },
+    {
+      "ruta": "/familias",
+      "nombre": "Familias",
+      "descripcion": "Cards por persona con pasaporte, estado, acta (solo Macarena y Julieta). Boarding passes por persona por vuelo. Hoteles por familia."
+    },
+    {
+      "ruta": "/documentacion",
+      "nombre": "Documentación",
+      "descripcion": "Toggle estado pasaporte (ok→pending→expired), toggle Acta, upload de archivos"
+    },
+    {
+      "ruta": "/reservas",
+      "nombre": "Reservas / Hoteles",
+      "descripcion": "Listado por ciudad con edición inline: nombre, dirección, confirmación, habitación, precio, maps_url, notas"
+    },
+    {
+      "ruta": "/transportes",
+      "nombre": "Transportes",
+      "descripcion": "Vuelos y trenes por fecha, edición inline de PNR por familia, empresa, número, horarios, confirmado"
+    },
+    {
+      "ruta": "/ciudad/:ciudad",
+      "nombre": "Detalle de ciudad",
+      "descripcion": "Ficha de ciudad, hotel con cómo llegar desde aeropuerto, pendientes logísticos, entradas y actividades con voucher upload"
+    },
+    {
+      "ruta": "/gastos",
+      "nombre": "Gastos",
+      "descripcion": "Filtro por familia, resumen en USD por familia (1 EUR = 1.178 USD), lista agrupada por categoría con subtotales. Cada fila EUR muestra conversión a USD."
+    },
+    {
+      "ruta": "/pendientes",
+      "nombre": "Pendientes",
+      "descripcion": "Lista global de tareas con toggle hecho/pendiente, filtro por categoría y ciudad"
+    }
+  ],
+
+  "fotos_ciudades": {
+    "Londres":  "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80",
+    "Paris":    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80",
+    "Bruselas": "https://plus.unsplash.com/premium_photo-1668267554872-3882db1fa282?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "Roma":     "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=600&q=80",
+    "Madrid":   "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=600&q=80"
+  },
+
+  "gastos_cargados": {
+    "tipo_cambio": { "EUR_a_USD": 1.178, "fuente": "cargo real Eurostar 325 EUR = 382.84 USD" },
+    "alojamiento": [
+      { "ciudad": "Londres",  "moneda": "USD", "Ahmad": 1163.17, "Barrera": 1421.53, "Nader": 1599.21 },
+      { "ciudad": "Paris",    "moneda": "EUR", "Ahmad": 944.33,  "Barrera": null,    "Nader": 1265.56 },
+      { "ciudad": "Bruselas", "moneda": "EUR", "Ahmad": 351.41,  "Barrera": 423.00,  "Nader": 423.00  },
+      { "ciudad": "Roma",     "moneda": "EUR", "Ahmad": 840.00,  "Barrera": 1340.00, "Nader": 1090.00 },
+      { "ciudad": "Madrid",   "moneda": "EUR", "Ahmad": 585.00,  "Barrera": 585.00,  "Nader": 585.00  }
+    ],
+    "transporte": [
+      {
+        "descripcion": "Eurostar Londres → París",
+        "moneda": "EUR",
+        "precio_por_persona": 65.00,
+        "Ahmad": { "personas": 4, "total": 260.00 },
+        "Nader": { "personas": 5, "total": 325.00 },
+        "Barrera": { "personas": 5, "total": 325.00 }
+      },
+      {
+        "descripcion": "Vuelo Roma → Madrid",
+        "moneda": "EUR",
+        "Ahmad": 253.44,
+        "Nader": 316.80,
+        "Barrera": 316.80
+      }
+    ]
+  },
+
+  "transportes": {
+    "eurostar": {
+      "ruta": "Londres → París",
+      "pnr": { "Nader": "RZN7P2", "Ahmad": "pendiente", "Barrera": "pendiente" }
+    }
+  },
+
+  "actividades_seed": [
+    { "ciudad": "Londres",  "nombre": "Premier League — partido",               "precio": "De pago" },
+    { "ciudad": "Londres",  "nombre": "Natural History Museum",                  "precio": "Gratis con reserva" },
+    { "ciudad": "Londres",  "nombre": "British Museum",                          "precio": "Gratis con reserva" },
+    { "ciudad": "Londres",  "nombre": "Tower of London",                         "precio": "GBP ~30 pp" },
+    { "ciudad": "Paris",    "nombre": "Louvre — entrada + reserva horaria",      "precio": "EUR ~22 pp" },
+    { "ciudad": "Paris",    "nombre": "Torre Eiffel — acceso a la cima",         "precio": "EUR ~29 pp" },
+    { "ciudad": "Paris",    "nombre": "Palacio de Versalles",                    "precio": "EUR ~21 pp" },
+    { "ciudad": "Paris",    "nombre": "Teatro / espectáculo",                    "precio": "Variable" },
+    { "ciudad": "Bruselas", "nombre": "Atomium",                                 "precio": "EUR ~16 pp" },
+    { "ciudad": "Bruselas", "nombre": "Musée Magritte",                          "precio": "EUR ~10 pp" },
+    { "ciudad": "Roma",     "nombre": "Coliseo + Foro Romano",                   "precio": "EUR ~18 pp" },
+    { "ciudad": "Roma",     "nombre": "Museos Vaticanos + Capilla Sixtina",      "precio": "EUR ~20 pp" },
+    { "ciudad": "Roma",     "nombre": "Galería Borghese",                        "precio": "EUR ~13 pp" },
+    { "ciudad": "Madrid",   "nombre": "Museo del Prado",                         "precio": "EUR ~15 pp" },
+    { "ciudad": "Madrid",   "nombre": "Reina Sofía (Guernica)",                  "precio": "EUR ~12 pp" },
+    { "ciudad": "Madrid",   "nombre": "Espectáculo de flamenco",                 "precio": "EUR ~45 pp" }
+  ],
+
+  "pendiente_futuro": [
+    "Guía por ciudad (mapa + zonas de interés)",
+    "Paris Barrera: cargar precio de hotel cuando se confirme",
+    "PNR Eurostar Ahmad y Barrera pendientes",
+    "Completar confirmaciones de vuelos a medida que lleguen",
+    "Cargar montos reales de entradas a medida que se reserven",
+    "Pasaportes Tomas y Santiago Nader: renovar antes del viaje"
+  ]
+}
