@@ -75,13 +75,19 @@ export default function Gastos() {
     setShowForm(false)
   }
 
-  const total = (gastos ?? []).reduce((sum, g) => {
-    return sum + (g.moneda === 'EUR' ? Number(g.monto) : 0)
-  }, 0)
+  const MONEDAS = ['EUR', 'USD', 'GBP']
+
+  const totalByMoneda = MONEDAS.reduce((acc, m) => {
+    acc[m] = (gastos ?? []).filter(g => g.moneda === m).reduce((s, g) => s + Number(g.monto), 0)
+    return acc
+  }, {})
 
   const byFamily = FAMILIAS.reduce((acc, f) => {
     const list = (gastos ?? []).filter(g => g.pagado_por === f)
-    acc[f] = list.reduce((s, g) => s + (g.moneda === 'EUR' ? Number(g.monto) : 0), 0)
+    acc[f] = MONEDAS.reduce((m, mon) => {
+      m[mon] = list.filter(g => g.moneda === mon).reduce((s, g) => s + Number(g.monto), 0)
+      return m
+    }, {})
     return acc
   }, {})
 
@@ -90,9 +96,13 @@ export default function Gastos() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
           <h1 className="font-serif text-3xl text-ink">Gastos</h1>
-          <p className="font-mono text-xs text-ink-light mt-1">
-            Total EUR: {total.toFixed(2)}
-          </p>
+          <div className="flex gap-3 mt-1 flex-wrap">
+            {MONEDAS.filter(m => totalByMoneda[m] > 0).map(m => (
+              <p key={m} className="font-mono text-xs text-ink-light">
+                {m} {totalByMoneda[m].toFixed(2)}
+              </p>
+            ))}
+          </div>
         </div>
         <div className="flex gap-2 items-center">
           <FamilyFilter />
@@ -109,8 +119,12 @@ export default function Gastos() {
       <div className="grid grid-cols-3 gap-3 mb-6">
         {FAMILIAS.map(f => (
           <div key={f} className="card text-center">
-            <FamiliaBadge familia={f} className="mb-1" />
-            <p className="font-mono text-sm font-medium text-ink">EUR {byFamily[f].toFixed(0)}</p>
+            <FamiliaBadge familia={f} className="mb-2" />
+            {MONEDAS.map(m => byFamily[f][m] > 0 ? (
+              <p key={m} className="font-mono text-sm font-medium text-ink leading-snug">
+                {m} {byFamily[f][m].toFixed(0)}
+              </p>
+            ) : null)}
           </div>
         ))}
       </div>

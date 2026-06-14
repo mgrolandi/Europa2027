@@ -40,7 +40,6 @@ function PersonaRow({ persona, documentos }) {
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-medium text-ink">{persona.nombre}</p>
-          <p className="font-mono text-xs text-ink-light">{persona.rol}</p>
         </div>
         <div className="flex flex-col items-end gap-1">
           <button
@@ -65,11 +64,6 @@ function PersonaRow({ persona, documentos }) {
             >
               Acta: {auth === 'ok' ? 'OK' : 'Pendiente'}
             </button>
-          )}
-          {persona.rol === 'Menor' && (
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-100 text-blue-700 border-blue-200">
-              Menor
-            </span>
           )}
         </div>
       </div>

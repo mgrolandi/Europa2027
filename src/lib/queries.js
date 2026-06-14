@@ -261,3 +261,40 @@ export const useDeleteGasto = () => {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['gastos'] }),
   })
 }
+
+// ─── ACTIVIDADES ────────────────────────────────────────────────────────────
+
+export const useActividades = (ciudad = null) =>
+  useQuery({
+    queryKey: ['actividades', ciudad],
+    queryFn: async () => {
+      let q = supabase.from('actividades').select('*').order('fecha', { nullsFirst: true }).order('nombre')
+      if (ciudad) q = q.eq('ciudad', ciudad)
+      const { data, error } = await q
+      if (error) throw error
+      return data
+    },
+    enabled: !!supabase,
+  })
+
+export const useAddActividad = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (actividad) => {
+      const { error } = await supabase.from('actividades').insert(actividad)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['actividades'] }),
+  })
+}
+
+export const useUpdateActividad = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, updates }) => {
+      const { error } = await supabase.from('actividades').update(updates).eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['actividades'] }),
+  })
+}

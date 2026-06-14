@@ -78,7 +78,6 @@ function PersonaCard({ persona, documentos }) {
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-medium text-ink text-sm">{persona.nombre}</p>
-          <p className="font-mono text-[10px] text-ink-light mt-0.5">{persona.rol}</p>
           {persona.pasaporte_numero && (
             <p className="font-mono text-[10px] text-ink-light mt-0.5">
               {persona.pasaporte_numero}

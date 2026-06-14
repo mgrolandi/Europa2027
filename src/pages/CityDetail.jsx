@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
-import { useState } from 'react'
-import { useFichaCiudad, useHoteles, useVuelos, useLugares, usePendientes, useAddPendiente, useTogglePendiente } from '../lib/queries'
+import { useState, useRef } from 'react'
+import { useFichaCiudad, useHoteles, useVuelos, useLugares, usePendientes, useAddPendiente, useTogglePendiente, useActividades, useAddActividad, useUpdateActividad, useUploadDocumento, useDocumentos } from '../lib/queries'
 import { isConfigured } from '../lib/supabase'
 import { useFamilyFilter } from '../context/FamilyFilterContext'
 import FamilyFilter from '../components/FamilyFilter'
@@ -122,6 +122,68 @@ function VueloCard({ v, tag }) {
   )
 }
 
+function ActividadCard({ a, hasVoucher, onToggleConfirm, onUploadVoucher }) {
+  const fileRef = useRef()
+  const upload  = useUploadDocumento()
+
+  function handleFile(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    onUploadVoucher(file)
+    e.target.value = ''
+  }
+
+  function fmtLocal(iso) {
+    if (!iso) return null
+    return new Date(iso + 'T12:00:00').toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' })
+  }
+
+  return (
+    <div className={`card ${a.confirmada ? 'border-green-200' : 'border-amber-200 bg-amber-50/20'}`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-ink text-sm">{a.nombre}</p>
+          {a.descripcion && <p className="text-xs text-ink-light mt-0.5">{a.descripcion}</p>}
+          <div className="flex flex-wrap gap-x-3 text-xs font-mono text-ink-light mt-1">
+            {a.fecha && <span>{fmtLocal(a.fecha)}</span>}
+            {a.hora  && <span>{a.hora}</span>}
+            {a.precio && <span className="text-ink">{a.precio}</span>}
+            {a.confirmacion && <span>#{a.confirmacion}</span>}
+          </div>
+        </div>
+        <button
+          onClick={onToggleConfirm}
+          className={`font-mono text-[10px] px-2 py-0.5 rounded border shrink-0 hover:opacity-80 transition-opacity cursor-pointer ${
+            a.confirmada
+              ? 'bg-green-100 text-green-700 border-green-200'
+              : 'bg-amber-100 text-amber-700 border-amber-200'
+          }`}
+        >
+          {a.confirmada ? 'Confirmada ✓' : 'Pendiente'}
+        </button>
+      </div>
+      <div className="mt-2">
+        {hasVoucher ? (
+          <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-green-100 text-green-700 border-green-200">
+            ✓ Voucher subido
+          </span>
+        ) : (
+          <>
+            <input ref={fileRef} type="file" className="hidden" onChange={handleFile} />
+            <button
+              onClick={() => fileRef.current?.click()}
+              disabled={upload.isPending}
+              className="font-mono text-[10px] px-2 py-0.5 rounded border border-cream-dark text-ink-light hover:border-ink hover:text-ink transition-colors disabled:opacity-40"
+            >
+              {upload.isPending ? 'Subiendo…' : '+ Voucher'}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function CityDetail() {
   const { ciudad } = useParams()
   const { selectedFamily } = useFamilyFilter()
@@ -129,6 +191,8 @@ export default function CityDetail() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [newTitulo, setNewTitulo]     = useState('')
   const [newCat, setNewCat]           = useState('logistica')
+  const [showAddActividad, setShowAddActividad] = useState(false)
+  const [newActividad, setNewActividad] = useState({ nombre: '', fecha: '', precio: '', confirmada: false, confirmacion: '' })
 
   if (!isConfigured) return <SupabaseBanner />
 
@@ -141,6 +205,12 @@ export default function CityDetail() {
   const togglePendiente                   = useTogglePendiente()
 
   const { data: entradas } = usePendientes('entradas', ciudad)
+
+  const { data: actividades }  = useActividades(ciudad)
+  const addActividad           = useAddActividad()
+  const updateActividad        = useUpdateActividad()
+  const uploadDoc              = useUploadDocumento()
+  const { data: documentos }   = useDocumentos()
 
   const openPendientes = (cityPendientes ?? []).filter(p => !p.hecho)
   const donePendientes = (cityPendientes ?? []).filter(p => p.hecho)
@@ -158,6 +228,22 @@ export default function CityDetail() {
           setShowAddForm(false)
         },
       }
+    )
+  }
+
+  function handleAddActividad(e) {
+    e.preventDefault()
+    if (!newActividad.nombre.trim()) return
+    addActividad.mutate(
+      {
+        ciudad,
+        nombre:      newActividad.nombre.trim(),
+        fecha:       newActividad.fecha || null,
+        precio:      newActividad.precio.trim() || null,
+        confirmada:  newActividad.confirmada,
+        confirmacion: newActividad.confirmacion.trim() || null,
+      },
+      { onSuccess: () => { setNewActividad({ nombre: '', fecha: '', precio: '', confirmada: false, confirmacion: '' }); setShowAddActividad(false) } }
     )
   }
 
@@ -281,51 +367,91 @@ export default function CityDetail() {
       )}
 
       {/* Entradas y actividades */}
-      {(openEntradas.length > 0 || doneEntradas.length > 0) && (
-        <section className="mb-6">
-          <h2 className="section-title">Entradas y actividades</h2>
-          <div className="space-y-2">
-            {[...openEntradas, ...doneEntradas].map(p => (
-              <div
-                key={p.id}
-                className={`card flex items-start gap-3 ${p.hecho ? 'opacity-60' : p.urgente ? 'border-red-200 bg-red-50/30' : ''}`}
-              >
-                <button
-                  onClick={() => togglePendiente.mutate({ id: p.id, hecho: p.hecho })}
-                  className={`mt-0.5 w-4 h-4 rounded border-2 shrink-0 transition-colors ${
-                    p.hecho
-                      ? 'border-green-500 bg-green-500'
-                      : 'border-ink-light/50 hover:border-ink'
-                  }`}
+      <section className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="section-title mb-0">Entradas y actividades</h2>
+          <button
+            onClick={() => setShowAddActividad(v => !v)}
+            className="font-mono text-xs text-ink-light border border-cream-dark rounded-lg px-3 py-1.5 hover:border-ink hover:text-ink transition-colors"
+          >
+            {showAddActividad ? 'Cancelar' : '+ Agregar'}
+          </button>
+        </div>
+
+        {showAddActividad && (
+          <form onSubmit={handleAddActividad} className="card mb-3 space-y-2">
+            <input
+              value={newActividad.nombre}
+              onChange={e => setNewActividad(v => ({ ...v, nombre: e.target.value }))}
+              placeholder="Nombre de la actividad o entrada…"
+              required
+              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink transition-colors"
+            />
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                type="date"
+                value={newActividad.fecha}
+                onChange={e => setNewActividad(v => ({ ...v, fecha: e.target.value }))}
+                className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink"
+              />
+              <input
+                value={newActividad.precio}
+                onChange={e => setNewActividad(v => ({ ...v, precio: e.target.value }))}
+                placeholder="Precio (ej. EUR 22 pp)"
+                className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                value={newActividad.confirmacion}
+                onChange={e => setNewActividad(v => ({ ...v, confirmacion: e.target.value }))}
+                placeholder="N° de confirmación"
+                className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink"
+              />
+              <label className="flex items-center gap-2 cursor-pointer px-3">
+                <input
+                  type="checkbox"
+                  checked={newActividad.confirmada}
+                  onChange={e => setNewActividad(v => ({ ...v, confirmada: e.target.checked }))}
+                  className="w-4 h-4 rounded"
                 />
-                <div className="flex-1 min-w-0">
-                  <p className={`text-sm text-ink ${p.hecho ? 'line-through text-ink-light' : ''}`}>
-                    {p.titulo}
-                  </p>
-                  {p.descripcion && (
-                    <p className="font-mono text-[10px] text-ink-light mt-0.5">{p.descripcion}</p>
-                  )}
-                  <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">
-                    {p.fecha_limite_label && (
-                      <span className={`font-mono text-[10px] ${p.urgente ? 'text-red-600' : 'text-ink-light'}`}>
-                        {p.fecha_limite_label}
-                      </span>
-                    )}
-                    {p.precio_info && (
-                      <span className="font-mono text-[10px] text-ink-light">{p.precio_info}</span>
-                    )}
-                  </div>
-                </div>
-                {p.urgente && !p.hecho && (
-                  <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-700 border border-red-200 shrink-0">
-                    Urgente
-                  </span>
-                )}
-              </div>
-            ))}
+                <span className="font-mono text-sm text-ink">Confirmada</span>
+              </label>
+            </div>
+            <button
+              type="submit"
+              disabled={addActividad.isPending}
+              className="w-full py-2 rounded-lg bg-ink text-cream font-mono text-xs hover:bg-ink/90 transition-colors disabled:opacity-50"
+            >
+              {addActividad.isPending ? 'Guardando…' : 'Agregar'}
+            </button>
+          </form>
+        )}
+
+        {(!actividades?.length && !showAddActividad) ? (
+          <p className="text-sm text-ink-light italic">Sin entradas cargadas para {ciudad}</p>
+        ) : (
+          <div className="space-y-2">
+            {(actividades ?? []).map(a => {
+              const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
+              return (
+                <ActividadCard
+                  key={a.id}
+                  a={a}
+                  hasVoucher={actDocs.length > 0}
+                  onToggleConfirm={() => updateActividad.mutate({ id: a.id, updates: { confirmada: !a.confirmada } })}
+                  onUploadVoucher={(file) => uploadDoc.mutate({
+                    file,
+                    entidad_id: a.id,
+                    tipo_doc: 'voucher',
+                    entidad_tipo: 'actividad',
+                  })}
+                />
+              )
+            })}
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
       {/* City pendientes */}
       <section className="mb-6">
