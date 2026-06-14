@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream text-ink font-sans;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .badge-Barrera { @apply bg-blue-100 text-blue-700 border-blue-200; }
+  .badge-Nader   { @apply bg-green-100 text-green-700 border-green-200; }
+  .badge-Ahmad   { @apply bg-purple-100 text-purple-700 border-purple-200; }
+
+  .btn-familia-Barrera { @apply bg-blue-600 text-white border-blue-600; }
+  .btn-familia-Nader   { @apply bg-green-600 text-white border-green-600; }
+  .btn-familia-Ahmad   { @apply bg-purple-600 text-white border-purple-600; }
+
+  .card {
+    @apply rounded-xl border border-cream-dark bg-white/60 p-4 shadow-sm;
+  }
+
+  .section-title {
+    @apply font-serif text-xl text-ink mb-3;
+  }
+}
