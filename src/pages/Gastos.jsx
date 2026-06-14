@@ -233,18 +233,25 @@ export default function Gastos() {
         </div>
       ) : gastos?.length ? (
         <div className="space-y-6">
-          {MONEDAS.filter(m => (gastos ?? []).some(g => g.moneda === m)).map(m => (
-            <div key={m}>
-              <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-2">
-                {m} · total {totalByMoneda[m].toFixed(2)}
-              </p>
-              <div className="space-y-2">
-                {gastos.filter(g => g.moneda === m).map(g => (
-                  <GastoRow key={g.id} g={g} onDelete={id => deleteGasto.mutate(id)} />
-                ))}
-              </div>
-            </div>
-          ))}
+          {['alojamiento', 'transporte', ...CATEGORIAS.filter(c => c !== 'alojamiento' && c !== 'transporte')]
+            .filter(cat => (gastos ?? []).some(g => g.categoria === cat))
+            .map(cat => {
+              const items = gastos.filter(g => g.categoria === cat)
+              const subtotalUSD = items.reduce((s, g) => s + toUSD(g), 0)
+              return (
+                <div key={cat}>
+                  <div className="flex items-baseline justify-between mb-2">
+                    <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest capitalize">{cat}</p>
+                    <p className="font-mono text-[10px] text-ink-light">≈ USD {subtotalUSD.toFixed(0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    {items.map(g => (
+                      <GastoRow key={g.id} g={g} onDelete={id => deleteGasto.mutate(id)} />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
         </div>
       ) : (
         <p className="text-sm text-ink-light italic text-center py-8">
