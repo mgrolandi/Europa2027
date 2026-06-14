@@ -89,25 +89,25 @@ INSERT INTO actividades (viaje_id, ciudad, nombre, categoria, fecha, confirmacio
 -- Nota: ajustá los montos y moneda según las reservas reales
 
 -- AHMAD
-INSERT INTO gastos (viaje_id, familia, descripcion, monto, moneda, categoria, ciudad, fecha, pagado_por) VALUES
-((SELECT id FROM viajes LIMIT 1), 'Ahmad', 'Hotel Londres — Voco', 0, 'GBP', 'alojamiento', 'Londres', '2027-01-28', 'Ahmad'),
-((SELECT id FROM viajes LIMIT 1), 'Ahmad', 'Hotel Paris — Mercure Opera', 0, 'EUR', 'alojamiento', 'Paris', '2027-02-01', 'Ahmad'),
-((SELECT id FROM viajes LIMIT 1), 'Ahmad', 'Hotel Bruselas — NH Brussels', 0, 'EUR', 'alojamiento', 'Bruselas', '2027-02-04', 'Ahmad'),
-((SELECT id FROM viajes LIMIT 1), 'Ahmad', 'Hotel Roma — TBD', 0, 'EUR', 'alojamiento', 'Roma', '2027-02-06', 'Ahmad'),
-((SELECT id FROM viajes LIMIT 1), 'Ahmad', 'Hotel Madrid — TBD', 0, 'EUR', 'alojamiento', 'Madrid', '2027-02-11', 'Ahmad');
+INSERT INTO gastos (viaje_id, descripcion, monto, moneda, categoria, ciudad, fecha, pagado_por) VALUES
+((SELECT id FROM viajes LIMIT 1), 'Hotel Londres — Voco', 0, 'GBP', 'alojamiento', 'Londres', '2027-01-28', 'Ahmad'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Paris — Mercure Opera', 0, 'EUR', 'alojamiento', 'Paris', '2027-02-01', 'Ahmad'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Bruselas — NH Brussels', 0, 'EUR', 'alojamiento', 'Bruselas', '2027-02-04', 'Ahmad'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Roma — TBD', 0, 'EUR', 'alojamiento', 'Roma', '2027-02-06', 'Ahmad'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Madrid — TBD', 0, 'EUR', 'alojamiento', 'Madrid', '2027-02-11', 'Ahmad');
 
 -- BARRERA
-INSERT INTO gastos (viaje_id, familia, descripcion, monto, moneda, categoria, ciudad, fecha, pagado_por) VALUES
-((SELECT id FROM viajes LIMIT 1), 'Barrera', 'Hotel Londres — Voco', 0, 'GBP', 'alojamiento', 'Londres', '2027-01-28', 'Barrera'),
-((SELECT id FROM viajes LIMIT 1), 'Barrera', 'Hotel Paris — Mercure Opera', 0, 'EUR', 'alojamiento', 'Paris', '2027-02-01', 'Barrera'),
-((SELECT id FROM viajes LIMIT 1), 'Barrera', 'Hotel Bruselas — NH Brussels', 0, 'EUR', 'alojamiento', 'Bruselas', '2027-02-04', 'Barrera'),
-((SELECT id FROM viajes LIMIT 1), 'Barrera', 'Hotel Roma — TBD', 0, 'EUR', 'alojamiento', 'Roma', '2027-02-06', 'Barrera'),
-((SELECT id FROM viajes LIMIT 1), 'Barrera', 'Hotel Madrid — TBD', 0, 'EUR', 'alojamiento', 'Madrid', '2027-02-11', 'Barrera');
+INSERT INTO gastos (viaje_id, descripcion, monto, moneda, categoria, ciudad, fecha, pagado_por) VALUES
+((SELECT id FROM viajes LIMIT 1), 'Hotel Londres — Voco', 0, 'GBP', 'alojamiento', 'Londres', '2027-01-28', 'Barrera'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Paris — Mercure Opera', 0, 'EUR', 'alojamiento', 'Paris', '2027-02-01', 'Barrera'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Bruselas — NH Brussels', 0, 'EUR', 'alojamiento', 'Bruselas', '2027-02-04', 'Barrera'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Roma — TBD', 0, 'EUR', 'alojamiento', 'Roma', '2027-02-06', 'Barrera'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Madrid — TBD', 0, 'EUR', 'alojamiento', 'Madrid', '2027-02-11', 'Barrera');
 
 -- NADER
-INSERT INTO gastos (viaje_id, familia, descripcion, monto, moneda, categoria, ciudad, fecha, pagado_por) VALUES
-((SELECT id FROM viajes LIMIT 1), 'Nader', 'Hotel Londres — Voco', 0, 'GBP', 'alojamiento', 'Londres', '2027-01-28', 'Nader'),
-((SELECT id FROM viajes LIMIT 1), 'Nader', 'Hotel Paris — Mercure Opera', 0, 'EUR', 'alojamiento', 'Paris', '2027-02-01', 'Nader'),
-((SELECT id FROM viajes LIMIT 1), 'Nader', 'Hotel Bruselas — NH Brussels', 0, 'EUR', 'alojamiento', 'Bruselas', '2027-02-04', 'Nader'),
-((SELECT id FROM viajes LIMIT 1), 'Nader', 'Hotel Roma — TBD', 0, 'EUR', 'alojamiento', 'Roma', '2027-02-06', 'Nader'),
-((SELECT id FROM viajes LIMIT 1), 'Nader', 'Hotel Madrid — TBD', 0, 'EUR', 'alojamiento', 'Madrid', '2027-02-11', 'Nader');
+INSERT INTO gastos (viaje_id, descripcion, monto, moneda, categoria, ciudad, fecha, pagado_por) VALUES
+((SELECT id FROM viajes LIMIT 1), 'Hotel Londres — Voco', 0, 'GBP', 'alojamiento', 'Londres', '2027-01-28', 'Nader'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Paris — Mercure Opera', 0, 'EUR', 'alojamiento', 'Paris', '2027-02-01', 'Nader'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Bruselas — NH Brussels', 0, 'EUR', 'alojamiento', 'Bruselas', '2027-02-04', 'Nader'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Roma — TBD', 0, 'EUR', 'alojamiento', 'Roma', '2027-02-06', 'Nader'),
+((SELECT id FROM viajes LIMIT 1), 'Hotel Madrid — TBD', 0, 'EUR', 'alojamiento', 'Madrid', '2027-02-11', 'Nader');
