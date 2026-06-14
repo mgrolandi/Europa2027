@@ -6,8 +6,9 @@ import FamilyFilter from '../components/FamilyFilter'
 import FamiliaBadge from '../components/FamiliaBadge'
 import SupabaseBanner from '../components/SupabaseBanner'
 
-const CATEGORIAS = ['alojamiento', 'transporte', 'comida', 'entradas', 'otros']
-const CIUDADES   = ['Londres', 'Paris', 'Bruselas', 'Roma', 'Madrid', '']
+const CATEGORIAS  = ['alojamiento', 'transporte', 'comida', 'entradas', 'otros']
+const CIUDADES    = ['Londres', 'Paris', 'Bruselas', 'Roma', 'Madrid', '']
+const EUR_TO_USD  = 1.16
 
 const BLANK = {
   descripcion: '',
@@ -40,6 +41,11 @@ function GastoRow({ g, onDelete }) {
         <p className="font-mono font-medium text-ink">
           {g.moneda} {Number(g.monto).toFixed(2)}
         </p>
+        {g.moneda === 'EUR' && (
+          <p className="font-mono text-[10px] text-ink-light">
+            (USD {(Number(g.monto) * EUR_TO_USD).toFixed(2)})
+          </p>
+        )}
         <button
           onClick={() => onDelete(g.id)}
           className="text-[10px] font-mono text-ink-light/50 hover:text-red-500 transition-colors mt-1"
@@ -77,17 +83,17 @@ export default function Gastos() {
 
   const MONEDAS = ['EUR', 'USD']
 
+  const toUSD = (g) => g.moneda === 'EUR' ? Number(g.monto) * EUR_TO_USD : Number(g.monto)
+
   const totalByMoneda = MONEDAS.reduce((acc, m) => {
     acc[m] = (gastos ?? []).filter(g => g.moneda === m).reduce((s, g) => s + Number(g.monto), 0)
     return acc
   }, {})
 
-  const byFamily = FAMILIAS.reduce((acc, f) => {
-    const list = (gastos ?? []).filter(g => g.pagado_por === f)
-    acc[f] = MONEDAS.reduce((m, mon) => {
-      m[mon] = list.filter(g => g.moneda === mon).reduce((s, g) => s + Number(g.monto), 0)
-      return m
-    }, {})
+  const totalUSD = (gastos ?? []).reduce((s, g) => s + toUSD(g), 0)
+
+  const byFamilyUSD = FAMILIAS.reduce((acc, f) => {
+    acc[f] = (gastos ?? []).filter(g => g.pagado_por === f).reduce((s, g) => s + toUSD(g), 0)
     return acc
   }, {})
 
@@ -96,13 +102,15 @@ export default function Gastos() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
           <h1 className="font-serif text-3xl text-ink">Gastos</h1>
-          <div className="flex gap-4 mt-1">
+          <div className="flex gap-4 mt-1 flex-wrap">
             {MONEDAS.map(m => (
-              <div key={m}>
-                <span className="font-mono text-[10px] text-ink-light uppercase tracking-wider">{m} </span>
-                <span className="font-mono text-sm font-medium text-ink">{totalByMoneda[m].toFixed(0)}</span>
-              </div>
+              <span key={m} className="font-mono text-xs text-ink-light">
+                {m} {totalByMoneda[m].toFixed(0)}
+              </span>
             ))}
+            <span className="font-mono text-xs font-medium text-ink">
+              ≈ USD {totalUSD.toFixed(0)} total
+            </span>
           </div>
         </div>
         <div className="flex gap-2 items-center">
@@ -117,22 +125,18 @@ export default function Gastos() {
       </div>
 
       {/* Summary */}
-      <div className="space-y-3 mb-6">
-        {MONEDAS.map(m => (
-          <div key={m} className="card">
-            <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-3">{m}</p>
-            <div className="grid grid-cols-3 gap-2">
-              {FAMILIAS.map(f => (
-                <div key={f} className="text-center">
-                  <FamiliaBadge familia={f} className="mb-1" />
-                  <p className="font-mono text-sm font-medium text-ink mt-1">
-                    {byFamily[f][m] > 0 ? byFamily[f][m].toFixed(0) : '—'}
-                  </p>
-                </div>
-              ))}
+      <div className="card mb-6">
+        <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-3">Total en USD · 1 EUR = 1.16 USD</p>
+        <div className="grid grid-cols-3 gap-2">
+          {FAMILIAS.map(f => (
+            <div key={f} className="text-center">
+              <FamiliaBadge familia={f} className="mb-1" />
+              <p className="font-mono text-sm font-medium text-ink mt-1">
+                USD {byFamilyUSD[f].toFixed(0)}
+              </p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Add form */}
