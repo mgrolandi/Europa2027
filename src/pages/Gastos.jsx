@@ -75,7 +75,7 @@ export default function Gastos() {
     setShowForm(false)
   }
 
-  const MONEDAS = ['EUR', 'USD', 'GBP']
+  const MONEDAS = ['EUR', 'USD']
 
   const totalByMoneda = MONEDAS.reduce((acc, m) => {
     acc[m] = (gastos ?? []).filter(g => g.moneda === m).reduce((s, g) => s + Number(g.monto), 0)
@@ -159,7 +159,6 @@ export default function Gastos() {
               className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-cream focus:outline-none focus:border-ink"
             >
               <option>EUR</option>
-              <option>GBP</option>
               <option>USD</option>
             </select>
           </div>
