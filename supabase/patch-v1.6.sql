@@ -21,11 +21,10 @@ UPDATE personas
 SET autorizacion_status = 'pendiente'
 WHERE nombre ILIKE '%Julieta%' AND familia = 'Ahmad';
 
--- 5. Candelaria (Barrera): confirmar quién es y descomentar la línea correcta
--- Si es Camila Barrera Posleman:
--- UPDATE personas SET autorizacion_status = 'pendiente' WHERE nombre ILIKE '%Camila%' AND familia = 'Barrera';
--- Si es Macarena Barrera Posleman:
--- UPDATE personas SET autorizacion_status = 'pendiente' WHERE nombre ILIKE '%Macarena%' AND familia = 'Barrera';
+-- 5. Macarena Barrera Posleman: necesita autorización de viaje / acta de nacimiento
+UPDATE personas
+SET autorizacion_status = 'pendiente'
+WHERE nombre ILIKE '%Macarena%' AND familia = 'Barrera';
 
 -- 6. Agregar pendiente para pasaporte de Santiago Nader
 INSERT INTO pendientes (viaje_id, categoria, titulo, hecho, urgente, prioridad, familia)
@@ -35,7 +34,7 @@ FROM viajes LIMIT 1;
 -- 7. Pendientes de autorización de viaje
 INSERT INTO pendientes (viaje_id, categoria, titulo, hecho, urgente, prioridad, familia) VALUES
 ((SELECT id FROM viajes LIMIT 1), 'documentacion', 'Autorización de viaje / acta de nacimiento — Julieta Ahmad', false, true, 'alta', 'Ahmad'),
-((SELECT id FROM viajes LIMIT 1), 'documentacion', 'Autorización de viaje / acta de nacimiento — Candelaria (confirmar apellido)', false, true, 'alta', 'Barrera');
+((SELECT id FROM viajes LIMIT 1), 'documentacion', 'Autorización de viaje / acta de nacimiento — Macarena Barrera Posleman', false, true, 'alta', 'Barrera');
 
 -- 8. ETA y ETIAS por ciudad
 -- Londres ya tiene ETA en patch-v1.5, y ETIAS Paris también.
