@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { useState } from 'react'
-import { useFichaCiudad, useHoteles, useVuelos, useLugares } from '../lib/queries'
+import { useFichaCiudad, useHoteles, useVuelos, useLugares, usePendientes, useAddPendiente, useTogglePendiente } from '../lib/queries'
 import { isConfigured } from '../lib/supabase'
 import { useFamilyFilter } from '../context/FamilyFilterContext'
 import FamilyFilter from '../components/FamilyFilter'
@@ -121,7 +121,10 @@ function VueloCard({ v, tag }) {
 export default function CityDetail() {
   const { ciudad } = useParams()
   const { selectedFamily } = useFamilyFilter()
-  const [activeCat, setActiveCat] = useState('miradores')
+  const [activeCat, setActiveCat]     = useState('miradores')
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [newTitulo, setNewTitulo]     = useState('')
+  const [newCat, setNewCat]           = useState('logistica')
 
   if (!isConfigured) return <SupabaseBanner />
 
@@ -129,6 +132,26 @@ export default function CityDetail() {
   const { data: hoteles }                 = useHoteles(ciudad)
   const { data: vuelos }                  = useVuelos()
   const { data: lugares }                 = useLugares(ciudad, activeCat)
+  const { data: cityPendientes }          = usePendientes(null, ciudad)
+  const addPendiente                      = useAddPendiente()
+  const togglePendiente                   = useTogglePendiente()
+
+  const openPendientes = (cityPendientes ?? []).filter(p => !p.hecho)
+  const donePendientes = (cityPendientes ?? []).filter(p => p.hecho)
+
+  function handleAddPendiente(e) {
+    e.preventDefault()
+    if (!newTitulo.trim()) return
+    addPendiente.mutate(
+      { categoria: newCat, titulo: newTitulo.trim(), ciudad, hecho: false },
+      {
+        onSuccess: () => {
+          setNewTitulo('')
+          setShowAddForm(false)
+        },
+      }
+    )
+  }
 
   const hotelesFiltered = (hoteles ?? []).filter(
     h => !selectedFamily || h.familia === selectedFamily
@@ -246,6 +269,77 @@ export default function CityDetail() {
           )}
         </section>
       )}
+
+      {/* City pendientes */}
+      <section className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="section-title mb-0">Pendientes</h2>
+          <button
+            onClick={() => setShowAddForm(v => !v)}
+            className="font-mono text-xs text-ink-light border border-cream-dark rounded-lg px-3 py-1.5 hover:border-ink hover:text-ink transition-colors"
+          >
+            {showAddForm ? 'Cancelar' : '+ Agregar'}
+          </button>
+        </div>
+
+        {showAddForm && (
+          <form onSubmit={handleAddPendiente} className="card mb-3 space-y-2">
+            <input
+              value={newTitulo}
+              onChange={e => setNewTitulo(e.target.value)}
+              placeholder="Descripción del pendiente…"
+              required
+              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink transition-colors"
+            />
+            <div className="flex gap-2">
+              <select
+                value={newCat}
+                onChange={e => setNewCat(e.target.value)}
+                className="border border-cream-dark rounded-lg px-3 py-2 text-xs font-mono bg-white/60 focus:outline-none"
+              >
+                <option value="logistica">Logística</option>
+                <option value="transportes">Transportes</option>
+                <option value="documentacion">Documentación</option>
+              </select>
+              <button
+                type="submit"
+                disabled={addPendiente.isPending}
+                className="flex-1 py-2 rounded-lg bg-ink text-cream font-mono text-xs hover:bg-ink/90 transition-colors disabled:opacity-50"
+              >
+                {addPendiente.isPending ? 'Guardando…' : 'Agregar'}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {openPendientes.length === 0 && donePendientes.length === 0 ? (
+          <p className="text-sm text-ink-light italic">Sin pendientes para {ciudad}</p>
+        ) : (
+          <div className="space-y-1.5">
+            {openPendientes.map(p => (
+              <div key={p.id} className="flex items-start gap-3 p-3 rounded-xl border border-cream-dark bg-white/60">
+                <button
+                  onClick={() => togglePendiente.mutate({ id: p.id, hecho: p.hecho })}
+                  className="mt-0.5 w-4 h-4 rounded border-2 border-ink-light/50 shrink-0 hover:border-ink transition-colors"
+                />
+                <div>
+                  <p className="text-sm text-ink">{p.titulo}</p>
+                  <p className="font-mono text-[10px] text-ink-light mt-0.5 capitalize">{p.categoria}</p>
+                </div>
+              </div>
+            ))}
+            {donePendientes.map(p => (
+              <div key={p.id} className="flex items-start gap-3 p-3 rounded-xl border border-cream-dark bg-white/30 opacity-50">
+                <button
+                  onClick={() => togglePendiente.mutate({ id: p.id, hecho: p.hecho })}
+                  className="mt-0.5 w-4 h-4 rounded border-2 border-green-500 bg-green-500 shrink-0"
+                />
+                <p className="text-sm text-ink-light line-through">{p.titulo}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* Places */}
       <section>

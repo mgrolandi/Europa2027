@@ -81,12 +81,13 @@ export const useHoteles = (ciudad = null, familia = null) =>
 
 // ─── PENDIENTES ────────────────────────────────────────────────────────────
 
-export const usePendientes = (categoria = null) =>
+export const usePendientes = (categoria = null, ciudad = null) =>
   useQuery({
-    queryKey: ['pendientes', categoria],
+    queryKey: ['pendientes', categoria, ciudad],
     queryFn: async () => {
-      let q = supabase.from('pendientes').select('*').order('created_at')
+      let q = supabase.from('pendientes').select('*').order('prioridad').order('created_at')
       if (categoria) q = q.eq('categoria', categoria)
+      if (ciudad)    q = q.eq('ciudad', ciudad)
       const { data, error } = await q
       if (error) throw error
       return data
@@ -102,6 +103,17 @@ export const useUpdatePersona = () => {
       if (error) throw error
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['personas'] }),
+  })
+}
+
+export const useAddPendiente = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (pendiente) => {
+      const { error } = await supabase.from('pendientes').insert(pendiente)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['pendientes'] }),
   })
 }
 
@@ -173,6 +185,28 @@ export const useUploadDocumento = () => {
       return path
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['documentos'] }),
+  })
+}
+
+export const useUpdateHotel = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, updates }) => {
+      const { error } = await supabase.from('hoteles').update(updates).eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['hoteles'] }),
+  })
+}
+
+export const useUpdateVuelo = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, updates }) => {
+      const { error } = await supabase.from('vuelos').update(updates).eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['vuelos'] }),
   })
 }
 
