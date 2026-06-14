@@ -8,7 +8,7 @@ import SupabaseBanner from '../components/SupabaseBanner'
 
 const CATEGORIAS  = ['alojamiento', 'transporte', 'comida', 'entradas', 'otros']
 const CIUDADES    = ['Londres', 'Paris', 'Bruselas', 'Roma', 'Madrid', '']
-const EUR_TO_USD  = 1.16
+const EUR_TO_USD  = 1.178
 
 const BLANK = {
   descripcion: '',
@@ -126,7 +126,7 @@ export default function Gastos() {
 
       {/* Summary */}
       <div className="card mb-6">
-        <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-3">Total en USD · 1 EUR = 1.16 USD</p>
+        <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-3">Total en USD · 1 EUR = 1.178 USD</p>
         <div className="grid grid-cols-3 gap-2">
           {FAMILIAS.map(f => (
             <div key={f} className="text-center">
