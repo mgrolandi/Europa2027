@@ -99,7 +99,7 @@ export default function Gastos() {
 
   return (
     <div>
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+      <div className="mb-4 flex items-start justify-between gap-4">
         <div>
           <h1 className="font-serif text-3xl text-ink">Gastos</h1>
           <div className="flex gap-4 mt-1 flex-wrap">
@@ -113,15 +113,16 @@ export default function Gastos() {
             </span>
           </div>
         </div>
-        <div className="flex gap-2 items-center">
-          <FamilyFilter />
-          <button
-            onClick={() => setShowForm(s => !s)}
-            className="px-4 py-1.5 rounded-full text-sm font-mono bg-ink text-cream border border-ink hover:bg-ink/90 transition-colors shrink-0"
-          >
-            + Agregar
-          </button>
-        </div>
+        <button
+          onClick={() => setShowForm(s => !s)}
+          className="px-4 py-1.5 rounded-full text-sm font-mono bg-ink text-cream border border-ink hover:bg-ink/90 transition-colors shrink-0 mt-1"
+        >
+          + Agregar
+        </button>
+      </div>
+
+      <div className="mb-6">
+        <FamilyFilter />
       </div>
 
       {/* Summary */}
