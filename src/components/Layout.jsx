@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 const NAV = [
-  { to: '/',              label: 'Inicio',      short: 'Inicio'   },
+  { to: '/',              label: 'Ciudades',    short: 'Ciudades' },
   { to: '/familias',      label: 'Familias',    short: 'Familias' },
   { to: '/reservas',      label: 'Reservas',    short: 'Hoteles'  },
   { to: '/transportes',   label: 'Transportes', short: 'Vuelos'   },

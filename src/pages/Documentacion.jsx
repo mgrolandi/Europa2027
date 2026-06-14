@@ -22,6 +22,7 @@ function PersonaRow({ persona, documentos }) {
   const docsPers = (documentos ?? []).filter(d => d.persona_id === persona.id)
 
   const passport = persona.pasaporte_status ?? 'ok'
+  const auth     = persona.autorizacion_status
 
   function handleFile(e) {
     const file = e.target.files?.[0]
@@ -49,6 +50,22 @@ function PersonaRow({ persona, documentos }) {
           >
             Pasaporte: {STATUS_LABEL[passport] ?? passport}
           </button>
+          {auth && auth !== 'no_aplica' && (
+            <button
+              onClick={() => updatePersona.mutate({
+                id: persona.id,
+                updates: { autorizacion_status: auth === 'pendiente' ? 'ok' : 'pendiente' },
+              })}
+              title="Click para cambiar estado"
+              className={`font-mono text-[10px] px-2 py-0.5 rounded border cursor-pointer hover:opacity-80 transition-opacity ${
+                auth === 'ok'
+                  ? 'bg-green-100 text-green-700 border-green-200'
+                  : 'bg-purple-100 text-purple-700 border-purple-200'
+              }`}
+            >
+              Autorización: {auth === 'ok' ? 'OK' : 'Pendiente'}
+            </button>
+          )}
           {persona.rol === 'Menor' && (
             <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-100 text-blue-700 border-blue-200">
               Menor
