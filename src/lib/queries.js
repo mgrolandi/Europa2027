@@ -94,6 +94,17 @@ export const usePendientes = (categoria = null) =>
     enabled: !!supabase,
   })
 
+export const useUpdatePersona = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, updates }) => {
+      const { error } = await supabase.from('personas').update(updates).eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['personas'] }),
+  })
+}
+
 export const useTogglePendiente = () => {
   const qc = useQueryClient()
   return useMutation({

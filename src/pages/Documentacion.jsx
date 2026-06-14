@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { usePersonas, useDocumentos, useUploadDocumento } from '../lib/queries'
+import { usePersonas, useDocumentos, useUploadDocumento, useUpdatePersona } from '../lib/queries'
 import { isConfigured } from '../lib/supabase'
 import { useFamilyFilter, FAMILIAS } from '../context/FamilyFilterContext'
 import FamilyFilter from '../components/FamilyFilter'
@@ -13,8 +13,11 @@ const STATUS_STYLE = {
   expired: 'bg-red-100   text-red-700   border-red-200',
 }
 
+const STATUS_CYCLE = { ok: 'pending', pending: 'expired', expired: 'ok' }
+
 function PersonaRow({ persona, documentos }) {
   const upload = useUploadDocumento()
+  const updatePersona = useUpdatePersona()
   const fileRef = useRef()
   const docsPers = (documentos ?? []).filter(d => d.persona_id === persona.id)
 
@@ -27,6 +30,10 @@ function PersonaRow({ persona, documentos }) {
     e.target.value = ''
   }
 
+  function cyclePassport() {
+    updatePersona.mutate({ id: persona.id, updates: { pasaporte_status: STATUS_CYCLE[passport] } })
+  }
+
   return (
     <div className="card">
       <div className="flex items-start justify-between gap-2">
@@ -35,9 +42,13 @@ function PersonaRow({ persona, documentos }) {
           <p className="font-mono text-xs text-ink-light">{persona.rol}</p>
         </div>
         <div className="flex flex-col items-end gap-1">
-          <span className={`font-mono text-[10px] px-2 py-0.5 rounded border ${STATUS_STYLE[passport] ?? STATUS_STYLE.pending}`}>
+          <button
+            onClick={cyclePassport}
+            title="Click para cambiar estado"
+            className={`font-mono text-[10px] px-2 py-0.5 rounded border cursor-pointer hover:opacity-80 transition-opacity ${STATUS_STYLE[passport] ?? STATUS_STYLE.pending}`}
+          >
             Pasaporte: {STATUS_LABEL[passport] ?? passport}
-          </span>
+          </button>
           {persona.rol === 'Menor' && (
             <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-100 text-blue-700 border-blue-200">
               Menor
