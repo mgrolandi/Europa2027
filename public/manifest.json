@@ -2,7 +2,7 @@
   "name": "Europa 2027",
   "short_name": "Europa27",
   "description": "Planificador de viaje · Europa 2027",
-  "start_url": "/Europa2027/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#f5f0e8",
   "theme_color": "#b8860b",
