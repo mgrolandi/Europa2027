@@ -116,15 +116,20 @@ export default function Gastos() {
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        {FAMILIAS.map(f => (
-          <div key={f} className="card text-center">
-            <FamiliaBadge familia={f} className="mb-2" />
-            {MONEDAS.map(m => byFamily[f][m] > 0 ? (
-              <p key={m} className="font-mono text-sm font-medium text-ink leading-snug">
-                {m} {byFamily[f][m].toFixed(0)}
-              </p>
-            ) : null)}
+      <div className="space-y-3 mb-6">
+        {MONEDAS.filter(m => totalByMoneda[m] > 0).map(m => (
+          <div key={m}>
+            <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-2">{m}</p>
+            <div className="grid grid-cols-3 gap-3">
+              {FAMILIAS.map(f => (
+                <div key={f} className="card text-center py-3">
+                  <FamiliaBadge familia={f} className="mb-1.5" />
+                  <p className="font-mono text-sm font-medium text-ink">
+                    {byFamily[f][m] > 0 ? byFamily[f][m].toFixed(0) : '—'}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>
@@ -222,9 +227,18 @@ export default function Gastos() {
           {[1,2,3].map(i => <div key={i} className="h-20 rounded-xl bg-cream-dark animate-pulse" />)}
         </div>
       ) : gastos?.length ? (
-        <div className="space-y-2">
-          {gastos.map(g => (
-            <GastoRow key={g.id} g={g} onDelete={id => deleteGasto.mutate(id)} />
+        <div className="space-y-6">
+          {MONEDAS.filter(m => (gastos ?? []).some(g => g.moneda === m)).map(m => (
+            <div key={m}>
+              <p className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-2">
+                {m} · total {totalByMoneda[m].toFixed(2)}
+              </p>
+              <div className="space-y-2">
+                {gastos.filter(g => g.moneda === m).map(g => (
+                  <GastoRow key={g.id} g={g} onDelete={id => deleteGasto.mutate(id)} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       ) : (
