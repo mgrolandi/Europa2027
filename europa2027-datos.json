@@ -64,12 +64,20 @@
     {
       "ciudad": "Bruselas",
       "fechas": { "checkin": "2027-02-06", "checkout": "2027-02-07" },
-      "nombre": null, "direccion": null, "maps_url": null,
+      "nombre": "Hotel NH Brussels Carrefour de l'Europe",
+      "direccion": "Rue du Marché aux Herbes 110, 1000 Bruxelles, Bélgica",
+      "maps_url": "https://maps.google.com/?q=Rue+du+Marche+aux+Herbes+110+1000+Bruxelles",
       "como_llegar_desde_aeropuerto": "Desde BRU tomar tren directo a Bruxelles-Central. Marcar siempre aunque no haya control visible.",
+      "habitaciones": {
+        "dobles": { "cantidad": 3, "confirmacion": "73474107361490", "asignacion": "1 doble Ahmad (2) + 1 doble Nader (2) + 1 doble Barrera (2)" },
+        "cuadruples": { "cantidad": 2, "confirmacion": "73474100905258", "asignacion": "Cuadruple A: 2 Ahmad + 2 Barrera | Cuadruple B: 3 Nader + 1 Barrera" }
+      },
+      "fecha_pago": "2027-01-30",
+      "metodo_pago": "Tarjeta Galicia Gaby",
       "reservas": {
-        "Barrera": { "confirmacion": null, "precio": null, "obs": "Por confirmar" },
-        "Nader":   { "confirmacion": null, "precio": null, "obs": "Por confirmar" },
-        "Ahmad":   { "confirmacion": null, "precio": null, "obs": "Por confirmar" }
+        "Barrera": { "confirmacion": "73474107361490 / 73474100905258", "precio": "EUR 423.00", "habitacion": "1 doble (2 Barrera) + 2 Barrera en Cuadruple A + 1 Barrera en Cuadruple B", "obs": "5 pax repartidos entre 3 habitaciones" },
+        "Nader":   { "confirmacion": "73474107361490 / 73474100905258", "precio": "EUR 423.00", "habitacion": "1 doble (2 Nader) + Cuadruple B (3 Nader)", "obs": "5 pax repartidos entre 2 habitaciones" },
+        "Ahmad":   { "confirmacion": "73474107361490 / 73474100905258", "precio": "EUR 351.41", "habitacion": "1 doble (2 Ahmad) + Cuadruple A (2 Ahmad)", "obs": "4 pax repartidos entre 2 habitaciones" }
       }
     },
     {
@@ -129,7 +137,7 @@
     "transportes": [
       { "item": "Vuelo Bruselas -> Roma", "hecho": false, "urgente": true, "obs": "Sin aerolinea ni numero aun" },
       { "item": "Tren Paris -> Bruselas (Thalys)", "hecho": false, "urgente": true, "obs": null },
-      { "item": "Hotel Bruselas — todas las familias", "hecho": false, "urgente": true, "obs": null },
+      { "item": "Hotel Bruselas — todas las familias", "hecho": true, "urgente": false, "obs": "NH Brussels Carrefour de l'Europe. 3 dobles (conf. 73474107361490) + 2 cuadruples (conf. 73474100905258). Pago 30/01 con Tarjeta Galicia Gaby." },
       { "item": "Vuelo Roma -> Madrid IB0648", "hecho": true, "obs": "PNR Nader: J5SQ1. Falta Barrera y Ahmad" },
       { "item": "Tren Londres -> Paris Eurostar", "hecho": true, "obs": "Confirmado. Faltan PNR por familia" }
     ],
@@ -314,8 +322,8 @@
     "seguros_permisos_id": "1nj6S_Omyz8LlzCmCuKsBjOa-7rfOVR_n"
   },
   "meta": {
-    "version": "1.3",
-    "ultima_actualizacion": "2026-06-07",
-    "notas": "v1.3: lugares agregados para Paris, Bruselas, Roma y Madrid. Guias HTML por ciudad generadas."
+    "version": "1.4",
+    "ultima_actualizacion": "2026-06-14",
+    "notas": "v1.4: Hotel Bruselas confirmado — NH Brussels Carrefour de l'Europe. Asignacion de habitaciones completa (3 dobles + 2 cuadruples)."
   }
 }
