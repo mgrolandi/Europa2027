@@ -140,8 +140,12 @@ export default function CityDetail() {
   const addPendiente                      = useAddPendiente()
   const togglePendiente                   = useTogglePendiente()
 
+  const { data: entradas } = usePendientes('entradas', ciudad)
+
   const openPendientes = (cityPendientes ?? []).filter(p => !p.hecho)
   const donePendientes = (cityPendientes ?? []).filter(p => p.hecho)
+  const openEntradas   = (entradas ?? []).filter(p => !p.hecho)
+  const doneEntradas   = (entradas ?? []).filter(p => p.hecho)
 
   function handleAddPendiente(e) {
     e.preventDefault()
@@ -273,6 +277,53 @@ export default function CityDetail() {
               </ul>
             </div>
           )}
+        </section>
+      )}
+
+      {/* Entradas y actividades */}
+      {(openEntradas.length > 0 || doneEntradas.length > 0) && (
+        <section className="mb-6">
+          <h2 className="section-title">Entradas y actividades</h2>
+          <div className="space-y-2">
+            {[...openEntradas, ...doneEntradas].map(p => (
+              <div
+                key={p.id}
+                className={`card flex items-start gap-3 ${p.hecho ? 'opacity-60' : p.urgente ? 'border-red-200 bg-red-50/30' : ''}`}
+              >
+                <button
+                  onClick={() => togglePendiente.mutate({ id: p.id, hecho: p.hecho })}
+                  className={`mt-0.5 w-4 h-4 rounded border-2 shrink-0 transition-colors ${
+                    p.hecho
+                      ? 'border-green-500 bg-green-500'
+                      : 'border-ink-light/50 hover:border-ink'
+                  }`}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm text-ink ${p.hecho ? 'line-through text-ink-light' : ''}`}>
+                    {p.titulo}
+                  </p>
+                  {p.descripcion && (
+                    <p className="font-mono text-[10px] text-ink-light mt-0.5">{p.descripcion}</p>
+                  )}
+                  <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">
+                    {p.fecha_limite_label && (
+                      <span className={`font-mono text-[10px] ${p.urgente ? 'text-red-600' : 'text-ink-light'}`}>
+                        {p.fecha_limite_label}
+                      </span>
+                    )}
+                    {p.precio_info && (
+                      <span className="font-mono text-[10px] text-ink-light">{p.precio_info}</span>
+                    )}
+                  </div>
+                </div>
+                {p.urgente && !p.hecho && (
+                  <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-700 border border-red-200 shrink-0">
+                    Urgente
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
