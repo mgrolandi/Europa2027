@@ -24,7 +24,7 @@ function Skeleton() {
   return <div className="h-8 rounded bg-cream-dark animate-pulse" />
 }
 
-function HotelCard({ h }) {
+function HotelCard({ h, comoLlegar }) {
   const confirmed = !!h.confirmacion
   return (
     <div className={`card ${confirmed ? 'border-green-200' : 'border-amber-200 bg-amber-50/30'}`}>
@@ -56,18 +56,22 @@ function HotelCard({ h }) {
         {h.confirmacion && <span>#{h.confirmacion}</span>}
       </div>
 
-      {h.notas && (
-        <p className="text-xs text-ink-light mt-2 italic">{h.notas}</p>
+      {h.notas && <p className="text-xs text-ink-light mt-2 italic">{h.notas}</p>}
+
+      {comoLlegar && (
+        <div className="mt-2 text-xs text-ink-light border-l-2 border-gold pl-2">
+          {comoLlegar}
+        </div>
       )}
 
       {h.maps_url && (
         <a
-          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(h.direccion ?? '')}`}
+          href={h.maps_url}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block mt-2 text-xs font-mono text-gold hover:text-gold-light underline underline-offset-2"
         >
-          Cómo llegar
+          Ver en Maps
         </a>
       )}
     </div>
@@ -230,7 +234,9 @@ export default function CityDetail() {
           <p className="text-sm text-ink-light italic">Sin reservas{selectedFamily ? ` para ${selectedFamily}` : ''}</p>
         ) : (
           <div className="space-y-3">
-            {hotelesFiltered.map(h => <HotelCard key={h.id} h={h} />)}
+            {hotelesFiltered.map(h => (
+              <HotelCard key={h.id} h={h} comoLlegar={ficha?.como_llegar_aeropuerto} />
+            ))}
           </div>
         )}
 

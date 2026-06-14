@@ -50,7 +50,7 @@ function PersonaRow({ persona, documentos }) {
           >
             Pasaporte: {STATUS_LABEL[passport] ?? passport}
           </button>
-          {auth && auth !== 'no_aplica' && (
+          {(auth === 'pendiente' || auth === 'ok') && (
             <button
               onClick={() => updatePersona.mutate({
                 id: persona.id,
@@ -63,7 +63,7 @@ function PersonaRow({ persona, documentos }) {
                   : 'bg-purple-100 text-purple-700 border-purple-200'
               }`}
             >
-              Autorización: {auth === 'ok' ? 'OK' : 'Pendiente'}
+              Acta: {auth === 'ok' ? 'OK' : 'Pendiente'}
             </button>
           )}
           {persona.rol === 'Menor' && (

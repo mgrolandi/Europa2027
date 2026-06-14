@@ -8,7 +8,7 @@ import FamiliaBadge from '../components/FamiliaBadge'
 const CITY_PHOTOS = {
   Londres:  'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80',
   Paris:    'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80',
-  Bruselas: 'https://images.unsplash.com/photo-1535207010348-71e47296838a?auto=format&fit=crop&w=600&q=80',
+  Bruselas: 'https://images.unsplash.com/photo-1548533819-69e4db0c0eda?auto=format&fit=crop&w=600&q=80',
   Roma:     'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=600&q=80',
   Madrid:   'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=600&q=80',
 }

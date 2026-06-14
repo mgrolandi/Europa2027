@@ -19,14 +19,25 @@ function fmt(iso) {
 function UploadBtn({ label, personaId, entidadId, tipoDoc, documentos }) {
   const ref    = useRef()
   const upload = useUploadDocumento()
-  const existing = (documentos ?? []).find(
-    d => d.tipo_doc === tipoDoc && (d.persona_id === personaId || d.entidad_id === entidadId)
-  )
+
+  // Strict match when both ids provided (boarding pass per person per flight)
+  const existing = (documentos ?? []).find(d => {
+    if (d.tipo_doc !== tipoDoc) return false
+    if (personaId && entidadId) return d.persona_id === personaId && d.entidad_id === entidadId
+    if (personaId) return d.persona_id === personaId
+    return d.entidad_id === entidadId
+  })
 
   function handleFile(e) {
     const file = e.target.files?.[0]
     if (!file) return
-    upload.mutate({ file, persona_id: personaId ?? null, entidad_id: entidadId ?? null, tipo_doc: tipoDoc, entidad_tipo: personaId ? 'persona' : 'vuelo' })
+    upload.mutate({
+      file,
+      persona_id:   personaId  ?? null,
+      entidad_id:   entidadId  ?? null,
+      tipo_doc:     tipoDoc,
+      entidad_tipo: entidadId  ? 'vuelo' : 'persona',
+    })
     e.target.value = ''
   }
 
@@ -52,14 +63,33 @@ function UploadBtn({ label, personaId, entidadId, tipoDoc, documentos }) {
   )
 }
 
+function fmtDate(iso) {
+  if (!iso) return null
+  return new Date(iso + 'T12:00:00').toLocaleDateString('es', { day: '2-digit', month: '2-digit', year: '2-digit' })
+}
+
 function PersonaCard({ persona, documentos }) {
-  const ps = PASSPORT_STYLE[persona.pasaporte_status] ?? PASSPORT_STYLE.ok
+  const ps   = PASSPORT_STYLE[persona.pasaporte_status] ?? PASSPORT_STYLE.ok
+  const auth = persona.autorizacion_status
+  const needsActa = auth === 'pendiente' || auth === 'ok'
+
   return (
     <div className="card">
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-medium text-ink text-sm">{persona.nombre}</p>
           <p className="font-mono text-[10px] text-ink-light mt-0.5">{persona.rol}</p>
+          {persona.pasaporte_numero && (
+            <p className="font-mono text-[10px] text-ink-light mt-0.5">
+              {persona.pasaporte_numero}
+              {persona.pasaporte_vencimiento && (
+                <span className="ml-1 text-ink-light/60">· vto {fmtDate(persona.pasaporte_vencimiento)}</span>
+              )}
+            </p>
+          )}
+          {persona.pasaporte_status === 'pending' && !persona.pasaporte_numero && (
+            <p className="font-mono text-[10px] text-amber-600 mt-0.5">Renovar pasaporte</p>
+          )}
         </div>
         <span className={`font-mono text-[10px] px-2 py-0.5 rounded border shrink-0 ${ps.cls}`}>
           Pasaporte {ps.label}
@@ -68,8 +98,8 @@ function PersonaCard({ persona, documentos }) {
       <div className="flex flex-wrap gap-2 mt-3">
         <UploadBtn label="Pasaporte" personaId={persona.id} tipoDoc="pasaporte" documentos={documentos} />
         <UploadBtn label="Seguro"    personaId={persona.id} tipoDoc="seguro"    documentos={documentos} />
-        {persona.rol === 'Menor' && (
-          <UploadBtn label="Autorización" personaId={persona.id} tipoDoc="autorizacion" documentos={documentos} />
+        {needsActa && (
+          <UploadBtn label="Acta" personaId={persona.id} tipoDoc="autorizacion" documentos={documentos} />
         )}
       </div>
     </div>
@@ -98,33 +128,42 @@ function FamiliaPanel({ familia, personas, vuelos, hoteles, documentos }) {
         ))}
       </div>
 
-      {/* Boarding passes */}
+      {/* Boarding passes — por persona por vuelo */}
       <h3 className="font-mono text-[10px] text-ink-light uppercase tracking-widest mb-2">
         Boarding Passes
       </h3>
       <div className="space-y-2 mb-6">
         {vuelosFam.map(v => {
           const pnr = v.pnr?.[familia]
-          const confirmed = v.confirmado
           return (
-            <div key={v.id} className={`card flex items-center justify-between gap-3 ${confirmed ? 'border-green-200' : 'border-amber-200'}`}>
-              <div>
+            <div key={v.id} className={`card ${v.confirmado ? 'border-green-200' : 'border-amber-200'}`}>
+              <div className="mb-2">
                 <p className="text-sm font-medium text-ink">{v.origen} → {v.destino}</p>
-                <div className="flex gap-3 font-mono text-xs text-ink-light mt-0.5">
+                <div className="flex flex-wrap gap-x-3 font-mono text-xs text-ink-light mt-0.5">
                   <span>{fmt(v.fecha)}</span>
                   {v.empresa && <span>{v.empresa}</span>}
-                  {v.numero && <span>{v.numero}</span>}
+                  {v.numero  && <span>{v.numero}</span>}
                   <span className={pnr ? 'text-ink' : 'text-amber-600'}>
                     PNR: {pnr ?? 'pendiente'}
                   </span>
                 </div>
               </div>
-              <UploadBtn
-                label="Boarding"
-                entidadId={v.id}
-                tipoDoc={`boarding_${familia.toLowerCase()}`}
-                documentos={documentos}
-              />
+              <div className="space-y-1.5 border-t border-cream-dark pt-2">
+                {miembros.map(p => (
+                  <div key={p.id} className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs text-ink-light truncate">
+                      {p.nombre.split(' ')[0]}
+                    </span>
+                    <UploadBtn
+                      label="BP"
+                      personaId={p.id}
+                      entidadId={v.id}
+                      tipoDoc="boarding_pass"
+                      documentos={documentos}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )
         })}
@@ -146,12 +185,19 @@ function FamiliaPanel({ familia, personas, vuelos, hoteles, documentos }) {
               {h.confirmacion && <span>#{h.confirmacion}</span>}
             </div>
             {h.notas && <p className="text-xs text-ink-light italic mt-1">{h.notas}</p>}
-            {h.maps_url && (
-              <a href={h.maps_url} target="_blank" rel="noopener noreferrer"
-                className="text-xs font-mono text-gold hover:text-gold-light underline underline-offset-2 mt-2 inline-block">
-                Cómo llegar
-              </a>
+            {h.como_llegar_aeropuerto && (
+              <p className="text-xs text-ink-light mt-1.5 border-l-2 border-gold pl-2">
+                {h.como_llegar_aeropuerto}
+              </p>
             )}
+            <div className="mt-2 flex items-center gap-3">
+              {h.maps_url && (
+                <a href={h.maps_url} target="_blank" rel="noopener noreferrer"
+                  className="text-xs font-mono text-gold hover:underline underline-offset-2">
+                  Ver en Maps
+                </a>
+              )}
+            </div>
             <div className="mt-2">
               <UploadBtn label="Voucher" entidadId={h.id} tipoDoc="voucher" documentos={documentos} />
             </div>

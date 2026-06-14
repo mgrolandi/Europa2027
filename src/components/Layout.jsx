@@ -38,7 +38,7 @@ export default function Layout({ children }) {
           </Link>
           <div className="hidden md:flex items-center gap-5">
             <nav className="flex items-center gap-5 text-sm font-mono">
-              {NAV.slice(1).map(n => (
+              {NAV.map(n => (
                 <Link
                   key={n.to}
                   to={n.to}
