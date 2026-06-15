@@ -169,6 +169,21 @@
   },
   "lugares": {
     "Londres": {
+      "actividades": [
+        {
+          "nombre": "Mamma Mia — West End",
+          "fecha": "2027-02-01",
+          "dia": "Lunes",
+          "hora": "19:30",
+          "lugar": "Novello Theatre",
+          "zona": "West End · Aldwych, London WC2B 4LD",
+          "precio_gbp": 17.50,
+          "precio_usd": 42,
+          "confirmado": true,
+          "entrada_url": null,
+          "maps_url": "https://maps.google.com/?q=Novello+Theatre+London+WC2B+4LD"
+        }
+      ],
       "miradores": [
         { "nombre": "Sky Garden", "zona": "City of London", "descripcion": "Jardin en la cima del 20 Fenchurch St con vista panoramica de 360 sobre la City.", "precio": "Gratis", "reserva": true, "tip": "Reservar antes del viaje — se agota rapido.", "maps_url": "https://maps.google.com/?q=Sky+Garden+London" },
         { "nombre": "One New Change — Rooftop", "zona": "City of London", "descripcion": "Terraza abierta directamente frente a St Paul's Cathedral. Vista frontal sin obstaculos. Sin costo, sin reserva.", "precio": "Gratis", "reserva": false, "tip": "Acceso libre todo el dia.", "maps_url": "https://maps.google.com/?q=One+New+Change+London" },
@@ -207,6 +222,7 @@
       ]
     },
     "Paris": {
+      "actividades": [],
       "miradores": [
         { "nombre": "Torre Eiffel", "zona": "Champ de Mars", "descripcion": "El icono de Paris. Tres pisos con vistas legendarias. 330m de altura, construida en 1889 para la Exposicion Universal.", "precio": "Pago ~EUR 29 adulto / EUR 7.50 nino", "reserva": true, "tip": "Reservar con meses de anticipacion — sold out habitual.", "maps_url": "https://maps.google.com/?q=Tour+Eiffel+Paris" },
         { "nombre": "Arc de Triomphe — Terraza", "zona": "Champs-Elysees", "descripcion": "Subir al arco (284 escalones) para vista sobre los 12 bulevares que irradian desde la Place de l'Etoile.", "precio": "Pago ~EUR 13 adulto / Gratis -18", "reserva": false, "tip": "Al atardecer los bulevares iluminados son impresionantes.", "maps_url": "https://maps.google.com/?q=Arc+de+Triomphe+Paris" },
@@ -234,6 +250,7 @@
       ]
     },
     "Bruselas": {
+      "actividades": [],
       "miradores": [
         { "nombre": "Atomium", "zona": "Laeken", "descripcion": "Estructura futurista en forma de atomo de hierro gigantesco, construida para la Expo 1958. Vista panoramica desde la esfera superior.", "precio": "Pago EUR 16 adulto / EUR 9 nino", "reserva": false, "tip": "A 15 min del centro en metro. Los ninos flipan con el ascensor tubular.", "maps_url": "https://maps.google.com/?q=Atomium+Brussels" },
         { "nombre": "Palais de Justice — Terraza", "zona": "Marolles", "descripcion": "Tribunales neoclasicos enormes (1883) con terraza libre. Vista sobre los tejados de Bruselas hacia la Grand-Place.", "precio": "Gratis", "reserva": false, "tip": "Acceso libre en horario de oficina.", "maps_url": "https://maps.google.com/?q=Palais+de+Justice+Brussels" },
@@ -257,6 +274,7 @@
       ]
     },
     "Roma": {
+      "actividades": [],
       "miradores": [
         { "nombre": "Gianicolo", "zona": "Trastevere", "descripcion": "La mejor vista panoramica de Roma, gratis. Colina con canon que dispara a mediodia (tradicion desde 1846).", "precio": "Gratis", "reserva": false, "tip": "Ir al mediodia para ver el canon — los ninos quedan impactados.", "maps_url": "https://maps.google.com/?q=Gianicolo+Roma" },
         { "nombre": "Castel Sant'Angelo — Terraza", "zona": "Prati", "descripcion": "Fortaleza del siglo II convertida en castillo papal. La terraza ofrece vista sobre el Tiber, el Vaticano y el centro historico.", "precio": "Pago EUR 15 adulto / Gratis -18 UE", "reserva": false, "tip": "Subir al atardecer para los mejores colores sobre el Vaticano.", "maps_url": "https://maps.google.com/?q=Castel+Sant+Angelo+Roma" },
@@ -285,6 +303,7 @@
       ]
     },
     "Madrid": {
+      "actividades": [],
       "miradores": [
         { "nombre": "Circulo de Bellas Artes — Rooftop", "zona": "Centro", "descripcion": "La mejor terraza de Madrid. Vista 360 sobre los tejados y la Gran Via. Con bar y ambiente cultural.", "precio": "Pago EUR 5 (incluye consumicion)", "reserva": false, "tip": "Al atardecer es magico — la Gran Via iluminada es espectacular.", "maps_url": "https://maps.google.com/?q=Circulo+de+Bellas+Artes+Madrid" },
         { "nombre": "El Corte Ingles Callao — Terraza", "zona": "Gran Via", "descripcion": "Terraza del 9no piso con vista directa sobre la Gran Via y el skyline de Madrid. Acceso libre.", "precio": "Gratis (consumicion opcional)", "reserva": false, "tip": "El restaurante del techo tiene las mejores vistas del centro — abre al mediodia.", "maps_url": "https://maps.google.com/?q=El+Corte+Ingles+Callao+Madrid" },
@@ -322,8 +341,8 @@
     "seguros_permisos_id": "1nj6S_Omyz8LlzCmCuKsBjOa-7rfOVR_n"
   },
   "meta": {
-    "version": "1.4",
-    "ultima_actualizacion": "2026-06-14",
-    "notas": "v1.4: Hotel Bruselas confirmado — NH Brussels Carrefour de l'Europe. Asignacion de habitaciones completa (3 dobles + 2 cuadruples)."
+    "version": "1.5",
+    "ultima_actualizacion": "2026-06-15",
+    "notas": "v1.5: Seccion Actividades agregada a cada ciudad. Londres: Mamma Mia West End — lun 01/02 19:30, £17.50/USD 42 p/persona."
   }
 }

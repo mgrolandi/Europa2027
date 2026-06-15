@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Madrid — Europa 2027</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1a1a18">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
     :root{--ink:#1a1a18;--paper:#f5f0e8;--cream:#ede7d9;--red:#c0392b;--gold:#b8860b;--muted:#7a7468;--border:#c8bfaa}
@@ -65,29 +63,26 @@
     a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
     a.maps-link:hover{text-decoration:underline}
     .no-pendientes{padding:16px 20px;background:var(--cream);border:1px solid var(--border);border-radius:4px;font-size:13px;color:var(--muted);font-style:italic}
+    .act-grid{display:flex;flex-direction:column;gap:12px}
+    .act-card{background:#fff;border:1px solid var(--border);border-left:4px solid #27ae60;border-radius:6px;padding:18px 20px;display:flex;gap:20px;align-items:flex-start}
+    .act-date-col{text-align:center;flex-shrink:0;width:56px;padding-top:2px}
+    .act-day-num{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1;color:var(--ink)}
+    .act-day-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+    .act-time-lbl{font-size:12px;color:var(--gold);font-weight:500;margin-top:6px}
+    .act-body{flex:1}.act-body h3{font-size:16px;margin-bottom:3px}
+    .act-venue{font-size:11px;color:var(--muted);margin-bottom:10px}
+    .act-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .tag-confirmed{background:#d4edda;color:#1e5c2e;border:1px solid #a3d4ac;padding:2px 8px;border-radius:3px;font-size:11px}
+    .tag-price{background:#fde8e8;color:#7a1f1f;border:1px solid #f0aaaa;padding:2px 8px;border-radius:3px;font-size:11px}
+    .act-links{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+    a.act-ticket{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
+    a.act-ticket:hover{text-decoration:underline}
+    .act-ticket-pending{font-size:11px;color:var(--muted);font-style:italic}
+    .act-empty{padding:16px 20px;background:var(--cream);border-radius:6px;font-size:12px;color:var(--muted);font-style:italic}
     @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
-    #auth-overlay{position:fixed;inset:0;background:var(--paper);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
-    #auth-overlay.hidden{display:none}
-    .auth-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:48px 36px;width:100%;max-width:360px;text-align:center}
-    .auth-box h2{font-family:'Playfair Display',serif;font-size:30px;margin-bottom:6px}
-    .auth-box p{font-size:12px;color:var(--muted);margin-bottom:28px;letter-spacing:.04em}
-    .auth-input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:16px;background:var(--paper);color:var(--ink);outline:none;text-align:center;letter-spacing:.14em}
-    .auth-input:focus{border-color:var(--gold)}
-    .auth-btn{margin-top:12px;width:100%;padding:13px;background:var(--ink);color:var(--paper);border:none;border-radius:4px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.08em;cursor:pointer}
-    .auth-btn:hover{background:#2d2d2a}
-    .auth-error{margin-top:12px;font-size:12px;color:var(--red);min-height:18px}
   </style>
 </head>
 <body>
-<div id="auth-overlay">
-  <div class="auth-box">
-    <h2>Europa 2027</h2>
-    <p>Ingresá la clave del grupo</p>
-    <input class="auth-input" id="auth-input" type="password" placeholder="••••••••" autocomplete="current-password">
-    <button class="auth-btn" id="auth-btn">Entrar →</button>
-    <div class="auth-error" id="auth-error"></div>
-  </div>
-</div>
 
 <nav class="city-nav">
   <a href="index.html" class="nav-brand">Europa 2027</a>
@@ -172,6 +167,14 @@
   <div class="section">
     <h2 class="section-title">Pendientes <small>ENTRADAS & RESERVAS</small></h2>
     <div class="no-pendientes">Sin pendientes de entradas para esta ciudad.</div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section">
+    <div class="section-title">Actividades <small>confirmadas</small></div>
+    <div class="act-grid">
+      <div class="act-empty">Sin actividades confirmadas aún para esta ciudad.</div>
+    </div>
   </div>
 
   <!-- MIRADORES -->
@@ -415,22 +418,5 @@
   </div>
 
 </div>
-<script>
-(function(){
-  var KEY='e27_auth',PASS='Europa2027';
-  var overlay=document.getElementById('auth-overlay');
-  var input=document.getElementById('auth-input');
-  var btn=document.getElementById('auth-btn');
-  var err=document.getElementById('auth-error');
-  if(sessionStorage.getItem(KEY)==='ok'){overlay.classList.add('hidden');return;}
-  function tryAuth(){
-    if(input.value===PASS){sessionStorage.setItem(KEY,'ok');overlay.classList.add('hidden');}
-    else{err.textContent='Clave incorrecta — intentá de nuevo';input.value='';input.focus();}
-  }
-  btn.addEventListener('click',tryAuth);
-  input.addEventListener('keydown',function(e){if(e.key==='Enter')tryAuth();});
-  input.focus();
-})();
-</script>
 </body>
 </html>
