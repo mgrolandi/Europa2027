@@ -83,6 +83,12 @@
     a.act-ticket:hover{text-decoration:underline}
     .act-ticket-pending{font-size:11px;color:var(--muted);font-style:italic}
     .act-empty{padding:16px 20px;background:var(--cream);border-radius:6px;font-size:12px;color:var(--muted);font-style:italic}
+    /* Nav secciones */
+    html{scroll-behavior:smooth}
+    .section-nav{display:flex;gap:8px;overflow-x:auto;padding:20px 0;margin-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--border);margin-top:-16px}
+    .section-nav::-webkit-scrollbar{display:none}
+    .snav-btn{white-space:nowrap;padding:9px 22px;border-radius:24px;background:var(--cream);color:var(--ink);text-decoration:none;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.05em;border:1px solid var(--border);transition:background .15s,color .15s;flex-shrink:0}
+    .snav-btn:hover{background:var(--ink);color:var(--paper)}
   </style>
 </head>
 <body>
@@ -104,8 +110,15 @@
     <div class="dates">29 ene — 02 feb 2027 · 4 noches · Urban Chic Shaftesbury</div>
   </div>
 
+  <nav class="section-nav">
+    <a href="#alojamiento" class="snav-btn">Alojamiento</a>
+    <a href="#transporte" class="snav-btn">Transporte</a>
+    <a href="#actividades" class="snav-btn">Actividades</a>
+    <a href="#guia" class="snav-btn">Guía</a>
+  </nav>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <div id="alojamiento" class="section">
     <div class="section-title">Alojamiento <small>Urban Chic - Shaftesbury · W1D 5EB</small></div>
     <div class="hotel-grid">
 
@@ -152,7 +165,7 @@
   </div>
 
   <!-- AEROPUERTO -->
-  <div class="section">
+  <div id="transporte" class="section">
     <div class="section-title">Cómo llegar desde el aeropuerto <small>LHR → hotel</small></div>
     <div class="info-box">
       Desde <strong>LHR</strong> tomar Underground <strong>Piccadilly Line</strong> hasta <strong>Piccadilly Circus</strong> o <strong>Leicester Square</strong>.<br>
@@ -216,7 +229,7 @@
   </div>
 
   <!-- ACTIVIDADES -->
-  <div class="section">
+  <div id="actividades" class="section">
     <div class="section-title">Actividades <small>confirmadas</small></div>
     <div class="act-grid">
 
@@ -228,7 +241,9 @@
         </div>
         <div class="act-body">
           <h3>Mamma Mia — West End</h3>
-          <div class="act-venue">Novello Theatre · Aldwych, London WC2B 4LD</div>
+          <div class="act-venue">
+            <a href="https://maps.google.com/?q=Novello+Theatre+Aldwych+London+WC2B+4LD" class="maps-link" target="_blank" rel="noopener">Novello Theatre · Aldwych, London WC2B 4LD →</a>
+          </div>
           <div class="act-meta">
             <span class="tag-confirmed">✓ Confirmado</span>
             <span class="tag-price">£17.50 · USD 42 p/persona</span>
@@ -244,7 +259,7 @@
   </div>
 
   <!-- MIRADORES -->
-  <div class="section">
+  <div id="guia" class="section">
     <div class="section-title">Miradores <small>7 lugares</small></div>
     <div class="places-grid">
 

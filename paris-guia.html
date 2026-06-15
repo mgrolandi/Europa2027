@@ -83,6 +83,12 @@
     .act-ticket-pending{font-size:11px;color:var(--muted);font-style:italic}
     .act-empty{padding:16px 20px;background:var(--cream);border-radius:6px;font-size:12px;color:var(--muted);font-style:italic}
     @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    /* Nav secciones */
+    html{scroll-behavior:smooth}
+    .section-nav{display:flex;gap:8px;overflow-x:auto;padding:20px 0;margin-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--border);margin-top:-16px}
+    .section-nav::-webkit-scrollbar{display:none}
+    .snav-btn{white-space:nowrap;padding:9px 22px;border-radius:24px;background:var(--cream);color:var(--ink);text-decoration:none;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.05em;border:1px solid var(--border);transition:background .15s,color .15s;flex-shrink:0}
+    .snav-btn:hover{background:var(--ink);color:var(--paper)}
   </style>
 </head>
 <body>
@@ -104,8 +110,17 @@
     <div class="dates">02 — 06 feb 2027 · 4 noches · Alojamiento separado por familia</div>
   </div>
 
+  <nav class="section-nav">
+    <a href="#alojamiento" class="snav-btn">Alojamiento</a>
+    <a href="#transporte" class="snav-btn">Transporte</a>
+    <a href="#actividades" class="snav-btn">Actividades</a>
+    <a href="#guia" class="snav-btn">Guía</a>
+  </nav>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <  <!-- ALOJAMIENTO -->
+  <div id="alojamiento" class="section">
+ class="section">
     <div class="section-title">Alojamiento <small>separado por familia</small></div>
     <div class="hotel-grid">
 
@@ -148,7 +163,7 @@
   </div>
 
   <!-- AEROPUERTO -->
-  <div class="section">
+  <div id="transporte" class="section">
     <div class="section-title">Cómo llegar desde el aeropuerto <small>CDG → centro</small></div>
     <div class="info-box">
       Desde <strong>CDG</strong> tomar <strong>RER B</strong> directo hasta el centro de París (Châtelet-Les Halles, Saint-Michel, entre otras).<br>
@@ -194,7 +209,7 @@
   </div>
 
   <!-- ACTIVIDADES -->
-  <div class="section">
+  <div id="actividades" class="section">
     <div class="section-title">Actividades <small>confirmadas</small></div>
     <div class="act-grid">
       <div class="act-empty">Sin actividades confirmadas aún para esta ciudad.</div>
@@ -202,7 +217,7 @@
   </div>
 
   <!-- MIRADORES -->
-  <div class="section">
+  <div id="guia" class="section">
     <div class="section-title">Miradores <small>4 lugares</small></div>
     <div class="places-grid">
 

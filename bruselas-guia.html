@@ -80,6 +80,12 @@
     .act-ticket-pending{font-size:11px;color:var(--muted);font-style:italic}
     .act-empty{padding:16px 20px;background:var(--cream);border-radius:6px;font-size:12px;color:var(--muted);font-style:italic}
     @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    /* Nav secciones */
+    html{scroll-behavior:smooth}
+    .section-nav{display:flex;gap:8px;overflow-x:auto;padding:20px 0;margin-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--border);margin-top:-16px}
+    .section-nav::-webkit-scrollbar{display:none}
+    .snav-btn{white-space:nowrap;padding:9px 22px;border-radius:24px;background:var(--cream);color:var(--ink);text-decoration:none;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.05em;border:1px solid var(--border);transition:background .15s,color .15s;flex-shrink:0}
+    .snav-btn:hover{background:var(--ink);color:var(--paper)}
   </style>
 </head>
 <body>
@@ -101,8 +107,17 @@
     <div class="dates">06 — 07 feb 2027 &nbsp;·&nbsp; 1 noche &nbsp;·&nbsp; Bélgica</div>
   </div>
 
+  <nav class="section-nav">
+    <a href="#alojamiento" class="snav-btn">Alojamiento</a>
+    <a href="#transporte" class="snav-btn">Transporte</a>
+    <a href="#actividades" class="snav-btn">Actividades</a>
+    <a href="#guia" class="snav-btn">Guía</a>
+  </nav>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <  <!-- ALOJAMIENTO -->
+  <div id="alojamiento" class="section">
+ class="section">
     <h2 class="section-title">Alojamiento <small>POR CONFIRMAR</small></h2>
     <div class="hotel-grid">
 
@@ -131,7 +146,7 @@
   </div>
 
   <!-- TRANSPORTE -->
-  <div class="section">
+  <div id="transporte" class="section">
     <h2 class="section-title">Transporte en la ciudad</h2>
     <ul class="transport-list">
       <li>Marcar SIEMPRE aunque no haya molinete ni control visible — multa si no se valida.</li>
@@ -146,7 +161,7 @@
   </div>
 
   <!-- ACTIVIDADES -->
-  <div class="section">
+  <div id="actividades" class="section">
     <div class="section-title">Actividades <small>confirmadas</small></div>
     <div class="act-grid">
       <div class="act-empty">Sin actividades confirmadas aún para esta ciudad.</div>
@@ -154,7 +169,7 @@
   </div>
 
   <!-- MIRADORES -->
-  <div class="section">
+  <div id="guia" class="section">
     <h2 class="section-title">Miradores <small>VISTAS DE LA CIUDAD</small></h2>
     <div class="places-grid">
 
