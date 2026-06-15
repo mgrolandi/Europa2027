@@ -6,7 +6,6 @@
     "fecha_ida": "2027-01-28",
     "fecha_vuelta": "2027-02-15"
   },
-
   "personas": {
     "Barrera": [
       { "nombre": "Alvaro Abel Barrera Yane", "rol": "Adulto", "pasaporte": "ok" },
@@ -29,16 +28,14 @@
       { "nombre": "Maria Julieta Ahmad", "rol": "Menor", "pasaporte": "pending" }
     ]
   },
-
   "vuelos": [
-    { "id": "SAO-LON", "tipo": "vuelo", "origen": "Sao Paulo (GRU)", "destino": "Londres (LHR)", "fecha": "2027-01-28", "aerolinea": "British Airways", "numero": "BA0246", "salida": "16:25", "llegada": "06:45+1", "confirmado": false, "pnr": { "Barrera": null, "Nader": "YV77JC", "Ahmad": null } },
-    { "id": "LON-PAR", "tipo": "tren", "origen": "Londres (St Pancras)", "destino": "Paris (Gare du Nord)", "fecha": "2027-02-02", "empresa": "Eurostar", "numero": null, "salida": "12:30", "llegada": "16:00", "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
+    { "id": "SAO-LON", "tipo": "vuelo", "origen": "Sao Paulo (GRU)", "destino": "Londres (LHR)", "fecha": "2027-01-28", "aerolinea": "British Airways", "numero": "BA0246", "salida": "16:25", "llegada": "06:45+1", "confirmado": true, "pnr": { "Barrera": null, "Nader": "YV77JC", "Ahmad": null } },
+    { "id": "LON-PAR", "tipo": "tren", "origen": "Londres (St Pancras)", "destino": "Paris (Gare du Nord)", "fecha": "2027-02-02", "empresa": "Eurostar", "numero": null, "salida": "12:30", "llegada": "16:00", "confirmado": true, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
     { "id": "PAR-BRU", "tipo": "tren", "origen": "Paris", "destino": "Bruselas", "fecha": "2027-02-06", "empresa": "Thalys", "numero": null, "salida": null, "llegada": null, "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
     { "id": "BRU-ROM", "tipo": "vuelo", "origen": "Bruselas (BRU)", "destino": "Roma (FCO)", "fecha": "2027-02-07", "aerolinea": null, "numero": null, "salida": null, "llegada": null, "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
     { "id": "ROM-MAD", "tipo": "vuelo", "origen": "Roma (FCO)", "destino": "Madrid (MAD)", "fecha": "2027-02-11", "aerolinea": "Iberia", "numero": "IB0648", "salida": "12:00", "llegada": "14:35", "confirmado": true, "pnr": { "Barrera": null, "Nader": "J5SQ1", "Ahmad": null } },
     { "id": "MAD-EZE", "tipo": "vuelo", "origen": "Madrid (MAD)", "destino": "Buenos Aires (EZE)", "fecha": "2027-02-15", "aerolinea": "Iberia", "numero": "IB0101", "salida": "01:05", "llegada": "08:45+1", "confirmado": true, "pnr": { "Barrera": null, "Nader": "NZB0P", "Ahmad": null } }
   ],
-
   "hoteles": [
     {
       "ciudad": "Londres",
@@ -72,8 +69,8 @@
       "maps_url": "https://maps.google.com/?q=Rue+du+Marche+aux+Herbes+110+1000+Bruxelles",
       "como_llegar_desde_aeropuerto": "Desde BRU tomar tren directo a Bruxelles-Central. Marcar siempre aunque no haya control visible.",
       "habitaciones": {
-        "dobles":      { "cantidad": 3, "confirmacion": "73474107361490", "asignacion": "1 doble Ahmad (2) + 1 doble Nader (2) + 1 doble Barrera (2)" },
-        "cuadruples":  { "cantidad": 2, "confirmacion": "73474100905258", "asignacion": "Cuadruple A: 2 Ahmad + 2 Barrera | Cuadruple B: 3 Nader + 1 Barrera" }
+        "dobles": { "cantidad": 3, "confirmacion": "73474107361490", "asignacion": "1 doble Ahmad (2) + 1 doble Nader (2) + 1 doble Barrera (2)" },
+        "cuadruples": { "cantidad": 2, "confirmacion": "73474100905258", "asignacion": "Cuadruple A: 2 Ahmad + 2 Barrera | Cuadruple B: 3 Nader + 1 Barrera" }
       },
       "fecha_pago": "2027-01-30",
       "metodo_pago": "Tarjeta Galicia Gaby",
@@ -94,7 +91,7 @@
       "reservas": {
         "Barrera": { "confirmacion": "070227", "precio": "EUR 1340.00", "habitacion": "Family Suite con balcone 5 pax", "obs": "Sin asignacion individual aun" },
         "Nader":   { "confirmacion": "070227", "precio": "EUR 1090.00", "habitacion": "Appartamento Grand Tour 5 pax", "obs": null },
-        "Ahmad":   { "confirmacion": "070227", "precio": "EUR 840.00",  "habitacion": "Camera Quadrupla 4 pax", "obs": null }
+        "Ahmad":   { "confirmacion": "070227", "precio": "EUR 840.00", "habitacion": "Camera Quadrupla 4 pax", "obs": null }
       }
     },
     {
@@ -111,30 +108,241 @@
       }
     }
   ],
-
-  "pendientes": [
-    { "item": "PNR Barrera y Ahmad — BA0246 SAO-LON",               "categoria": "transportes",    "familia": "Barrera/Ahmad", "prioridad": "alta",  "hecho": false },
-    { "item": "PNR Barrera y Ahmad — IB0648 ROM-MAD",               "categoria": "transportes",    "familia": "Barrera/Ahmad", "prioridad": "alta",  "hecho": false },
-    { "item": "PNR todas las familias — IB0101 MAD-EZE",            "categoria": "transportes",    "familia": "Todas",         "prioridad": "alta",  "hecho": false },
-    { "item": "Reserva tren Eurostar LON-PAR (tickets por familia)", "categoria": "transportes",    "familia": "Todas",         "prioridad": "alta",  "hecho": false },
-    { "item": "Reserva tren Thalys PAR-BRU",                        "categoria": "transportes",    "familia": "Todas",         "prioridad": "alta",  "hecho": false },
-    { "item": "Vuelo BRU-ROM (aerolinea y numero)",                  "categoria": "transportes",    "familia": "Todas",         "prioridad": "alta",  "hecho": false },
-    { "item": "Alojamiento Paris — Barrera",                        "categoria": "transportes",    "familia": "Barrera",       "prioridad": "alta",  "hecho": false },
-    { "item": "Asignacion habitaciones Roma entre familias",         "categoria": "logistica",      "familia": "Todas",         "prioridad": "baja",  "hecho": false },
-    { "item": "Pasaporte Lucas Barrera Posleman",                    "categoria": "documentacion",  "familia": "Barrera",       "prioridad": "alta",  "hecho": false },
-    { "item": "Pasaporte Tomas Nader",                               "categoria": "documentacion",  "familia": "Nader",         "prioridad": "alta",  "hecho": false },
-    { "item": "Pasaporte Maria Julieta Ahmad",                       "categoria": "documentacion",  "familia": "Ahmad",         "prioridad": "alta",  "hecho": false },
-    { "item": "Boarding passes subir a la app",                      "categoria": "documentacion",  "familia": "Todas",         "prioridad": "media", "hecho": false },
-    { "item": "Boton como llegar con Google Maps",                   "categoria": "logistica",      "familia": null,            "prioridad": "baja",  "hecho": true  }
-  ],
-
-  "drive": {
-    "raiz_id": "1MxbTztDMdw7eeEMvyF9FylGm-QVnVt86"
+  "tips_transporte": {
+    "Londres": [
+      "Oyster card o contactless. Marcar al ENTRAR y al SALIR — sin salida se cobra tarifa maxima.",
+      "Desde LHR: Piccadilly Line. NO tomar la Elizabeth Line.",
+      "El bus es mas barato que el tube y permite ver la ciudad."
+    ],
+    "Paris": [
+      "Marcar al ENTRAR y al SALIR en metro y RER.",
+      "Navigo Decouverte semanal conviene si se usa mucho el transporte.",
+      "RER B desde CDG directo al centro."
+    ],
+    "Bruselas": [
+      "Marcar SIEMPRE aunque no haya molinete ni control visible — multa si no se valida.",
+      "Tren directo desde BRU a Bruxelles-Central cada 15 min."
+    ],
+    "Roma": [
+      "Validar el ticket al subir al bus o tranvia — inspectores frecuentes.",
+      "Traslado FCO: Monza/Downtown Travel (a confirmar).",
+      "Leonardo Express: FCO a Roma Termini en 32 min, cada 30 min."
+    ],
+    "Madrid": [
+      "Metro Linea 8 desde aeropuerto requiere suplemento aeropuerto (~EUR 3).",
+      "Tarjeta Multi de 10 viajes conviene para el grupo."
+    ]
   },
-
+  "pendientes": {
+    "transportes": [
+      { "item": "Vuelo Bruselas -> Roma", "hecho": false, "urgente": true, "obs": "Sin aerolinea ni numero aun" },
+      { "item": "Tren Paris -> Bruselas (Thalys)", "hecho": false, "urgente": true, "obs": null },
+      { "item": "Hotel Bruselas — todas las familias", "hecho": true, "urgente": false, "obs": "NH Brussels Carrefour de l'Europe. 3 dobles (conf. 73474107361490) + 2 cuadruples (conf. 73474100905258). Pago 30/01 con Tarjeta Galicia Gaby." },
+      { "item": "Vuelo Roma -> Madrid IB0648", "hecho": true, "obs": "PNR Nader: J5SQ1. Falta Barrera y Ahmad" },
+      { "item": "Tren Londres -> Paris Eurostar", "hecho": true, "obs": "Confirmado. Faltan PNR por familia" }
+    ],
+    "entradas": [
+      { "item": "Entradas Premier League — partido en Londres", "hecho": false, "fecha_limite": "2026-06-19", "fecha_limite_label": "Salen el 19/06/2026 — en 12 dias", "precio": "Pago", "ciudad": "Londres", "alerta": "URGENTE" },
+      { "item": "Natural History Museum Londres", "hecho": false, "fecha_limite": "2026-07-29", "fecha_limite_label": "Antes del 29/07/2026 — 6 meses antes", "precio": "Gratis con reserva", "obs": "Reservar online para evitar fila.", "ciudad": "Londres", "alerta": "PROXIMO" },
+      { "item": "British Museum Londres", "hecho": false, "fecha_limite": "2026-10-29", "fecha_limite_label": "Antes del 29/10/2026 — 3 meses antes", "precio": "Gratis con reserva", "obs": "Entrar por puerta trasera Montague Place — menos cola.", "ciudad": "Londres" },
+      { "item": "Coliseo Roma", "hecho": false, "fecha_limite": "2026-11-07", "fecha_limite_label": "Antes del 07/11/2026 — 3 meses antes", "precio": "Pago", "obs": "Incluye Foro Romano y Palatino.", "ciudad": "Roma" },
+      { "item": "Louvre Paris", "hecho": false, "fecha_limite": "2026-12-02", "fecha_limite_label": "Antes del 02/12/2026 — 2 meses antes", "precio": "Pago", "ciudad": "Paris" },
+      { "item": "Torre Eiffel Paris", "hecho": false, "fecha_limite": "2026-12-02", "fecha_limite_label": "Antes del 02/12/2026 — 2 meses antes", "precio": "Pago", "ciudad": "Paris" },
+      { "item": "Panteón Roma", "hecho": false, "fecha_limite": "2027-01-01", "fecha_limite_label": "Antes del 01/01/2027", "precio": "Gratis con reserva", "obs": "Entrada gratuita pero reserva obligatoria online.", "ciudad": "Roma" },
+      { "item": "Sky Garden Londres", "hecho": false, "fecha_limite": "2027-01-01", "fecha_limite_label": "Antes del 01/01/2027", "precio": "Gratis con reserva", "ciudad": "Londres" },
+      { "item": "Fontana di Trevi Roma", "hecho": false, "fecha_limite": null, "precio": "Gratis", "obs": "Sin reserva necesaria.", "ciudad": "Roma" }
+    ],
+    "logistica": [
+      { "item": "ETIAS — Permiso entrada Comunidad Europea", "hecho": false, "familias": "Todas", "obs": "Tramitar cuando abra el sistema. Aplica a las 3 familias (pasaporte argentino)." },
+      { "item": "Migraciones CE — hacerlo en Londres antes de tomar el Eurostar", "hecho": false, "familias": "Todas", "obs": "El control migratorio de entrada a la CE se hace en St Pancras (Londres), no en Paris." },
+      { "item": "Traslado FCO -> hotel Roma — Monza/Downtown Travel", "hecho": false, "familias": "Todas", "obs": "Confirmar reserva y horario con la empresa." }
+    ],
+    "documentacion": [
+      { "item": "Pasaporte Lucas Barrera Posleman", "hecho": false, "familia": "Barrera", "prioridad": "alta" },
+      { "item": "Pasaporte Tomas Nader", "hecho": false, "familia": "Nader", "prioridad": "alta" },
+      { "item": "Pasaporte Maria Julieta Ahmad", "hecho": false, "familia": "Ahmad", "prioridad": "alta" },
+      { "item": "Subir boarding passes a Drive", "hecho": false, "familia": "Todas", "prioridad": "media" },
+      { "item": "PNR Barrera y Ahmad — BA0246 SAO-LON", "hecho": false, "familia": "Barrera/Ahmad", "prioridad": "alta", "obs": "Vuelo confirmado BA0246. Falta obtener PNR de Barrera y Ahmad." },
+      { "item": "PNR Barrera y Ahmad — IB0648 ROM-MAD", "hecho": false, "familia": "Barrera/Ahmad", "prioridad": "alta" },
+      { "item": "PNR todas — IB0101 MAD-EZE", "hecho": false, "familia": "Todas", "prioridad": "alta" }
+    ]
+  },
+  "lugares": {
+    "Londres": {
+      "actividades": [
+        {
+          "nombre": "Mamma Mia — West End",
+          "fecha": "2027-02-01",
+          "dia": "Lunes",
+          "hora": "19:30",
+          "lugar": "Novello Theatre",
+          "zona": "West End · Aldwych, London WC2B 4LD",
+          "precio_gbp": 17.50,
+          "precio_usd": 42,
+          "confirmado": true,
+          "entrada_url": null,
+          "maps_url": "https://maps.google.com/?q=Novello+Theatre+London+WC2B+4LD"
+        }
+      ],
+      "miradores": [
+        { "nombre": "Sky Garden", "zona": "City of London", "descripcion": "Jardin en la cima del 20 Fenchurch St con vista panoramica de 360 sobre la City.", "precio": "Gratis", "reserva": true, "tip": "Reservar antes del viaje — se agota rapido.", "maps_url": "https://maps.google.com/?q=Sky+Garden+London" },
+        { "nombre": "One New Change — Rooftop", "zona": "City of London", "descripcion": "Terraza abierta directamente frente a St Paul's Cathedral. Vista frontal sin obstaculos. Sin costo, sin reserva.", "precio": "Gratis", "reserva": false, "tip": "Acceso libre todo el dia.", "maps_url": "https://maps.google.com/?q=One+New+Change+London" },
+        { "nombre": "Tate Modern — Terraza nivel 10", "zona": "South Bank", "descripcion": "Mirador gratuito con vistas del Tamesis, St Paul's y el Millennium Bridge.", "precio": "Gratis", "reserva": false, "tip": "Ideal al atardecer.", "maps_url": "https://maps.google.com/?q=Tate+Modern+London" },
+        { "nombre": "Greenwich Park — Royal Observatory", "zona": "Greenwich", "descripcion": "Colina del Observatorio Real. El Meridiano de Greenwich cruza aqui.", "precio": "Gratis", "reserva": false, "tip": "Llevar termo — frio en febrero.", "maps_url": "https://maps.google.com/?q=Royal+Observatory+Greenwich" },
+        { "nombre": "The Shard — Viewing Gallery", "zona": "London Bridge", "descripcion": "El punto mas alto de Londres. Piso 68-69 al aire libre.", "precio": "Pago ~£32", "reserva": true, "tip": "Mejor de noche.", "maps_url": "https://maps.google.com/?q=The+Shard+London" },
+        { "nombre": "Primrose Hill", "zona": "Primrose Hill", "descripcion": "Colina con panoramica del skyline. Ambiente local, sin turistas.", "precio": "Gratis", "reserva": false, "tip": "A 10 min de Camden.", "maps_url": "https://maps.google.com/?q=Primrose+Hill+London" },
+        { "nombre": "Monument to the Great Fire", "zona": "City of London", "descripcion": "311 escalones hasta la cupula con vistas del centro historico.", "precio": "Pago ~£6", "reserva": false, "tip": "Hay diploma al llegar arriba — les encanta a los chicos.", "maps_url": "https://maps.google.com/?q=Monument+London" }
+      ],
+      "bares": [
+        { "nombre": "Lamb & Flag", "zona": "Covent Garden", "descripcion": "Pub historico de 1772 en callejon adoquinado.", "precio": "Consumicion ~£6-8 pinta", "reserva": false, "tip": "El pub que todo londinense ama mostrar.", "maps_url": "https://maps.google.com/?q=Lamb+and+Flag+Covent+Garden+London" },
+        { "nombre": "Swift Bar", "zona": "Soho", "descripcion": "Bar de cocteles de dos niveles. Whisky y clasicos. Solo adultos.", "precio": "Cocteles ~£14-18", "reserva": false, "tip": "Para la noche sin los chicos.", "maps_url": "https://maps.google.com/?q=Swift+Bar+Soho+London" },
+        { "nombre": "Anchor Bankside", "zona": "South Bank", "descripcion": "Pub historico sobre el Tamesis frente al Tate Modern.", "precio": "Consumicion ~£6-8 pinta", "reserva": false, "tip": "Terraza sobre el rio — llevar abrigo.", "maps_url": "https://maps.google.com/?q=Anchor+Bankside+London" },
+        { "nombre": "Nightjar", "zona": "Shoreditch", "descripcion": "Speakeasy subterraneo. Jazz en vivo jue-dom. World's 50 Best.", "precio": "Cocteles ~£16-22", "reserva": true, "tip": "Reservar semanas antes. Dress code elegante.", "maps_url": "https://maps.google.com/?q=Nightjar+Bar+London" },
+        { "nombre": "The Blues Kitchen Camden", "zona": "Camden", "descripcion": "BBQ americano y musica en vivo: blues, soul, R&B. Ideal para grupos.", "precio": "Sin entrada · Consumicion ~£8-12", "reserva": false, "tip": "Perfecto para todos juntos.", "maps_url": "https://maps.google.com/?q=Blues+Kitchen+Camden+London" },
+        { "nombre": "Dukes Bar", "zona": "Mayfair", "descripcion": "Bar que inspiro los martinis de James Bond. Se preparan en carrito junto a la mesa.", "precio": "Martini ~£25-30", "reserva": false, "tip": "Solo un martini — son brutalmente fuertes.", "maps_url": "https://maps.google.com/?q=Dukes+Bar+London" },
+        { "nombre": "The Market Porter", "zona": "Borough Market", "descripcion": "Pub victoriano junto al mercado. Aparece en Harry Potter.", "precio": "Consumicion ~£6-8 pinta", "reserva": false, "tip": "Combinarlo con el Borough Market.", "maps_url": "https://maps.google.com/?q=The+Market+Porter+London" }
+      ],
+      "iconicos": [
+        { "nombre": "Tower of London", "zona": "City of London", "descripcion": "Fortaleza medieval con las Joyas de la Corona y guardias Beefeater.", "precio": "Pago ~£34 adulto / £17 nino", "reserva": true, "tip": "Tickets online con anticipacion.", "maps_url": "https://maps.google.com/?q=Tower+of+London" },
+        { "nombre": "Westminster Abbey", "zona": "Westminster", "descripcion": "Catedral de las coronaciones. Enterrados Darwin, Newton, Dickens.", "precio": "Pago ~£27 adulto", "reserva": true, "tip": "Reservar online.", "maps_url": "https://maps.google.com/?q=Westminster+Abbey+London" },
+        { "nombre": "British Museum", "zona": "Bloomsbury", "descripcion": "Piedra Rosetta, momias egipcias, esculturas del Partenon.", "precio": "Gratis", "reserva": true, "tip": "Entrar por Montague Place (puerta trasera) — menos cola.", "maps_url": "https://maps.google.com/?q=British+Museum+London" },
+        { "nombre": "Shakespeare's Globe", "zona": "South Bank", "descripcion": "Replica del teatro isabelino. Tour disponible. Funciones en febrero.", "precio": "Tour ~£18 / Funcion desde £5 (standing)", "reserva": false, "tip": "Ver cartelera de febrero.", "maps_url": "https://maps.google.com/?q=Shakespeare+Globe+London" },
+        { "nombre": "Portobello Road Market", "zona": "Notting Hill", "descripcion": "Mercado de antiguedades y vintage. Sabados es el dia fuerte.", "precio": "Entrada gratis", "reserva": false, "tip": "1 feb es sabado — perfecto.", "maps_url": "https://maps.google.com/?q=Portobello+Road+Market+London" },
+        { "nombre": "Camden Market", "zona": "Camden", "descripcion": "Mercado alternativo con food hall, ropa, viniles, artesanias.", "precio": "Entrada gratis", "reserva": false, "tip": "Con adolescentes es el favorito.", "maps_url": "https://maps.google.com/?q=Camden+Market+London" },
+        { "nombre": "Natural History Museum", "zona": "South Kensington", "descripcion": "Dinosaurio gigante en el hall. Fascinante para todas las edades.", "precio": "Gratis", "reserva": true, "tip": "Puede quedar pista de hielo en febrero. Reservar para evitar fila.", "maps_url": "https://maps.google.com/?q=Natural+History+Museum+London" },
+        { "nombre": "Columbia Road Flower Market", "zona": "East London", "descripcion": "Solo domingos. Mercado de flores en calle victoriana estrecha.", "precio": "Entrada gratis", "reserva": false, "tip": "Ir temprano — abre 8am y se llena al mediodia.", "maps_url": "https://maps.google.com/?q=Columbia+Road+Flower+Market+London" }
+      ],
+      "musica": [
+        { "nombre": "Ronnie Scott's Jazz Club", "zona": "Soho", "descripcion": "El club de jazz mas famoso del mundo desde 1959. Miles Davis, Amy Winehouse tocaron aqui.", "precio": "Entrada ~£35-60", "reserva": true, "tip": "Reservar — sold out frecuente.", "maps_url": "https://maps.google.com/?q=Ronnie+Scotts+London" },
+        { "nombre": "Electric Ballroom", "zona": "Camden", "descripcion": "Sala emblematica de Camden. Rock, indie, electronica. Noche retro los sabados.", "precio": "Entrada ~£10-20", "reserva": false, "tip": "Revisar agenda en febrero.", "maps_url": "https://maps.google.com/?q=Electric+Ballroom+Camden+London" },
+        { "nombre": "Royal Festival Hall", "zona": "South Bank", "descripcion": "Sala del Southbank Centre. Bar exterior con vista al Tamesis, libre y gratuito.", "precio": "Bar gratis · Concierto varia", "reserva": false, "tip": "Revisar programa en southbankcentre.co.uk", "maps_url": "https://maps.google.com/?q=Royal+Festival+Hall+London" },
+        { "nombre": "100 Club", "zona": "Soho", "descripcion": "Sala donde tocaron Rolling Stones, Sex Pistols y Oasis.", "precio": "Entrada ~£10-20", "reserva": false, "tip": "Tickets baratos, ambiente autentico.", "maps_url": "https://maps.google.com/?q=100+Club+Oxford+Street+London" },
+        { "nombre": "Royal Opera House", "zona": "Covent Garden", "descripcion": "Opera y ballet. Cafeteria abierta al publico sin entrada.", "precio": "Cafeteria gratis · Funcion desde £5 (standing)", "reserva": false, "tip": "Standing disponible el dia de la funcion.", "maps_url": "https://maps.google.com/?q=Royal+Opera+House+London" },
+        { "nombre": "O2 Academy Brixton", "zona": "Brixton", "descripcion": "5000 personas, acustica perfecta. Shows internacionales frecuentes.", "precio": "Entrada varia segun artista", "reserva": false, "tip": "Ver agenda en febrero.", "maps_url": "https://maps.google.com/?q=O2+Academy+Brixton+London" }
+      ]
+    },
+    "Paris": {
+      "actividades": [],
+      "miradores": [
+        { "nombre": "Torre Eiffel", "zona": "Champ de Mars", "descripcion": "El icono de Paris. Tres pisos con vistas legendarias. 330m de altura, construida en 1889 para la Exposicion Universal.", "precio": "Pago ~EUR 29 adulto / EUR 7.50 nino", "reserva": true, "tip": "Reservar con meses de anticipacion — sold out habitual.", "maps_url": "https://maps.google.com/?q=Tour+Eiffel+Paris" },
+        { "nombre": "Arc de Triomphe — Terraza", "zona": "Champs-Elysees", "descripcion": "Subir al arco (284 escalones) para vista sobre los 12 bulevares que irradian desde la Place de l'Etoile.", "precio": "Pago ~EUR 13 adulto / Gratis -18", "reserva": false, "tip": "Al atardecer los bulevares iluminados son impresionantes.", "maps_url": "https://maps.google.com/?q=Arc+de+Triomphe+Paris" },
+        { "nombre": "Sacre-Coeur — Butte Montmartre", "zona": "Montmartre", "descripcion": "La basilica blanca sobre la colina mas alta de Paris. Vista 30km en dia claro. La escalinata es parte del paisaje.", "precio": "Gratis", "reserva": false, "tip": "Ir temprano para evitar el gentio en las escaleras.", "maps_url": "https://maps.google.com/?q=Sacre+Coeur+Montmartre+Paris" },
+        { "nombre": "Centre Pompidou — Terraza", "zona": "Beaubourg", "descripcion": "Museo de arte contemporaneo con terraza en el techo. Vista sobre los tejados del Marais y Notre-Dame.", "precio": "Pago entrada museo ~EUR 15 (incluye terraza)", "reserva": false, "tip": "El edificio de colores primarios en si es arquitectura iconica.", "maps_url": "https://maps.google.com/?q=Centre+Pompidou+Paris" }
+      ],
+      "bares": [
+        { "nombre": "Cafe de Flore", "zona": "Saint-Germain-des-Pres", "descripcion": "Cafe historico de 1887. Sartre y Simone de Beauvoir escribian aqui. El croissant y cafe con leche mas fotografiado de Paris.", "precio": "Cafe ~EUR 5 / Plato ~EUR 18-25", "reserva": false, "tip": "Ir a desayunar, no de noche — la magia es el ambiente diurno.", "maps_url": "https://maps.google.com/?q=Cafe+de+Flore+Paris" },
+        { "nombre": "Harry's New York Bar", "zona": "Opera", "descripcion": "Fundado en 1911. Aqui nacieron el Bloody Mary y el club sandwich. Frecuentado por Hemingway y Gershwin.", "precio": "Cocteles ~EUR 16-22", "reserva": false, "tip": "Pedir el Bloody Mary original — la receta es de este bar.", "maps_url": "https://maps.google.com/?q=Harrys+New+York+Bar+Paris" },
+        { "nombre": "Le Mary Celeste", "zona": "Marais", "descripcion": "Cocktail bar de culto en el corazon del Marais. Ostras frescas y mezcales de autor.", "precio": "Cocteles ~EUR 14-18", "reserva": false, "tip": "Llegar antes de las 20hs o hay fila.", "maps_url": "https://maps.google.com/?q=Le+Mary+Celeste+Paris" },
+        { "nombre": "Caveau de la Huchette", "zona": "Quartier Latin", "descripcion": "Jazz y swing en vivo en bodega medieval del s.XIII desde 1946. El club mas antiguo de Paris.", "precio": "Entrada ~EUR 15 / Consumicion adicional", "reserva": false, "tip": "Hay que bailar — los parisinos van a bailar swing, no solo a escuchar.", "maps_url": "https://maps.google.com/?q=Caveau+de+la+Huchette+Paris" }
+      ],
+      "iconicos": [
+        { "nombre": "Musee du Louvre", "zona": "1er arrondissement", "descripcion": "El museo mas visitado del mundo. Mona Lisa, Venus de Milo, codigo Hammurabi. 35.000 obras.", "precio": "Pago EUR 22 / Gratis -18", "reserva": true, "tip": "Reservar obligatorio — colas de horas sin reserva. Gratis menores de 18.", "maps_url": "https://maps.google.com/?q=Louvre+Paris" },
+        { "nombre": "Notre-Dame de Paris", "zona": "Ile de la Cite", "descripcion": "Catedral gotica del siglo XII, reabierta en diciembre 2024 tras el incendio de 2019. Completamente restaurada.", "precio": "Gratis exterior / Pago interior (con reserva)", "reserva": true, "tip": "Reservar online — afluencia masiva tras la reapertura.", "maps_url": "https://maps.google.com/?q=Notre-Dame+Paris" },
+        { "nombre": "Musee d'Orsay", "zona": "7eme arrondissement", "descripcion": "La coleccion impresionista mas importante del mundo en una antigua estacion de tren. Monet, Renoir, Van Gogh, Degas.", "precio": "Pago EUR 16 / Gratis -18", "reserva": true, "tip": "Dedicarle minimo 3 horas. Los Van Gogh en el 5to piso son una revelacion.", "maps_url": "https://maps.google.com/?q=Musee+Orsay+Paris" },
+        { "nombre": "Le Marais", "zona": "3eme y 4eme arrondissement", "descripcion": "Barrio historico judio con galerias, tiendas vintage, la Place des Vosges (la plaza mas antigua de Paris) y el mejor falafel de Europa.", "precio": "Gratis", "reserva": false, "tip": "El falafel de L'As du Fallafel en Rue des Rosiers vale la visita.", "maps_url": "https://maps.google.com/?q=Le+Marais+Paris" },
+        { "nombre": "Versailles", "zona": "Versailles (30 min en RER)", "descripcion": "El palacio barroco de Luis XIV y los jardines de Le Notre. 800 hectareas, 1400 fuentes. El mayor palacio de Europa.", "precio": "Pago EUR 21 / Gratis -18", "reserva": true, "tip": "Salir temprano — tour de medio dia minimo. Jardines incluidos.", "maps_url": "https://maps.google.com/?q=Chateau+de+Versailles" }
+      ],
+      "musica": [
+        { "nombre": "Moulin Rouge", "zona": "Pigalle", "descripcion": "El cabaret mas famoso del mundo desde 1889. Cancacan, plumas y lentejuelas. Espectaculo Feerie con 60 artistas.", "precio": "Desde EUR 115 (solo show)", "reserva": true, "tip": "Reservar con meses de anticipacion. La cena es cara y prescindible.", "maps_url": "https://maps.google.com/?q=Moulin+Rouge+Paris" },
+        { "nombre": "Olympia", "zona": "9eme arrondissement", "descripcion": "La sala de conciertos mas legendaria de Francia. Aqui debutaron Edith Piaf, Jacques Brel y Los Beatles en Europa.", "precio": "Entrada varia segun artista", "reserva": false, "tip": "Revisar agenda en febrero — siempre hay algo bueno.", "maps_url": "https://maps.google.com/?q=Olympia+Paris" },
+        { "nombre": "La Cigale", "zona": "Pigalle", "descripcion": "Sala art-deco de 2000 personas. Rock, indie, electronica internacional. Acustica perfecta.", "precio": "Entrada varia segun artista", "reserva": false, "tip": "Ubicada en Pigalle, cerca del Moulin Rouge.", "maps_url": "https://maps.google.com/?q=La+Cigale+Paris" },
+        { "nombre": "Philharmonie de Paris", "zona": "La Villette", "descripcion": "Sala de conciertos de clase mundial disenada por Jean Nouvel. Programa clasico y jazz de primer nivel.", "precio": "Entrada desde EUR 10", "reserva": false, "tip": "El edificio en si es una obra arquitectonica.", "maps_url": "https://maps.google.com/?q=Philharmonie+Paris" }
+      ]
+    },
+    "Bruselas": {
+      "actividades": [],
+      "miradores": [
+        { "nombre": "Atomium", "zona": "Laeken", "descripcion": "Estructura futurista en forma de atomo de hierro gigantesco, construida para la Expo 1958. Vista panoramica desde la esfera superior.", "precio": "Pago EUR 16 adulto / EUR 9 nino", "reserva": false, "tip": "A 15 min del centro en metro. Los ninos flipan con el ascensor tubular.", "maps_url": "https://maps.google.com/?q=Atomium+Brussels" },
+        { "nombre": "Palais de Justice — Terraza", "zona": "Marolles", "descripcion": "Tribunales neoclasicos enormes (1883) con terraza libre. Vista sobre los tejados de Bruselas hacia la Grand-Place.", "precio": "Gratis", "reserva": false, "tip": "Acceso libre en horario de oficina.", "maps_url": "https://maps.google.com/?q=Palais+de+Justice+Brussels" },
+        { "nombre": "Place Royale — Barrio Real", "zona": "Mont des Arts", "descripcion": "Centro neoclasico de Bruselas. Vista sobre el skyline de la ciudad baja. Rodeado de los mejores museos.", "precio": "Gratis", "reserva": false, "tip": "En febrero puede haber nieve — el lugar mas fotografiado nevado.", "maps_url": "https://maps.google.com/?q=Place+Royale+Brussels" }
+      ],
+      "bares": [
+        { "nombre": "Delirium Cafe", "zona": "Centro historico", "descripcion": "Bar con mas de 3000 tipos de cerveza segun el Libro Guinness. La cerveza Delirium Tremens (rosa con elefantes) es iconica.", "precio": "Cerveza ~EUR 4-7", "reserva": false, "tip": "Llegar antes de las 22hs o hay fila para entrar.", "maps_url": "https://maps.google.com/?q=Delirium+Cafe+Brussels" },
+        { "nombre": "A la Mort Subite", "zona": "Centro historico", "descripcion": "Pub belga de 1910 con interior art deco intacto. Especialidad: lambic y gueuze (cervezas de fermentacion espontanea).", "precio": "Cerveza ~EUR 3-5", "reserva": false, "tip": "El lambic framboise (frambuesa) es perfecto para no beerlovers.", "maps_url": "https://maps.google.com/?q=A+la+Mort+Subite+Brussels" },
+        { "nombre": "Moeder Lambic Fontainas", "zona": "Saint-Gilles", "descripcion": "Bar de culto con 50 cervezas de barril rotativas. Solo cervezas belgas independientes, nada industrial.", "precio": "Cerveza ~EUR 4-8", "reserva": false, "tip": "Pedir recomendacion al barman — son expertos apasionados.", "maps_url": "https://maps.google.com/?q=Moeder+Lambic+Fontainas+Brussels" },
+        { "nombre": "Mappa Mundo", "zona": "Rue du Marche au Charbon", "descripcion": "Bar cosmopolita en la calle mas animada del centro. Mezcla de locales y viajeros.", "precio": "Cerveza/Coctel ~EUR 4-8", "reserva": false, "tip": "La rue du Marche au Charbon tiene 10 bares seguidos — ideal para ir de bar en bar.", "maps_url": "https://maps.google.com/?q=Mappa+Mundo+Brussels" }
+      ],
+      "iconicos": [
+        { "nombre": "Grand-Place", "zona": "Centro historico", "descripcion": "Una de las plazas mas hermosas del mundo segun Victor Hugo. UNESCO. Guildhalls barrocos del s.XVII. De noche iluminada.", "precio": "Gratis", "reserva": false, "tip": "Verla de dia Y de noche — la iluminacion nocturna es espectacular.", "maps_url": "https://maps.google.com/?q=Grand-Place+Brussels" },
+        { "nombre": "Manneken Pis", "zona": "Centro historico", "descripcion": "La estatuilla mas famosa de Bruselas: un nino orinando. Ironico simbolo de la identidad belga. Suele estar disfrazado.", "precio": "Gratis", "reserva": false, "tip": "A 2 cuadras de la Grand-Place. Buscar la vitrina con los 1000 trajes que tiene.", "maps_url": "https://maps.google.com/?q=Manneken+Pis+Brussels" },
+        { "nombre": "Musee Magritte", "zona": "Mont des Arts", "descripcion": "La coleccion mas grande del mundo del surrealista belga Rene Magritte. El hombre del bombin y la manzana en contexto.", "precio": "Pago EUR 15 adulto / Gratis -18", "reserva": false, "tip": "Combinarlo con la visita al barrio royal — ambos en Mont des Arts.", "maps_url": "https://maps.google.com/?q=Musee+Magritte+Brussels" },
+        { "nombre": "Barrio de las Marolles", "zona": "Marolles", "descripcion": "Barrio popular y bohemio. El mercado del Jeu de Balle: 2000 puestos de antiguedades y ropa vintage todos los dias.", "precio": "Gratis", "reserva": false, "tip": "El mercado abre a las 6am — los mejores objetos se van antes de las 9.", "maps_url": "https://maps.google.com/?q=Jeu+de+Balle+Brussels" }
+      ],
+      "musica": [
+        { "nombre": "Ancienne Belgique (AB)", "zona": "Centro historico", "descripcion": "La sala de conciertos mas importante de Belgica. Indie, rock, folk internacional. Acustica impecable.", "precio": "Entrada varia segun artista", "reserva": false, "tip": "Revisar agenda — es una noche sola en Bruselas, vale buscar algo.", "maps_url": "https://maps.google.com/?q=Ancienne+Belgique+Brussels" },
+        { "nombre": "Bozar", "zona": "Mont des Arts", "descripcion": "Centro de bellas artes con programa de clasica, jazz y musica experimental de clase mundial.", "precio": "Entrada desde EUR 10", "reserva": false, "tip": "El edificio art-deco de Victor Horta es patrimonio en si mismo.", "maps_url": "https://maps.google.com/?q=Bozar+Brussels" }
+      ]
+    },
+    "Roma": {
+      "actividades": [],
+      "miradores": [
+        { "nombre": "Gianicolo", "zona": "Trastevere", "descripcion": "La mejor vista panoramica de Roma, gratis. Colina con canon que dispara a mediodia (tradicion desde 1846).", "precio": "Gratis", "reserva": false, "tip": "Ir al mediodia para ver el canon — los ninos quedan impactados.", "maps_url": "https://maps.google.com/?q=Gianicolo+Roma" },
+        { "nombre": "Castel Sant'Angelo — Terraza", "zona": "Prati", "descripcion": "Fortaleza del siglo II convertida en castillo papal. La terraza ofrece vista sobre el Tiber, el Vaticano y el centro historico.", "precio": "Pago EUR 15 adulto / Gratis -18 UE", "reserva": false, "tip": "Subir al atardecer para los mejores colores sobre el Vaticano.", "maps_url": "https://maps.google.com/?q=Castel+Sant+Angelo+Roma" },
+        { "nombre": "Pincio — Terraza del Pincio", "zona": "Villa Borghese", "descripcion": "Terraza romantica dentro del parque Villa Borghese. Vista clasica sobre la Piazza del Popolo y las cupulas de Roma.", "precio": "Gratis", "reserva": false, "tip": "A 10 min caminando desde Piazza di Spagna. Perfecto para picnic.", "maps_url": "https://maps.google.com/?q=Terrazza+del+Pincio+Roma" },
+        { "nombre": "Vittoriano — Altare della Patria", "zona": "Centro Storico", "descripcion": "El 'pastel de bodas' del centro. Ascensor hasta la terraza con vista 360 sobre los Foros, el Capitolio y el skyline.", "precio": "Ascensor Pago ~EUR 7", "reserva": false, "tip": "El ascensor exterior es la experiencia — vistas increibles en ascenso.", "maps_url": "https://maps.google.com/?q=Altare+della+Patria+Roma" }
+      ],
+      "bares": [
+        { "nombre": "Freni e Frizioni", "zona": "Trastevere", "descripcion": "El aperitivo aperol con buffet incluido mas famoso de Roma. En un garage vintage reconvertido con jardin.", "precio": "Aperitivo ~EUR 10 (incluye buffet)", "reserva": false, "tip": "Llegar entre 18:30-19:30 para el aperitivo — buffet abundante.", "maps_url": "https://maps.google.com/?q=Freni+e+Frizioni+Roma" },
+        { "nombre": "Bar San Calisto", "zona": "Trastevere", "descripcion": "El bar mas humilde y genuino de Trastevere. Grappa, vino local y conversacion con romanos de toda la vida.", "precio": "Consumicion ~EUR 2-4", "reserva": false, "tip": "Sin turistas, todo locales — el bar 'secreto' que no sale en guias.", "maps_url": "https://maps.google.com/?q=Bar+San+Calisto+Trastevere+Roma" },
+        { "nombre": "Rec 23", "zona": "Pigneto", "descripcion": "Cocteleria artesanal en el barrio mas hipster de Roma. Diseno industrial, DJ sets y cocteles de autor.", "precio": "Cocteles ~EUR 10-14", "reserva": false, "tip": "El barrio Pigneto es la alternativa romana a Brooklyn.", "maps_url": "https://maps.google.com/?q=Rec+23+Pigneto+Roma" },
+        { "nombre": "Il Sorpasso", "zona": "Prati", "descripcion": "Bar de dia y bistro de noche. Vermut y aperitivos perfectos antes de cenar. Muy popular entre romanos.", "precio": "Aperitivo ~EUR 8-12", "reserva": false, "tip": "El barrio Prati es tranquilo y autentico, cerca del Vaticano.", "maps_url": "https://maps.google.com/?q=Il+Sorpasso+Roma" }
+      ],
+      "iconicos": [
+        { "nombre": "Coliseo + Foro Romano + Palatino", "zona": "Centro Storico", "descripcion": "El anfiteatro del siglo I donde luchaban los gladiadores. El ticket incluye Foro Romano y Monte Palatino — medio dia de historia.", "precio": "Pago EUR 18 (entrada combinada)", "reserva": true, "tip": "Reservar con 3 meses de anticipacion — se agota. Entrar por el lado del Meta Sudans.", "maps_url": "https://maps.google.com/?q=Colosseo+Roma" },
+        { "nombre": "Panteón", "zona": "Piazza della Rotonda", "descripcion": "Templo romano del siglo II perfectamente conservado. La cupula de 43m con el oculo abierto al cielo sigue siendo un prodigio ingenieril.", "precio": "Gratis con reserva obligatoria", "reserva": true, "tip": "La reserva es gratuita pero obligatoria online. Lluvia + oculo = espectaculo.", "maps_url": "https://maps.google.com/?q=Pantheon+Roma" },
+        { "nombre": "Fontana di Trevi", "zona": "Trevi", "descripcion": "La fuente barroca mas grande de Roma (1762). Tirar una moneda garantiza el regreso a Roma segun la leyenda.", "precio": "Gratis", "reserva": false, "tip": "Ir antes de las 8am o despues de las 23pm para evitar la multitud.", "maps_url": "https://maps.google.com/?q=Fontana+di+Trevi+Roma" },
+        { "nombre": "Trastevere", "zona": "Trastevere", "descripcion": "El barrio mas romantico de Roma. Callecitas medievales, trattorias con mesas en la calle, iglesias barrocas.", "precio": "Gratis", "reserva": false, "tip": "Cenar aqui — la trattoria Da Enzo al 29 tiene la cacio e pepe definitiva.", "maps_url": "https://maps.google.com/?q=Trastevere+Roma" },
+        { "nombre": "Ciudad del Vaticano + Capilla Sixtina", "zona": "Vaticano", "descripcion": "La Creacion de Miguel Angel en el techo. La basilica mas grande del mundo. Los Museos Vaticanos tienen 54km de salas.", "precio": "Pago EUR 20 / Gratis primer domingo del mes", "reserva": true, "tip": "Reservar online obligatorio. Cola sin reserva: 2-3 horas. Con reserva: entrar directo.", "maps_url": "https://maps.google.com/?q=Vatican+Museum+Roma" },
+        { "nombre": "Piazza Navona", "zona": "Centro Storico", "descripcion": "La plaza mas bella de Roma. Tres fuentes de Bernini incluyendo la Fuente de los Cuatro Rios.", "precio": "Gratis", "reserva": false, "tip": "El gelato de La Romana (a 2 cuadras) es el mejor del centro.", "maps_url": "https://maps.google.com/?q=Piazza+Navona+Roma" },
+        { "nombre": "Campo de' Fiori", "zona": "Centro Storico", "descripcion": "Mercado matutino con fruta y flores desde el s.XVI. De noche se transforma en epicentro de la vida nocturna.", "precio": "Gratis", "reserva": false, "tip": "Mercado de 8am a 13pm. De noche: terrazas y aperitivos.", "maps_url": "https://maps.google.com/?q=Campo+de+Fiori+Roma" }
+      ],
+      "musica": [
+        { "nombre": "Alexanderplatz Jazz Club", "zona": "Prati", "descripcion": "El club de jazz mas famoso de Roma, activo desde 1984. Musicos internacionales todos los miercoles a domingos.", "precio": "Entrada ~EUR 10-20", "reserva": true, "tip": "Reservar mesa — se llena los fines de semana.", "maps_url": "https://maps.google.com/?q=Alexanderplatz+Jazz+Club+Roma" },
+        { "nombre": "Big Mama", "zona": "Trastevere", "descripcion": "Blues y soul en vivo desde 1984 en una bodega de Trastevere. El antro de referencia del blues romano.", "precio": "Entrada ~EUR 5-10", "reserva": false, "tip": "Combinarlo con la cena en Trastevere — abre a las 21hs.", "maps_url": "https://maps.google.com/?q=Big+Mama+Trastevere+Roma" },
+        { "nombre": "Auditorium Parco della Musica", "zona": "Flaminio", "descripcion": "Complejo musical de Renzo Piano. Tres salas con programa de jazz, clasica y world music de primer nivel.", "precio": "Entrada desde EUR 15", "reserva": false, "tip": "Revisar programa en auditorium.com — siempre hay algo interesante en febrero.", "maps_url": "https://maps.google.com/?q=Auditorium+Parco+della+Musica+Roma" }
+      ]
+    },
+    "Madrid": {
+      "actividades": [],
+      "miradores": [
+        { "nombre": "Circulo de Bellas Artes — Rooftop", "zona": "Centro", "descripcion": "La mejor terraza de Madrid. Vista 360 sobre los tejados y la Gran Via. Con bar y ambiente cultural.", "precio": "Pago EUR 5 (incluye consumicion)", "reserva": false, "tip": "Al atardecer es magico — la Gran Via iluminada es espectacular.", "maps_url": "https://maps.google.com/?q=Circulo+de+Bellas+Artes+Madrid" },
+        { "nombre": "El Corte Ingles Callao — Terraza", "zona": "Gran Via", "descripcion": "Terraza del 9no piso con vista directa sobre la Gran Via y el skyline de Madrid. Acceso libre.", "precio": "Gratis (consumicion opcional)", "reserva": false, "tip": "El restaurante del techo tiene las mejores vistas del centro — abre al mediodia.", "maps_url": "https://maps.google.com/?q=El+Corte+Ingles+Callao+Madrid" },
+        { "nombre": "Parque del Retiro", "zona": "Retiro", "descripcion": "El gran pulmon verde de Madrid. 350 hectareas con palacio de cristal, lago con barcas y jardines.", "precio": "Gratis", "reserva": false, "tip": "El Palacio de Cristal tiene exposiciones gratuitas. Las barcas estan disponibles en febrero.", "maps_url": "https://maps.google.com/?q=Parque+del+Retiro+Madrid" }
+      ],
+      "bares": [
+        { "nombre": "Salmon Guru", "zona": "Centro (Lavapies)", "descripcion": "Elegido uno de los 50 mejores bares del mundo. Cocteles de autor con tecnica de vanguardia.", "precio": "Cocteles ~EUR 14-20", "reserva": true, "tip": "Reservar para fin de semana — entre semana suele haber lugar.", "maps_url": "https://maps.google.com/?q=Salmon+Guru+Madrid" },
+        { "nombre": "Bodega de los Secretos", "zona": "Centro (Sol)", "descripcion": "Cocteleria y restaurante en bodega medieval del siglo XIII. 800 anos de historia bajo Madrid.", "precio": "Cocteles ~EUR 12-16", "reserva": true, "tip": "El espacio subterraneo es unico — vale la pena aunque solo sea a tomar algo.", "maps_url": "https://maps.google.com/?q=Bodega+de+los+Secretos+Madrid" },
+        { "nombre": "Mercado de San Miguel", "zona": "Centro (Sol)", "descripcion": "Mercado gourmet del s.XX en estructura de hierro. Tapas, ostras, vinos y vermut entre locales y turistas.", "precio": "Tapa ~EUR 2-5 / Vino ~EUR 3-5", "reserva": false, "tip": "El mejor vermut del mercado: Bodegas Marin. Ir entre 12 y 14hs.", "maps_url": "https://maps.google.com/?q=Mercado+de+San+Miguel+Madrid" },
+        { "nombre": "El Tigre", "zona": "Chueca", "descripcion": "Bar legendario de tapas abundantes y gratuitas con cada cana. Cerveza y plato de jamon incluido.", "precio": "Cerveza ~EUR 3 (tapa gratis)", "reserva": false, "tip": "No es glamoroso pero las tapas son abundantes y muy economico.", "maps_url": "https://maps.google.com/?q=El+Tigre+Madrid+Chueca" },
+        { "nombre": "Sala Equis", "zona": "Lavapies", "descripcion": "Cine-bar alternativo en patio interior del s.XIX. Vermut los sabados, proyecciones de cine independiente.", "precio": "Consumicion ~EUR 5-8", "reserva": false, "tip": "El patio descubierto es especial incluso en invierno con braseros.", "maps_url": "https://maps.google.com/?q=Sala+Equis+Madrid" }
+      ],
+      "iconicos": [
+        { "nombre": "Museo del Prado", "zona": "Paseo del Arte", "descripcion": "Uno de los museos mas importantes del mundo. Velazquez (Las Meninas), Goya (Los Fusilamientos), El Greco. 8000 obras.", "precio": "Pago EUR 15 / Gratis -18 / Gratis ultimas 2hs", "reserva": false, "tip": "Gratis ultimas 2 horas pero con cola larga. Dedicarle minimo 3 horas.", "maps_url": "https://maps.google.com/?q=Museo+del+Prado+Madrid" },
+        { "nombre": "Museo Reina Sofia", "zona": "Paseo del Arte", "descripcion": "El Guernica de Picasso. Dali, Miro y las vanguardias del siglo XX.", "precio": "Pago EUR 12 / Gratis -18 / Gratis sabados 19hs", "reserva": false, "tip": "El Guernica esta en la segunda planta — sin perderlo.", "maps_url": "https://maps.google.com/?q=Museo+Reina+Sofia+Madrid" },
+        { "nombre": "El Rastro", "zona": "La Latina / Lavapies", "descripcion": "El mercadillo mas famoso de Espana, desde el s.XVIII. 3500 puestos de antiguedades, ropa vintage, viniles.", "precio": "Gratis", "reserva": false, "tip": "Solo domingos y festivos — 14 feb es domingo. Ir antes de las 11hs.", "maps_url": "https://maps.google.com/?q=El+Rastro+Madrid" },
+        { "nombre": "Barrio de las Letras", "zona": "Centro historico", "descripcion": "Barrio del Siglo de Oro. Versos de Lope de Vega y Quevedo grabados en las calles. Cervantes murio a una cuadra.", "precio": "Gratis", "reserva": false, "tip": "La Calle Huertas tiene los mejores bares del barrio y mucho ambiente.", "maps_url": "https://maps.google.com/?q=Barrio+de+las+Letras+Madrid" },
+        { "nombre": "Palacio Real", "zona": "Opera", "descripcion": "El palacio real mas grande de Europa Occidental. 3418 habitaciones, armeria real, jardines de Sabatini.", "precio": "Pago EUR 14 adulto / EUR 7 nino", "reserva": false, "tip": "El cambio de guardia es el primer miercoles del mes — febrero tiene uno.", "maps_url": "https://maps.google.com/?q=Palacio+Real+Madrid" },
+        { "nombre": "Mercado de San Anton", "zona": "Chueca", "descripcion": "Mercado gourmet de tres plantas en el barrio de Chueca. Productos gourmet, restaurantes y terraza en el techo.", "precio": "Gratis entrada", "reserva": false, "tip": "La terraza del techo tiene vistas al barrio y es mas tranquila que San Miguel.", "maps_url": "https://maps.google.com/?q=Mercado+San+Anton+Chueca+Madrid" }
+      ],
+      "musica": [
+        { "nombre": "Sala El Sol", "zona": "Centro (Gran Via)", "descripcion": "Sala emblematica de La Movida Madrilena. Abierta desde 1979, aqui se forjo el rock espanol. Indie, pop, electronica.", "precio": "Entrada ~EUR 8-15", "reserva": false, "tip": "Revisar agenda en febrero — es una de las salas mas historicas de Madrid.", "maps_url": "https://maps.google.com/?q=Sala+El+Sol+Madrid" },
+        { "nombre": "Teatro Real", "zona": "Opera", "descripcion": "La opera mas importante de Espana. Programa de primer nivel mundial con directores y cantantes internacionales.", "precio": "Entrada desde EUR 10 (paraiso) hasta EUR 250", "reserva": true, "tip": "Las entradas de paraiso (EUR 10-20) son la mejor relacion calidad-precio de Madrid.", "maps_url": "https://maps.google.com/?q=Teatro+Real+Madrid" },
+        { "nombre": "Sala Clamores", "zona": "Almagro", "descripcion": "El club de jazz de referencia en Madrid desde 1978. Ambiente intimo, buena acustica, programa constante.", "precio": "Entrada ~EUR 8-12", "reserva": false, "tip": "Los martes son los conciertos mas economicos con musicos residentes.", "maps_url": "https://maps.google.com/?q=Sala+Clamores+Madrid" },
+        { "nombre": "Joy Eslava", "zona": "Centro (Sol)", "descripcion": "Discoteca en el teatro historico Eslava del siglo XIX. Tres pisos, electronica y pop espanol, mix de edades.", "precio": "Entrada ~EUR 15-20 (incluye consumicion)", "reserva": false, "tip": "El edificio neoclasico con la pista de baile abajo es un lugar unico.", "maps_url": "https://maps.google.com/?q=Joy+Eslava+Madrid" }
+      ]
+    }
+  },
+  "drive": {
+    "raiz_id": "1MxbTztDMdw7eeEMvyF9FylGm-QVnVt86",
+    "documentacion_id": "1Xt21_LBmvjIhx3VHUujDarJeJhx_4oJ1",
+    "pasaportes_barrera_id": "1NXm9D-9qMbsZy4FhErcXdAPNRwUzxXuI",
+    "pasaportes_nader_id": "1v5a_GNDEYWhhXCIgBR1Ddiw215P1qV7_",
+    "pasaportes_ahmad_id": "1haFZJON5gm_QQLhjhpkiONBBAos0qXa5",
+    "seguros_permisos_id": "1nj6S_Omyz8LlzCmCuKsBjOa-7rfOVR_n"
+  },
   "meta": {
-    "version": "1.4",
-    "ultima_actualizacion": "2026-06-14",
-    "notas": "v1.4: Hotel Bruselas confirmado (NH Brussels). Pendientes actualizados formato flat."
+    "version": "1.6",
+    "ultima_actualizacion": "2026-06-15",
+    "notas": "v1.6: Vuelo SAO-LON BA0246 confirmado. Nav secciones en guias de ciudad. Mamma Mia agregado como actividad Londres."
   }
 }
