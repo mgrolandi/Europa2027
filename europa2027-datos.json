@@ -29,7 +29,7 @@
     ]
   },
   "vuelos": [
-    { "id": "SAO-LON", "tipo": "vuelo", "origen": "Sao Paulo (GRU)", "destino": "Londres (LHR)", "fecha": "2027-01-28", "aerolinea": "British Airways", "numero": "BA0246", "salida": "16:25", "llegada": "06:45+1", "confirmado": false, "pnr": { "Barrera": null, "Nader": "YV77JC", "Ahmad": null } },
+    { "id": "SAO-LON", "tipo": "vuelo", "origen": "Sao Paulo (GRU)", "destino": "Londres (LHR)", "fecha": "2027-01-28", "aerolinea": "British Airways", "numero": "BA0246", "salida": "16:25", "llegada": "06:45+1", "confirmado": true, "pnr": { "Barrera": null, "Nader": "YV77JC", "Ahmad": null } },
     { "id": "LON-PAR", "tipo": "tren", "origen": "Londres (St Pancras)", "destino": "Paris (Gare du Nord)", "fecha": "2027-02-02", "empresa": "Eurostar", "numero": null, "salida": "12:30", "llegada": "16:00", "confirmado": true, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
     { "id": "PAR-BRU", "tipo": "tren", "origen": "Paris", "destino": "Bruselas", "fecha": "2027-02-06", "empresa": "Thalys", "numero": null, "salida": null, "llegada": null, "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
     { "id": "BRU-ROM", "tipo": "vuelo", "origen": "Bruselas (BRU)", "destino": "Roma (FCO)", "fecha": "2027-02-07", "aerolinea": null, "numero": null, "salida": null, "llegada": null, "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
@@ -162,7 +162,7 @@
       { "item": "Pasaporte Tomas Nader", "hecho": false, "familia": "Nader", "prioridad": "alta" },
       { "item": "Pasaporte Maria Julieta Ahmad", "hecho": false, "familia": "Ahmad", "prioridad": "alta" },
       { "item": "Subir boarding passes a Drive", "hecho": false, "familia": "Todas", "prioridad": "media" },
-      { "item": "PNR Barrera y Ahmad — BA0246 SAO-LON", "hecho": false, "familia": "Barrera/Ahmad", "prioridad": "alta" },
+      { "item": "PNR Barrera y Ahmad — BA0246 SAO-LON", "hecho": false, "familia": "Barrera/Ahmad", "prioridad": "alta", "obs": "Vuelo confirmado BA0246. Falta obtener PNR de Barrera y Ahmad." },
       { "item": "PNR Barrera y Ahmad — IB0648 ROM-MAD", "hecho": false, "familia": "Barrera/Ahmad", "prioridad": "alta" },
       { "item": "PNR todas — IB0101 MAD-EZE", "hecho": false, "familia": "Todas", "prioridad": "alta" }
     ]
@@ -341,8 +341,8 @@
     "seguros_permisos_id": "1nj6S_Omyz8LlzCmCuKsBjOa-7rfOVR_n"
   },
   "meta": {
-    "version": "1.5",
+    "version": "1.6",
     "ultima_actualizacion": "2026-06-15",
-    "notas": "v1.5: Seccion Actividades agregada a cada ciudad. Londres: Mamma Mia West End — lun 01/02 19:30, £17.50/USD 42 p/persona."
+    "notas": "v1.6: Vuelo SAO-LON BA0246 confirmado. Nav secciones en guias de ciudad. Mamma Mia agregado como actividad Londres."
   }
 }
