@@ -66,6 +66,22 @@
     .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
     a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
     a.maps-link:hover{text-decoration:underline}
+    .act-grid{display:flex;flex-direction:column;gap:12px}
+    .act-card{background:#fff;border:1px solid var(--border);border-left:4px solid #27ae60;border-radius:6px;padding:18px 20px;display:flex;gap:20px;align-items:flex-start}
+    .act-date-col{text-align:center;flex-shrink:0;width:56px;padding-top:2px}
+    .act-day-num{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1;color:var(--ink)}
+    .act-day-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+    .act-time-lbl{font-size:12px;color:var(--gold);font-weight:500;margin-top:6px}
+    .act-body{flex:1}.act-body h3{font-size:16px;margin-bottom:3px}
+    .act-venue{font-size:11px;color:var(--muted);margin-bottom:10px}
+    .act-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .tag-confirmed{background:#d4edda;color:#1e5c2e;border:1px solid #a3d4ac;padding:2px 8px;border-radius:3px;font-size:11px}
+    .tag-price{background:#fde8e8;color:#7a1f1f;border:1px solid #f0aaaa;padding:2px 8px;border-radius:3px;font-size:11px}
+    .act-links{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+    a.act-ticket{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
+    a.act-ticket:hover{text-decoration:underline}
+    .act-ticket-pending{font-size:11px;color:var(--muted);font-style:italic}
+    .act-empty{padding:16px 20px;background:var(--cream);border-radius:6px;font-size:12px;color:var(--muted);font-style:italic}
     @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -174,6 +190,14 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section">
+    <div class="section-title">Actividades <small>confirmadas</small></div>
+    <div class="act-grid">
+      <div class="act-empty">Sin actividades confirmadas aún para esta ciudad.</div>
     </div>
   </div>
 
