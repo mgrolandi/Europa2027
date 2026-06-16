@@ -220,6 +220,15 @@ function GlobalAgenda({ ciudades, actividades, vuelos }) {
   const allDays = Object.keys(cityByDate).sort()
   if (!allDays.length) return null
 
+  // Primer y último día de cada ciudad
+  const cityFirstDay = {}
+  const cityLastDay  = {}
+  for (const day of allDays) {
+    const c = cityByDate[day]
+    if (!cityFirstDay[c]) cityFirstDay[c] = day
+    cityLastDay[c] = day
+  }
+
   // Actividades confirmadas con fecha, indexadas por día
   const actByDate = {}
   for (const a of (actividades ?? [])) {
@@ -232,18 +241,19 @@ function GlobalAgenda({ ciudades, actividades, vuelos }) {
     actByDate[day].sort((a, b) => (a.hora ?? '').localeCompare(b.hora ?? ''))
   }
 
-  // Vuelos/trenes indexados por día
+  // Vuelos/trenes: llegadas ancladas al primer día de la ciudad destino,
+  // salidas ancladas al último día de la ciudad origen (= fecha del vuelo)
   const transByDate = {}
   for (const v of (vuelos ?? [])) {
-    const day = v.fecha?.slice(0, 10)
-    if (!day) continue
     const ciudadLlegada = v.ciudad_llegada ?? cityOf(v.destino)
     const ciudadSalida  = v.ciudad_salida  ?? cityOf(v.origen)
-    if (EUROPEAN_CITIES.has(ciudadLlegada) && cityByDate[day] === ciudadLlegada) {
+    if (EUROPEAN_CITIES.has(ciudadLlegada) && cityFirstDay[ciudadLlegada]) {
+      const day = cityFirstDay[ciudadLlegada]
       if (!transByDate[day]) transByDate[day] = []
       transByDate[day].push({ ...v, tag: 'Llegada', horaEvento: v.llegada })
     }
-    if (EUROPEAN_CITIES.has(ciudadSalida) && cityByDate[day] === ciudadSalida) {
+    if (EUROPEAN_CITIES.has(ciudadSalida) && cityLastDay[ciudadSalida]) {
+      const day = cityLastDay[ciudadSalida]
       if (!transByDate[day]) transByDate[day] = []
       transByDate[day].push({ ...v, tag: 'Salida', horaEvento: v.salida })
     }

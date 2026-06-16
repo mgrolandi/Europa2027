@@ -389,7 +389,8 @@ export default function CityDetail() {
           const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase()
 
           const transDay = {}
-          entrada.forEach(v => { const day = v.fecha?.slice(0,10); if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Llegada' }) } })
+          // Llegadas: anclar al primer día de la ciudad (el vuelo puede salir el día anterior)
+          entrada.forEach(v => { const day = ficha.fecha_llegada; if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Llegada' }) } })
           salida.forEach(v  => { const day = v.fecha?.slice(0,10); if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Salida'  }) } })
 
           return (
