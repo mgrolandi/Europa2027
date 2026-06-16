@@ -445,22 +445,6 @@ export default function CityDetail() {
                   )
                 })}
               </div>
-              {opciones.length > 0 && (
-                <div>
-                  <p className="font-mono text-[10px] text-ink-light uppercase tracking-wider mb-3">Ideas · sin fecha comprometida</p>
-                  <div className="space-y-1.5">
-                    {opciones.map(a => {
-                      const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
-                      return (
-                        <ActividadCard key={a.id} a={a} hasVoucher={actDocs.length > 0}
-                          onToggleConfirm={() => updateActividad.mutate({ id: a.id, updates: { confirmada: !a.confirmada } })}
-                          onUploadVoucher={(file) => uploadDoc.mutate({ file, entidad_id: a.id, tipo_doc: 'voucher', entidad_tipo: 'actividad' })}
-                        />
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
             </>
           )
         })()}
@@ -560,6 +544,28 @@ export default function CityDetail() {
             </div>
           </form>
         )}
+
+        {/* Ideas sin fecha comprometida */}
+        {ficha && (() => {
+          const opciones = (actividades ?? []).filter(a => !a.fecha || !a.confirmada)
+          if (!opciones.length) return null
+          return (
+            <div className="mb-5">
+              <p className="font-mono text-[10px] text-ink-light uppercase tracking-wider mb-3">Ideas · sin fecha comprometida</p>
+              <div className="space-y-1.5">
+                {opciones.map(a => {
+                  const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
+                  return (
+                    <ActividadCard key={a.id} a={a} hasVoucher={actDocs.length > 0}
+                      onToggleConfirm={() => updateActividad.mutate({ id: a.id, updates: { confirmada: !a.confirmada } })}
+                      onUploadVoucher={(file) => uploadDoc.mutate({ file, entidad_id: a.id, tipo_doc: 'voucher', entidad_tipo: 'actividad' })}
+                    />
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
 
         {openPendientes.length === 0 && donePendientes.length === 0 ? (
           <p className="text-sm text-ink-light italic">Sin pendientes para {ciudad}</p>
