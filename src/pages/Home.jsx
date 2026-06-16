@@ -205,31 +205,13 @@ function RouteTimeline({ vuelos, onSelect }) {
 function GlobalAgenda({ ciudades, actividades, vuelos }) {
   if (!ciudades?.length) return null
 
-  // Mapa fecha → ciudad
-  const cityByDate = {}
-  for (const c of ciudades) {
-    if (!c.fecha_llegada || !c.fecha_salida) continue
-    const d = new Date(c.fecha_llegada + 'T12:00:00')
-    const end = new Date(c.fecha_salida + 'T12:00:00')
-    while (d <= end) {
-      cityByDate[d.toISOString().slice(0, 10)] = c.ciudad
-      d.setDate(d.getDate() + 1)
-    }
-  }
+  const sorted = [...ciudades]
+    .filter(c => c.fecha_llegada && c.fecha_salida)
+    .sort((a, b) => a.fecha_llegada.localeCompare(b.fecha_llegada))
 
-  const allDays = Object.keys(cityByDate).sort()
-  if (!allDays.length) return null
+  if (!sorted.length) return null
 
-  // Primer y último día de cada ciudad
-  const cityFirstDay = {}
-  const cityLastDay  = {}
-  for (const day of allDays) {
-    const c = cityByDate[day]
-    if (!cityFirstDay[c]) cityFirstDay[c] = day
-    cityLastDay[c] = day
-  }
-
-  // Actividades confirmadas con fecha, indexadas por día
+  // Actividades confirmadas por día
   const actByDate = {}
   for (const a of (actividades ?? [])) {
     if (!a.fecha || !a.confirmada) continue
@@ -241,98 +223,91 @@ function GlobalAgenda({ ciudades, actividades, vuelos }) {
     actByDate[day].sort((a, b) => (a.hora ?? '').localeCompare(b.hora ?? ''))
   }
 
-  // Vuelos/trenes: cada transporte aparece UNA sola vez.
-  // Si sale y llega el mismo día calendario → mostrar en ese día con hora de salida.
-  // Si llega al día siguiente (ej: vuelo nocturno) → mostrar en el primer día de la ciudad destino.
-  const transByDate = {}
-  for (const v of (vuelos ?? [])) {
-    const ciudadLlegada = v.ciudad_llegada ?? cityOf(v.destino)
-    const ciudadSalida  = v.ciudad_salida  ?? cityOf(v.origen)
-    const fechaVuelo    = v.fecha?.slice(0, 10)
-    const diaLlegada    = cityFirstDay[ciudadLlegada]
-    const esNocturno    = fechaVuelo && diaLlegada && fechaVuelo !== diaLlegada
-
-    if (esNocturno) {
-      // Vuelo nocturno (ej: SAO-LON): mostrar en el primer día de destino
-      if (EUROPEAN_CITIES.has(ciudadLlegada) && diaLlegada) {
-        if (!transByDate[diaLlegada]) transByDate[diaLlegada] = []
-        transByDate[diaLlegada].push({ ...v, tag: 'Llegada', horaEvento: v.llegada })
-      }
-    } else if (fechaVuelo) {
-      // Mismo día: mostrar una sola vez con hora de salida
-      if (!transByDate[fechaVuelo]) transByDate[fechaVuelo] = []
-      const tag = EUROPEAN_CITIES.has(ciudadSalida) ? 'Salida' : 'Llegada'
-      const hora = EUROPEAN_CITIES.has(ciudadSalida) ? v.salida : v.llegada
-      transByDate[fechaVuelo].push({ ...v, tag, horaEvento: hora })
-    }
-  }
-  // Ordenar eventos de transporte por hora dentro de cada día
-  for (const day of Object.keys(transByDate)) {
-    transByDate[day].sort((a, b) => (a.horaEvento ?? '').localeCompare(b.horaEvento ?? ''))
-  }
-
-  let prevCity = null
-
   return (
     <section className="mb-8">
       <h2 className="section-title">Agenda del viaje</h2>
       <div className="space-y-1">
-        {allDays.map(day => {
-          const ciudad = cityByDate[day]
-          const colors = CITY_COLORS[ciudad] ?? { bg: 'bg-cream', border: 'border-cream-dark', badge: 'bg-cream-dark text-ink', dot: 'bg-ink' }
-          const acts   = actByDate[day]   ?? []
-          const trans  = transByDate[day] ?? []
-          const showCityHeader = ciudad !== prevCity
-          prevCity = ciudad
-          const hasContent = acts.length > 0 || trans.length > 0
+        {sorted.map(c => {
+          const colors = CITY_COLORS[c.ciudad] ?? { bg: 'bg-cream', border: 'border-cream-dark', badge: 'bg-cream-dark text-ink', dot: 'bg-ink' }
+
+          // Días de esta ciudad
+          const days = []
+          const d = new Date(c.fecha_llegada + 'T12:00:00')
+          const end = new Date(c.fecha_salida + 'T12:00:00')
+          while (d <= end) { days.push(d.toISOString().slice(0, 10)); d.setDate(d.getDate() + 1) }
+
+          // Transporte de esta ciudad: llegadas en fecha_llegada, salidas en v.fecha
+          const transByDay = {}
+          for (const v of (vuelos ?? [])) {
+            const ciudadLleg = v.ciudad_llegada ?? cityOf(v.destino)
+            const ciudadSal  = v.ciudad_salida  ?? cityOf(v.origen)
+            if (ciudadLleg === c.ciudad) {
+              const day = c.fecha_llegada
+              if (!transByDay[day]) transByDay[day] = []
+              transByDay[day].push({ ...v, tag: 'Llegada', horaEvento: v.llegada })
+            }
+            if (ciudadSal === c.ciudad && v.fecha) {
+              const day = v.fecha.slice(0, 10)
+              if (!transByDay[day]) transByDay[day] = []
+              transByDay[day].push({ ...v, tag: 'Salida', horaEvento: v.salida })
+            }
+          }
+          for (const day of Object.keys(transByDay)) {
+            transByDay[day].sort((a, b) => (a.horaEvento ?? '').localeCompare(b.horaEvento ?? ''))
+          }
 
           return (
-            <div key={day}>
-              {showCityHeader && (
-                <div className="flex items-center gap-2 mt-5 mb-1.5">
-                  <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
-                  <Link
-                    to={`/ciudad/${ciudad}`}
-                    className={`font-mono text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${colors.badge} hover:opacity-80 transition-opacity`}
-                  >
-                    {ciudad}
-                  </Link>
-                </div>
-              )}
-              <div className={`rounded-xl border overflow-hidden ${hasContent ? `${colors.border} ${colors.bg}` : 'border-cream-dark/30'}`}>
-                <div className="flex items-center gap-3 px-3 py-2">
-                  <span className="font-mono text-[11px] font-medium text-ink-light w-6 shrink-0">
-                    {new Date(day + 'T12:00:00').toLocaleDateString('es', { day: 'numeric' })}
-                  </span>
-                  <span className="font-mono text-xs text-ink capitalize">
-                    {new Date(day + 'T12:00:00').toLocaleDateString('es', { weekday: 'long', month: 'short' })}
-                  </span>
-                </div>
-
-                {trans.map((v, i) => (
-                  <div key={i} className="flex items-start gap-3 px-3 py-1.5 border-t border-blue-100 bg-blue-50/70">
-                    <span className="font-mono text-[10px] text-blue-500 w-6 shrink-0 mt-0.5">{v.horaEvento ?? '—'}</span>
-                    <div className="flex-1 min-w-0">
-                      <span className="font-mono text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded mr-1.5">
-                        {v.tag} {v.tipo === 'vuelo' ? '✈️' : '🚄'}
-                      </span>
-                      <span className="font-mono text-xs text-ink">
-                        {cityOf(v.origen)} → {cityOf(v.destino)}
-                      </span>
-                      {v.numero && <span className="font-mono text-[10px] text-ink-light ml-1.5">{v.numero}</span>}
+            <div key={c.ciudad}>
+              <div className="flex items-center gap-2 mt-5 mb-1.5">
+                <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
+                <Link
+                  to={`/ciudad/${c.ciudad}`}
+                  className={`font-mono text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${colors.badge} hover:opacity-80 transition-opacity`}
+                >
+                  {c.ciudad}
+                </Link>
+              </div>
+              <div className="space-y-1">
+                {days.map(day => {
+                  const acts  = actByDate[day]   ?? []
+                  const trans = transByDay[day]   ?? []
+                  const hasContent = acts.length > 0 || trans.length > 0
+                  return (
+                    <div key={day} className={`rounded-xl border overflow-hidden ${hasContent ? `${colors.border} ${colors.bg}` : 'border-cream-dark/30'}`}>
+                      <div className="flex items-center gap-3 px-3 py-2">
+                        <span className="font-mono text-[11px] font-medium text-ink-light w-6 shrink-0">
+                          {new Date(day + 'T12:00:00').toLocaleDateString('es', { day: 'numeric' })}
+                        </span>
+                        <span className="font-mono text-xs text-ink capitalize">
+                          {new Date(day + 'T12:00:00').toLocaleDateString('es', { weekday: 'long', month: 'short' })}
+                        </span>
+                      </div>
+                      {trans.map((v, i) => (
+                        <div key={i} className="flex items-start gap-3 px-3 py-1.5 border-t border-blue-100 bg-blue-50/70">
+                          <span className="font-mono text-[10px] text-blue-500 w-6 shrink-0 mt-0.5">{v.horaEvento ?? '—'}</span>
+                          <div className="flex-1 min-w-0">
+                            <span className="font-mono text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded mr-1.5">
+                              {v.tag} {v.tipo === 'vuelo' ? '✈️' : '🚄'}
+                            </span>
+                            <span className="font-mono text-xs text-ink">
+                              {cityOf(v.origen)} → {cityOf(v.destino)}
+                            </span>
+                            {v.numero && <span className="font-mono text-[10px] text-ink-light ml-1.5">{v.numero}</span>}
+                          </div>
+                        </div>
+                      ))}
+                      {acts.map((a, i) => (
+                        <div key={a.id ?? i} className="flex items-start gap-3 px-3 py-1.5 border-t border-black/5">
+                          <span className="font-mono text-[10px] text-amber-600 w-6 shrink-0 mt-0.5">{a.hora ?? ''}</span>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-mono text-xs text-ink leading-tight">{a.nombre}</p>
+                            {a.precio && <p className="font-mono text-[10px] text-ink-light mt-0.5">{a.precio}</p>}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                ))}
-
-                {acts.map((a, i) => (
-                  <div key={a.id ?? i} className="flex items-start gap-3 px-3 py-1.5 border-t border-black/5">
-                    <span className="font-mono text-[10px] text-amber-600 w-6 shrink-0 mt-0.5">{a.hora ?? ''}</span>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-mono text-xs text-ink leading-tight">{a.nombre}</p>
-                      {a.precio && <p className="font-mono text-[10px] text-ink-light mt-0.5">{a.precio}</p>}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           )
