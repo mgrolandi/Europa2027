@@ -278,44 +278,39 @@ export default function CityDetail() {
         </div>
       )}
 
-      {/* Ficha ciudad */}
+      {/* Ficha ciudad — card compacta */}
       {ficha && (
-        <section className="mb-6">
-          <h2 className="section-title">Info ciudad</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
-            {[
-              ['País',         ficha.pais],
-              ['Idioma',       ficha.idioma],
-              ['Moneda',       ficha.moneda],
-              ['Enchufe',      ficha.tipo_enchufe],
-              ['Zona horaria', ficha.zona_horaria],
-              ['Visa',         ficha.visa_info],
-            ].map(([label, val]) => val && (
-              <div key={label} className="rounded-lg bg-cream-dark p-3">
-                <p className="font-mono text-[10px] text-ink-light uppercase tracking-wider">{label}</p>
-                <p className="text-sm text-ink mt-1">{val}</p>
-              </div>
-            ))}
-          </div>
-
-        </section>
+        <div className="rounded-xl border border-cream-dark bg-cream-dark/40 px-4 py-3 mb-6 flex flex-wrap gap-x-6 gap-y-1.5 text-xs font-mono">
+          {[
+            ['🌍', ficha.pais],
+            ['💬', ficha.idioma],
+            ['💰', ficha.moneda],
+            ['🔌', ficha.tipo_enchufe],
+            ['🕐', ficha.zona_horaria],
+            ['✈️', ficha.visa_info],
+          ].filter(([, v]) => v).map(([icon, val]) => (
+            <span key={val} className="text-ink-light">
+              {icon} <span className="text-ink">{val}</span>
+            </span>
+          ))}
+        </div>
       )}
 
       {/* Nav interno */}
       <div className="flex gap-2 flex-wrap mb-6 pb-6 border-b border-cream-dark">
         {[
-          { href: '#alojamiento', icon: '🏨', label: 'Alojamiento' },
-          { href: '#transporte',  icon: '🚇', label: 'Transporte'  },
-          { href: '#actividades', icon: '🎭', label: 'Actividades' },
-          { href: '#guia',        icon: '📋', label: 'Guía'        },
-        ].map(({ href, icon, label }) => (
-          <a
-            key={href}
-            href={href}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-ink text-cream font-mono text-xs border-2 border-ink hover:bg-transparent hover:text-ink transition-all"
+          { id: 'alojamiento', icon: '🏨', label: 'Alojamiento' },
+          { id: 'transporte',  icon: '🚇', label: 'Transporte'  },
+          { id: 'actividades', icon: '🎭', label: 'Actividades' },
+          { id: 'guia',        icon: '📋', label: 'Guía'        },
+        ].map(({ id, icon, label }) => (
+          <button
+            key={id}
+            onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-ink text-cream font-mono text-xs border-2 border-ink hover:bg-transparent hover:text-ink transition-all cursor-pointer"
           >
             {icon} {label}
-          </a>
+          </button>
         ))}
       </div>
 
@@ -346,30 +341,31 @@ export default function CityDetail() {
       </section>
 
       {/* Transport */}
-      {(entrada.length > 0 || salida.length > 0) && (
-        <section className="mb-6" id="transporte">
-          <h2 className="section-title">Transporte</h2>
+      <section className="mb-6" id="transporte">
+        <h2 className="section-title">Transporte</h2>
+        {(entrada.length > 0 || salida.length > 0) ? (
           <div className="space-y-3">
             {entrada.map(v => <VueloCard key={v.id} v={v} tag="Llegada" />)}
             {salida.map(v  => <VueloCard key={v.id} v={v} tag="Salida"  />)}
           </div>
-
-          {ficha?.tips_transporte?.length > 0 && (
-            <div className="mt-3 rounded-lg bg-cream-dark p-3">
-              <p className="font-mono text-[10px] text-ink-light uppercase tracking-wider mb-2">
-                Tips de transporte
-              </p>
-              <ul className="space-y-1.5">
-                {ficha.tips_transporte.map((t, i) => (
-                  <li key={i} className="flex gap-2 text-sm text-ink">
-                    <span className="text-gold shrink-0">·</span> {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
-      )}
+        ) : (
+          <p className="text-sm text-ink-light italic">Sin vuelos cargados para {ciudad}</p>
+        )}
+        {ficha?.tips_transporte?.length > 0 && (
+          <div className="mt-3 rounded-lg bg-cream-dark p-3">
+            <p className="font-mono text-[10px] text-ink-light uppercase tracking-wider mb-2">
+              Tips de transporte
+            </p>
+            <ul className="space-y-1.5">
+              {ficha.tips_transporte.map((t, i) => (
+                <li key={i} className="flex gap-2 text-sm text-ink">
+                  <span className="text-gold shrink-0">·</span> {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
 
       {/* Entradas y actividades */}
       <section className="mb-6" id="actividades">
