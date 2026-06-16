@@ -252,8 +252,8 @@ function GlobalAgenda({ ciudades, actividades, vuelos }) {
       if (!transByDate[day]) transByDate[day] = []
       transByDate[day].push({ ...v, tag: 'Llegada', horaEvento: v.llegada })
     }
-    if (EUROPEAN_CITIES.has(ciudadSalida) && cityLastDay[ciudadSalida]) {
-      const day = cityLastDay[ciudadSalida]
+    if (EUROPEAN_CITIES.has(ciudadSalida) && v.fecha) {
+      const day = v.fecha.slice(0, 10)
       if (!transByDate[day]) transByDate[day] = []
       transByDate[day].push({ ...v, tag: 'Salida', horaEvento: v.salida })
     }
