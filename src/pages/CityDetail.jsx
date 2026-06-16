@@ -298,27 +298,32 @@ export default function CityDetail() {
             ))}
           </div>
 
-          {ficha.emergencias && Object.keys(ficha.emergencias).length > 0 && (
-            <div className="rounded-lg bg-red-50 border border-red-200 p-3">
-              <p className="font-mono text-[10px] text-red-700 uppercase tracking-wider mb-1">Emergencias</p>
-              <div className="flex flex-wrap gap-4">
-                {Object.entries(ficha.emergencias).map(([k, v]) => (
-                  <span key={k} className="font-mono text-sm">
-                    <span className="text-ink-light">{k}:</span>{' '}
-                    <strong className="text-ink">{v}</strong>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </section>
       )}
+
+      {/* Nav interno */}
+      <div className="flex gap-2 flex-wrap mb-6 pb-6 border-b border-cream-dark">
+        {[
+          { href: '#alojamiento', icon: '🏨', label: 'Alojamiento' },
+          { href: '#transporte',  icon: '🚇', label: 'Transporte'  },
+          { href: '#actividades', icon: '🎭', label: 'Actividades' },
+          { href: '#guia',        icon: '📋', label: 'Guía'        },
+        ].map(({ href, icon, label }) => (
+          <a
+            key={href}
+            href={href}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-ink text-cream font-mono text-xs border-2 border-ink hover:bg-transparent hover:text-ink transition-all"
+          >
+            {icon} {label}
+          </a>
+        ))}
+      </div>
 
       {/* Family filter */}
       <FamilyFilter className="mb-6" />
 
       {/* Hotels */}
-      <section className="mb-6">
+      <section className="mb-6" id="alojamiento">
         <h2 className="section-title">Alojamiento</h2>
         {hotelesFiltered.length === 0 ? (
           <p className="text-sm text-ink-light italic">Sin reservas{selectedFamily ? ` para ${selectedFamily}` : ''}</p>
@@ -342,7 +347,7 @@ export default function CityDetail() {
 
       {/* Transport */}
       {(entrada.length > 0 || salida.length > 0) && (
-        <section className="mb-6">
+        <section className="mb-6" id="transporte">
           <h2 className="section-title">Transporte</h2>
           <div className="space-y-3">
             {entrada.map(v => <VueloCard key={v.id} v={v} tag="Llegada" />)}
@@ -367,7 +372,7 @@ export default function CityDetail() {
       )}
 
       {/* Entradas y actividades */}
-      <section className="mb-6">
+      <section className="mb-6" id="actividades">
         <div className="flex items-center justify-between mb-3">
           <h2 className="section-title mb-0">Entradas y actividades</h2>
           <button
@@ -454,7 +459,7 @@ export default function CityDetail() {
       </section>
 
       {/* City pendientes */}
-      <section className="mb-6">
+      <section className="mb-6" id="guia">
         <div className="flex items-center justify-between mb-3">
           <h2 className="section-title mb-0">Pendientes</h2>
           <button
