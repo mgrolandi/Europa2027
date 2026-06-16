@@ -318,7 +318,7 @@ export default function CityDetail() {
         {[
           { id: 'alojamiento', icon: '🏨', label: 'Alojamiento' },
           { id: 'transporte',  icon: '🚇', label: 'Transporte'  },
-          { id: 'actividades', icon: '🎭', label: 'Actividades' },
+          { id: 'actividades', icon: '🗓', label: 'Agenda' },
           { id: 'guia',        icon: '📋', label: 'Guía'        },
         ].map(({ id, icon, label }) => (
           <button
@@ -384,10 +384,10 @@ export default function CityDetail() {
         )}
       </section>
 
-      {/* Actividades — agenda + opciones */}
+      {/* Agenda */}
       <section className="mb-6" id="actividades">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="section-title mb-0">Actividades</h2>
+          <h2 className="section-title mb-0">Agenda</h2>
           <button
             onClick={() => setShowAddActividad(v => !v)}
             className="font-mono text-xs text-ink-light border border-cream-dark rounded-lg px-3 py-1.5 hover:border-ink hover:text-ink transition-colors"
@@ -471,20 +471,57 @@ export default function CityDetail() {
 
           const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase()
 
+          const firstDay = days[0]
+          const lastDay  = days[days.length - 1]
+
+          // Transportes del día: llegada en primer día, salida en último
+          const transDay = {}
+          entrada.forEach(v => {
+            const d = v.fecha?.slice(0, 10)
+            if (d) { if (!transDay[d]) transDay[d] = []; transDay[d].push({ ...v, tag: 'Llegada' }) }
+          })
+          salida.forEach(v => {
+            const d = v.fecha?.slice(0, 10)
+            if (d) { if (!transDay[d]) transDay[d] = []; transDay[d].push({ ...v, tag: 'Salida' }) }
+          })
+
           return (
             <>
               {/* Timeline de días */}
               <div className="border border-cream-dark rounded-xl overflow-hidden mb-6">
                 {days.map((day, i) => {
-                  const acts = byDay[day] ?? []
+                  const acts   = byDay[day] ?? []
+                  const trans  = transDay[day] ?? []
+                  const hasAny = acts.length > 0 || trans.length > 0
                   return (
                     <div key={day} className={`${i > 0 ? 'border-t border-cream-dark' : ''}`}>
-                      <div className={`flex items-center gap-3 px-4 py-2 ${acts.length > 0 ? 'bg-ink text-cream' : 'bg-cream-dark/40'}`}>
-                        <span className={`font-mono text-xs font-semibold tracking-wider ${acts.length > 0 ? 'text-gold' : 'text-ink-light'}`}>
+                      <div className={`flex items-center gap-3 px-4 py-2 ${hasAny ? 'bg-ink text-cream' : 'bg-cream-dark/40'}`}>
+                        <span className={`font-mono text-xs font-semibold tracking-wider ${hasAny ? 'text-gold' : 'text-ink-light'}`}>
                           {fmtDay(day)}
                         </span>
-                        {acts.length === 0 && <span className="font-mono text-[10px] text-ink-light/60">sin actividades confirmadas</span>}
+                        {!hasAny && <span className="font-mono text-[10px] text-ink-light/60">día libre</span>}
                       </div>
+                      {trans.map(v => (
+                        <div key={v.id + v.tag} className="px-4 py-3 flex items-start gap-3 border-t border-cream-dark/50 bg-blue-50/40">
+                          <div className="font-mono text-sm text-blue-500 font-semibold w-12 shrink-0 pt-0.5">
+                            {v.tag === 'Llegada' ? (v.llegada ?? '—') : (v.salida ?? '—')}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-ink">
+                              {v.tag === 'Llegada' ? '✈️ Llegada — ' : '🚄 Salida — '}
+                              {v.origen} → {v.destino}
+                            </p>
+                            <p className="font-mono text-xs text-ink-light mt-0.5">
+                              {[v.empresa, v.numero].filter(Boolean).join(' · ')}
+                              {v.tag === 'Llegada' && v.llegada ? ` · Llega ${v.llegada}` : ''}
+                              {v.tag === 'Salida'  && v.salida  ? ` · Sale ${v.salida}`   : ''}
+                            </p>
+                          </div>
+                          <span className={`font-mono text-[10px] px-2 py-0.5 rounded border shrink-0 ${v.confirmado ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
+                            {v.confirmado ? '✓' : 'Pendiente'}
+                          </span>
+                        </div>
+                      ))}
                       {acts.map(a => {
                         const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
                         return (
