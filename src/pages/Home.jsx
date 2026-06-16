@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useFichasCiudad, usePendientes, useVuelos } from '../lib/queries'
+import { useFichasCiudad, usePendientes, useVuelos, useActividades } from '../lib/queries'
 import { isConfigured } from '../lib/supabase'
 import SupabaseBanner from '../components/SupabaseBanner'
 import FamiliaBadge from '../components/FamiliaBadge'
@@ -14,6 +14,14 @@ const CITY_PHOTOS = {
 }
 
 const EUROPEAN_CITIES = new Set(['Londres', 'Paris', 'Bruselas', 'Roma', 'Madrid'])
+
+const CITY_COLORS = {
+  Londres:  { bg: 'bg-blue-50',   border: 'border-blue-200',   badge: 'bg-blue-100 text-blue-700',     dot: 'bg-blue-400'   },
+  Paris:    { bg: 'bg-rose-50',   border: 'border-rose-200',   badge: 'bg-rose-100 text-rose-700',     dot: 'bg-rose-400'   },
+  Bruselas: { bg: 'bg-amber-50',  border: 'border-amber-200',  badge: 'bg-amber-100 text-amber-700',   dot: 'bg-amber-400'  },
+  Roma:     { bg: 'bg-green-50',  border: 'border-green-200',  badge: 'bg-green-100 text-green-700',   dot: 'bg-green-500'  },
+  Madrid:   { bg: 'bg-orange-50', border: 'border-orange-200', badge: 'bg-orange-100 text-orange-700', dot: 'bg-orange-400' },
+}
 
 function fmt(iso) {
   if (!iso) return ''
@@ -163,16 +171,12 @@ function RouteTimeline({ vuelos, onSelect }) {
           const from   = v.ciudad_salida ?? cityOf(v.origen)
           const to     = v.ciudad_llegada ?? cityOf(v.destino)
           const isLast = i === segs.length - 1
-
           return (
             <div key={v.id ?? i} className="flex items-start">
-              {/* City node */}
               <div className="flex flex-col items-center gap-1.5 pt-0.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-ink ring-2 ring-cream mt-0.5" />
                 <span className="font-mono text-[10px] text-ink-light whitespace-nowrap">{from}</span>
               </div>
-
-              {/* Connector + icon */}
               <button
                 onClick={() => onSelect(v)}
                 title={`${from} → ${to}`}
@@ -184,7 +188,6 @@ function RouteTimeline({ vuelos, onSelect }) {
                 </span>
                 <div className="h-px w-8 sm:w-12 bg-ink/25 group-hover:bg-ink transition-colors" />
               </button>
-
               {isLast && (
                 <div className="flex flex-col items-center gap-1.5 pt-0.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-ink ring-2 ring-cream mt-0.5" />
@@ -196,6 +199,124 @@ function RouteTimeline({ vuelos, onSelect }) {
         })}
       </div>
     </div>
+  )
+}
+
+function GlobalAgenda({ ciudades, actividades, vuelos }) {
+  if (!ciudades?.length) return null
+
+  // Mapa fecha → ciudad
+  const cityByDate = {}
+  for (const c of ciudades) {
+    if (!c.fecha_llegada || !c.fecha_salida) continue
+    const d = new Date(c.fecha_llegada + 'T12:00:00')
+    const end = new Date(c.fecha_salida + 'T12:00:00')
+    while (d <= end) {
+      cityByDate[d.toISOString().slice(0, 10)] = c.ciudad
+      d.setDate(d.getDate() + 1)
+    }
+  }
+
+  const allDays = Object.keys(cityByDate).sort()
+  if (!allDays.length) return null
+
+  // Actividades confirmadas con fecha, indexadas por día
+  const actByDate = {}
+  for (const a of (actividades ?? [])) {
+    if (!a.fecha || !a.confirmada) continue
+    const day = a.fecha.slice(0, 10)
+    if (!actByDate[day]) actByDate[day] = []
+    actByDate[day].push(a)
+  }
+  for (const day of Object.keys(actByDate)) {
+    actByDate[day].sort((a, b) => (a.hora ?? '').localeCompare(b.hora ?? ''))
+  }
+
+  // Vuelos/trenes indexados por día
+  const transByDate = {}
+  for (const v of (vuelos ?? [])) {
+    const day = v.fecha?.slice(0, 10)
+    if (!day) continue
+    const ciudadLlegada = v.ciudad_llegada ?? cityOf(v.destino)
+    const ciudadSalida  = v.ciudad_salida  ?? cityOf(v.origen)
+    if (EUROPEAN_CITIES.has(ciudadLlegada) && cityByDate[day] === ciudadLlegada) {
+      if (!transByDate[day]) transByDate[day] = []
+      transByDate[day].push({ ...v, tag: 'Llegada', horaEvento: v.llegada })
+    }
+    if (EUROPEAN_CITIES.has(ciudadSalida) && cityByDate[day] === ciudadSalida) {
+      if (!transByDate[day]) transByDate[day] = []
+      transByDate[day].push({ ...v, tag: 'Salida', horaEvento: v.salida })
+    }
+  }
+
+  let prevCity = null
+
+  return (
+    <section className="mb-8">
+      <h2 className="section-title">Agenda del viaje</h2>
+      <div className="space-y-1">
+        {allDays.map(day => {
+          const ciudad = cityByDate[day]
+          const colors = CITY_COLORS[ciudad] ?? { bg: 'bg-cream', border: 'border-cream-dark', badge: 'bg-cream-dark text-ink', dot: 'bg-ink' }
+          const acts   = actByDate[day]   ?? []
+          const trans  = transByDate[day] ?? []
+          const showCityHeader = ciudad !== prevCity
+          prevCity = ciudad
+          const hasContent = acts.length > 0 || trans.length > 0
+
+          return (
+            <div key={day}>
+              {showCityHeader && (
+                <div className="flex items-center gap-2 mt-5 mb-1.5">
+                  <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
+                  <Link
+                    to={`/ciudad/${ciudad}`}
+                    className={`font-mono text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${colors.badge} hover:opacity-80 transition-opacity`}
+                  >
+                    {ciudad}
+                  </Link>
+                </div>
+              )}
+              <div className={`rounded-xl border overflow-hidden ${hasContent ? `${colors.border} ${colors.bg}` : 'border-cream-dark/30'}`}>
+                <div className="flex items-center gap-3 px-3 py-2">
+                  <span className="font-mono text-[11px] font-medium text-ink-light w-6 shrink-0">
+                    {new Date(day + 'T12:00:00').toLocaleDateString('es', { day: 'numeric' })}
+                  </span>
+                  <span className="font-mono text-xs text-ink capitalize">
+                    {new Date(day + 'T12:00:00').toLocaleDateString('es', { weekday: 'long', month: 'short' })}
+                  </span>
+                </div>
+
+                {trans.map((v, i) => (
+                  <div key={i} className="flex items-start gap-3 px-3 py-1.5 border-t border-blue-100 bg-blue-50/70">
+                    <span className="font-mono text-[10px] text-blue-500 w-6 shrink-0 mt-0.5">{v.horaEvento ?? '—'}</span>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-mono text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded mr-1.5">
+                        {v.tag} {v.tipo === 'vuelo' ? '✈️' : '🚄'}
+                      </span>
+                      <span className="font-mono text-xs text-ink">
+                        {cityOf(v.origen)} → {cityOf(v.destino)}
+                      </span>
+                      {v.numero && <span className="font-mono text-[10px] text-ink-light ml-1.5">{v.numero}</span>}
+                    </div>
+                  </div>
+                ))}
+
+                {acts.map((a, i) => (
+                  <div key={a.id ?? i} className="flex items-start gap-3 px-3 py-1.5 border-t border-black/5">
+                    <span className="font-mono text-[10px] text-amber-600 w-6 shrink-0 mt-0.5">{a.hora ?? ''}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-mono text-xs text-ink leading-tight">{a.nombre}</p>
+                      {a.precio && <p className="font-mono text-[10px] text-ink-light mt-0.5">{a.precio}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </section>
   )
 }
 
@@ -214,12 +335,12 @@ export default function Home() {
   const { data: ciudades, isLoading } = useFichasCiudad()
   const { data: pendientes }          = usePendientes()
   const { data: vuelos }              = useVuelos()
+  const { data: actividades }         = useActividades()
 
   const pendienteCount = (pendientes ?? []).filter(p => !p.hecho).length
 
   return (
     <div>
-      {/* Hero */}
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="font-serif text-4xl text-ink">Europa 2027</h1>
@@ -238,7 +359,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* City cards */}
       <section className="mb-8">
         <h2 className="section-title">Ciudades</h2>
         {isLoading ? (
@@ -254,7 +374,8 @@ export default function Home() {
         )}
       </section>
 
-      {/* Route timeline */}
+      <GlobalAgenda ciudades={ciudades} actividades={actividades} vuelos={vuelos} />
+
       <section className="mb-8">
         <h2 className="section-title">Ruta del viaje</h2>
         <div className="card overflow-hidden py-3 px-0">
@@ -269,7 +390,6 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Quick access */}
       <section>
         <h2 className="section-title">Accesos rápidos</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
