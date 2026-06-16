@@ -66,7 +66,10 @@
     .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
     a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
     a.maps-link:hover{text-decoration:underline}
-    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    .section-nav{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0 32px;margin-bottom:8px}
+    .snav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:all .2s;border:2px solid var(--ink)}
+    .snav-btn:hover{background:transparent;color:var(--ink)}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}.section-nav{gap:8px}.snav-btn{padding:9px 16px;font-size:11px}}
   </style>
 </head>
 <body>
@@ -88,8 +91,16 @@
     <div class="dates">02 — 06 feb 2027 · 4 noches · Alojamiento separado por familia</div>
   </div>
 
+  <!-- NAV INTERNO -->
+  <div class="section-nav">
+    <a href="#alojamiento" class="snav-btn">🏨 Alojamiento</a>
+    <a href="#transporte" class="snav-btn">🚇 Transporte</a>
+    <a href="#actividades" class="snav-btn">🎭 Actividades</a>
+    <a href="#guia" class="snav-btn">📋 Guía</a>
+  </div>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <div class="section" id="alojamiento">
     <div class="section-title">Alojamiento <small>separado por familia</small></div>
     <div class="hotel-grid">
 
@@ -142,7 +153,7 @@
   </div>
 
   <!-- TRANSPORTE -->
-  <div class="section">
+  <div class="section" id="transporte">
     <div class="section-title">Transporte en la ciudad</div>
     <ul class="transport-list">
       <li><strong>Marcar al ENTRAR y al SALIR</strong> en metro y RER — sin salida se cobra tarifa máxima en RER.</li>
@@ -152,7 +163,7 @@
   </div>
 
   <!-- PENDIENTES PARIS -->
-  <div class="section">
+  <div class="section" id="guia">
     <div class="section-title">Pendientes — París</div>
     <div class="pend-grid">
 
@@ -172,6 +183,64 @@
           <span class="pend-badge ok">Antes 02/12/2026</span>
           <div class="pend-obs">~EUR 29 adulto / EUR 7.50 niño. Sold out habitual — reservar con meses de anticipación.</div>
         </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="actividades">
+    <div class="section-title">Actividades <small>ENTRADAS & EXPERIENCIAS</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">1er arrondissement</div>
+        <h3>Musée du Louvre</h3>
+        <p class="place-desc">El museo más visitado del mundo. Mona Lisa, Venus de Milo, código Hammurabi. Reserva obligatoria online — sin reserva la cola es de horas.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 22 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar con semanas de anticipación. Viernes abre hasta las 21:45 — menos gente por la tarde.</div>
+        <a href="https://maps.google.com/?q=Louvre+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Champ de Mars</div>
+        <h3>Torre Eiffel — Subida a la cima</h3>
+        <p class="place-desc">330m de altura. El ascensor hasta la cima (3er piso) tiene vista de 70km en día claro. Construida en 1889 para la Exposición Universal.</p>
+        <div class="place-badges">
+          <span class="price-paid">~EUR 29 adulto · EUR 7.50 niño</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Sold out habitual — reservar con meses de anticipación. Ir al atardecer para la iluminación.</div>
+        <a href="https://maps.google.com/?q=Tour+Eiffel+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Versailles · 30 min en RER C</div>
+        <h3>Palacio de Versalles</h3>
+        <p class="place-desc">El palacio barroco de Luis XIV y los jardines de Le Nôtre. 800 hectáreas, 1400 fuentes. Galería de los Espejos imprescindible.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 21 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Salir muy temprano — tour de medio día mínimo. Los jardines están incluidos en la entrada.</div>
+        <a href="https://maps.google.com/?q=Chateau+de+Versailles" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Île de la Cité</div>
+        <h3>Notre-Dame de Paris</h3>
+        <p class="place-desc">Catedral gótica del siglo XII, reabierta en diciembre 2024 tras el incendio de 2019. Completamente restaurada — primera vez abierta desde el fuego.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis exterior</span>
+          <span class="price-reservation">Interior con reserva</span>
+        </div>
+        <div class="place-tip">Reservar acceso al interior online — afluencia masiva tras la reapertura histórica.</div>
+        <a href="https://maps.google.com/?q=Notre-Dame+Paris" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
       </div>
 
     </div>

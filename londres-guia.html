@@ -64,7 +64,10 @@
     .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
     a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
     a.maps-link:hover{text-decoration:underline}
-    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    .section-nav{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0 32px;margin-bottom:8px}
+    .snav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:all .2s;border:2px solid var(--ink)}
+    .snav-btn:hover{background:transparent;color:var(--ink)}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}.section-nav{gap:8px}.snav-btn{padding:9px 16px;font-size:11px}}
   </style>
 </head>
 <body>
@@ -86,8 +89,16 @@
     <div class="dates">29 ene — 02 feb 2027 · 4 noches · Urban Chic Shaftesbury</div>
   </div>
 
+  <!-- NAV INTERNO -->
+  <div class="section-nav">
+    <a href="#alojamiento" class="snav-btn">🏨 Alojamiento</a>
+    <a href="#transporte" class="snav-btn">🚇 Transporte</a>
+    <a href="#actividades" class="snav-btn">🎭 Actividades</a>
+    <a href="#guia" class="snav-btn">📋 Guía</a>
+  </div>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <div class="section" id="alojamiento">
     <div class="section-title">Alojamiento <small>Urban Chic - Shaftesbury · W1D 5EB</small></div>
     <div class="hotel-grid">
 
@@ -144,7 +155,7 @@
   </div>
 
   <!-- TRANSPORTE -->
-  <div class="section">
+  <div class="section" id="transporte">
     <div class="section-title">Transporte en la ciudad</div>
     <ul class="transport-list">
       <li><strong>Oyster card o contactless.</strong> Marcar al ENTRAR y al SALIR en cada viaje en tube — sin salida se cobra la tarifa máxima del día.</li>
@@ -154,7 +165,7 @@
   </div>
 
   <!-- PENDIENTES LONDRES -->
-  <div class="section">
+  <div class="section" id="guia">
     <div class="section-title">Pendientes — Londres</div>
     <div class="pend-grid">
 
@@ -192,6 +203,74 @@
           <span class="pend-badge ok">Antes 01/01/2027</span>
           <div class="pend-obs">Gratis con reserva. Se agota rápido — hacerlo con anticipación.</div>
         </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="actividades">
+    <h2 class="section-title">Actividades <small>ENTRADAS & EXPERIENCIAS</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">West End · Covent Garden</div>
+        <h3>Mamma Mia! — El Musical</h3>
+        <p class="place-desc">El hit de ABBA en escena. 25 años ininterrumpidos en el West End. Teatro Novello, Aldwych WC2B 4LD. Canciones, baile y color desde la primera canción.</p>
+        <div class="place-badges">
+          <span class="price-paid">Desde £25 · Mejores butacas £80–120</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">El Teatro Novello está a 10 min caminando desde el hotel. Reservar con anticipación — sold out en fines de semana.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Novello+Theatre+Aldwych+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Kensington</div>
+        <h3>Natural History Museum</h3>
+        <p class="place-desc">Esqueleto de dinosaurio en la entrada, ballena azul suspendida, meteoritos y gemas. Imprescindible con chicos. Gratis.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis con reserva</span>
+          <span class="price-reservation">Reservar online</span>
+        </div>
+        <div class="place-tip">En febrero puede haber pista de hielo en el jardín exterior. Reservar entrada con anticipación.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Natural+History+Museum+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Bloomsbury</div>
+        <h3>British Museum</h3>
+        <p class="place-desc">Piedra Rosetta, momias egipcias, mármoles del Partenón. 8 millones de objetos. Uno de los museos más importantes del mundo.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis con reserva</span>
+          <span class="price-reservation">Reservar online</span>
+        </div>
+        <div class="place-tip">Entrar por la puerta trasera de Montague Place — menos cola que la entrada principal.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=British+Museum+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Tower Hill</div>
+        <h3>Tower of London</h3>
+        <p class="place-desc">Fortaleza del siglo XI, prisión real, sede de las Joyas de la Corona. Los Beefeaters (guardias reales) dan tours a pie incluidos.</p>
+        <div class="place-badges">
+          <span class="price-paid">~£30 adulto · £15 niño</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">El tour de los Beefeaters es gratis con la entrada — muy entretenido para los chicos.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Tower+of+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">White City / Premier League</div>
+        <h3>Premier League — Partido</h3>
+        <p class="place-desc">Fútbol inglés en vivo. Estadios de Chelsea (Stamford Bridge), Arsenal (Emirates) o Tottenham según el fixture de febrero 2027.</p>
+        <div class="place-badges">
+          <span class="price-paid">Desde £50 — variable</span>
+          <span class="price-reservation">Entradas 19/06/2026</span>
+        </div>
+        <div class="place-tip">Las entradas salen el 19/06/2026 y se agotan en horas. Revisar fixture para saber qué equipos juegan en casa.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Stamford+Bridge+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
       </div>
 
     </div>

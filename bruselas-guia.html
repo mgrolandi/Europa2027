@@ -63,7 +63,10 @@
     a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
     a.maps-link:hover{text-decoration:underline}
     .no-pendientes{padding:16px 20px;background:var(--cream);border:1px solid var(--border);border-radius:4px;font-size:13px;color:var(--muted);font-style:italic}
-    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    .section-nav{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0 32px;margin-bottom:8px}
+    .snav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:all .2s;border:2px solid var(--ink)}
+    .snav-btn:hover{background:transparent;color:var(--ink)}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}.section-nav{gap:8px}.snav-btn{padding:9px 16px;font-size:11px}}
   </style>
 </head>
 <body>
@@ -85,8 +88,16 @@
     <div class="dates">06 — 07 feb 2027 &nbsp;·&nbsp; 1 noche &nbsp;·&nbsp; Bélgica</div>
   </div>
 
+  <!-- NAV INTERNO -->
+  <div class="section-nav">
+    <a href="#alojamiento" class="snav-btn">🏨 Alojamiento</a>
+    <a href="#transporte" class="snav-btn">🚇 Transporte</a>
+    <a href="#actividades" class="snav-btn">🎭 Actividades</a>
+    <a href="#guia" class="snav-btn">📋 Guía</a>
+  </div>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <div class="section" id="alojamiento">
     <h2 class="section-title">Alojamiento <small>POR CONFIRMAR</small></h2>
     <div class="hotel-grid">
 
@@ -115,7 +126,7 @@
   </div>
 
   <!-- TRANSPORTE -->
-  <div class="section">
+  <div class="section" id="transporte">
     <h2 class="section-title">Transporte en la ciudad</h2>
     <ul class="transport-list">
       <li>Marcar SIEMPRE aunque no haya molinete ni control visible — multa si no se valida.</li>
@@ -124,9 +135,52 @@
   </div>
 
   <!-- PENDIENTES -->
-  <div class="section">
+  <div class="section" id="guia">
     <h2 class="section-title">Pendientes <small>ENTRADAS & RESERVAS</small></h2>
     <div class="no-pendientes">Sin pendientes de entradas para esta ciudad.</div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="actividades">
+    <h2 class="section-title">Actividades <small>ENTRADAS & EXPERIENCIAS</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Laeken</div>
+        <h3>Atomium</h3>
+        <p class="place-desc">Estructura futurista en forma de átomo gigante, construida para la Expo 1958. Vista panorámica desde la esfera superior. Imprescindible con chicos.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 16 adulto · EUR 9 niño</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">A 15 min del centro en metro. Los chicos flipan con el ascensor tubular entre esferas.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Atomium+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Mont des Arts</div>
+        <h3>Musée Magritte</h3>
+        <p class="place-desc">La colección más grande del mundo del surrealista belga René Magritte. El hombre del bombín, la manzana, los cielos nocturnos en su contexto completo.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 15 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+        </div>
+        <div class="place-tip">Combinarlo con el Palais de Justice — ambos en el barrio Mont des Arts, a 5 min caminando.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Musee+Magritte+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro histórico</div>
+        <h3>Ruta del Chocolate Belga</h3>
+        <p class="place-desc">Bruselas tiene más de 400 chocolaterías artesanales. Neuhaus (inventó el pralinée en 1912), Pierre Marcolini y Godiva tienen tiendas en la Grand-Place.</p>
+        <div class="place-badges">
+          <span class="price-paid">Caja pralinées ~EUR 15–25</span>
+        </div>
+        <div class="place-tip">La Galerie de la Reine, justo al lado de la Grand-Place, tiene las mejores chocolaterías históricas.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Galerie+de+la+Reine+Brussels" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
   </div>
 
   <!-- MIRADORES -->

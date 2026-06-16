@@ -62,7 +62,10 @@
     .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
     a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
     a.maps-link:hover{text-decoration:underline}
-    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    .section-nav{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0 32px;margin-bottom:8px}
+    .snav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:all .2s;border:2px solid var(--ink)}
+    .snav-btn:hover{background:transparent;color:var(--ink)}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}.section-nav{gap:8px}.snav-btn{padding:9px 16px;font-size:11px}}
   </style>
 </head>
 <body>
@@ -84,8 +87,16 @@
     <div class="dates">07 — 11 feb 2027 &nbsp;·&nbsp; 4 noches &nbsp;·&nbsp; Italia</div>
   </div>
 
+  <!-- NAV INTERNO -->
+  <div class="section-nav">
+    <a href="#alojamiento" class="snav-btn">🏨 Alojamiento</a>
+    <a href="#transporte" class="snav-btn">🚇 Transporte</a>
+    <a href="#actividades" class="snav-btn">🎭 Actividades</a>
+    <a href="#guia" class="snav-btn">📋 Guía</a>
+  </div>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <div class="section" id="alojamiento">
     <h2 class="section-title">Alojamiento <small>HOTEL SCALINATA DI SPAGNA</small></h2>
     <div class="hotel-grid">
 
@@ -139,7 +150,7 @@
   </div>
 
   <!-- TRANSPORTE -->
-  <div class="section">
+  <div class="section" id="transporte">
     <h2 class="section-title">Transporte en la ciudad</h2>
     <ul class="transport-list">
       <li>Validar el ticket al subir al bus o tranvia — inspectores frecuentes.</li>
@@ -149,7 +160,7 @@
   </div>
 
   <!-- PENDIENTES -->
-  <div class="section">
+  <div class="section" id="guia">
     <h2 class="section-title">Pendientes <small>ENTRADAS & RESERVAS</small></h2>
     <div class="pend-grid">
 
@@ -181,6 +192,63 @@
           <span style="font-size:11px;color:var(--muted)">Sin fecha</span>
           <div class="pend-obs">Sin reserva necesaria.</div>
         </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="actividades">
+    <h2 class="section-title">Actividades <small>ENTRADAS & EXPERIENCIAS</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro Storico</div>
+        <h3>Coliseo + Foro Romano + Palatino</h3>
+        <p class="place-desc">El anfiteatro más icónico del mundo (siglo I). El ticket combinado incluye el Foro Romano y el Monte Palatino — medio día de historia romana completa.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 18 (entrada combinada)</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar con 3 meses de anticipación — se agota. Entrar por el lado del Meta Sudans para menos cola.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Colosseo+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Vaticano</div>
+        <h3>Museos Vaticanos + Capilla Sixtina</h3>
+        <p class="place-desc">La Creación de Miguel Ángel en el techo de la Sixtina. La basílica más grande del mundo. Los Museos Vaticanos tienen 54km de salas de arte.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 20 adulto</span>
+          <span class="price-free">Gratis 1er domingo del mes</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Sin reserva: 2–3 horas de cola. Con reserva: entrada directa. El 1er domingo gratis es caótico.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Vatican+Museum+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Villa Borghese</div>
+        <h3>Galería Borghese</h3>
+        <p class="place-desc">La mejor colección privada de Bernini y Caravaggio del mundo. Aforo muy limitado — máximo 360 personas por turno de 2 horas. Una joya oculta de Roma.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 13 adulto</span>
+          <span class="price-reservation">Reserva obligatoria · turnos de 2hs</span>
+        </div>
+        <div class="place-tip">Se agota semanas antes. El Apolo y Dafne de Bernini en mármol blanco es una de las mejores esculturas del mundo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Galleria+Borghese+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Piazza della Rotonda</div>
+        <h3>Panteón</h3>
+        <p class="place-desc">Templo romano del siglo II perfectamente conservado. La cúpula de 43m con el óculo abierto al cielo sigue siendo un prodigio de ingeniería sin explicación total.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis con reserva obligatoria</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">La reserva es gratuita pero imprescindible online. Si llueve el agua cae por el óculo y desaparece por el suelo — espectacular.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Pantheon+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
       </div>
 
     </div>

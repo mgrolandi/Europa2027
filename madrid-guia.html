@@ -63,7 +63,10 @@
     a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
     a.maps-link:hover{text-decoration:underline}
     .no-pendientes{padding:16px 20px;background:var(--cream);border:1px solid var(--border);border-radius:4px;font-size:13px;color:var(--muted);font-style:italic}
-    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}}
+    .section-nav{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0 32px;margin-bottom:8px}
+    .snav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:all .2s;border:2px solid var(--ink)}
+    .snav-btn:hover{background:transparent;color:var(--ink)}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}.section-nav{gap:8px}.snav-btn{padding:9px 16px;font-size:11px}}
   </style>
 </head>
 <body>
@@ -85,8 +88,16 @@
     <div class="dates">11 — 15 feb 2027 &nbsp;·&nbsp; 4 noches &nbsp;·&nbsp; España</div>
   </div>
 
+  <!-- NAV INTERNO -->
+  <div class="section-nav">
+    <a href="#alojamiento" class="snav-btn">🏨 Alojamiento</a>
+    <a href="#transporte" class="snav-btn">🚇 Transporte</a>
+    <a href="#actividades" class="snav-btn">🎭 Actividades</a>
+    <a href="#guia" class="snav-btn">📋 Guía</a>
+  </div>
+
   <!-- ALOJAMIENTO -->
-  <div class="section">
+  <div class="section" id="alojamiento">
     <h2 class="section-title">Alojamiento <small>CARRETAS APARTMENTS MADRID</small></h2>
     <div class="hotel-grid">
 
@@ -139,7 +150,7 @@
   </div>
 
   <!-- TRANSPORTE -->
-  <div class="section">
+  <div class="section" id="transporte">
     <h2 class="section-title">Transporte en la ciudad</h2>
     <ul class="transport-list">
       <li>Metro Linea 8 desde aeropuerto requiere suplemento aeropuerto (~EUR 3).</li>
@@ -148,9 +159,66 @@
   </div>
 
   <!-- PENDIENTES -->
-  <div class="section">
+  <div class="section" id="guia">
     <h2 class="section-title">Pendientes <small>ENTRADAS & RESERVAS</small></h2>
     <div class="no-pendientes">Sin pendientes de entradas para esta ciudad.</div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="actividades">
+    <h2 class="section-title">Actividades <small>ENTRADAS & EXPERIENCIAS</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Paseo del Arte</div>
+        <h3>Museo del Prado</h3>
+        <p class="place-desc">Uno de los museos más importantes del mundo. Velázquez (Las Meninas), Goya (Los Fusilamientos), El Greco. Más de 8000 obras en el Paseo del Arte.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 15 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+          <span class="price-free">Gratis últimas 2hs</span>
+        </div>
+        <div class="place-tip">Gratis las últimas 2 horas pero con cola larga. Dedicarle mínimo 3 horas para ver lo esencial.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Museo+del+Prado+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Paseo del Arte</div>
+        <h3>Museo Reina Sofía — El Guernica</h3>
+        <p class="place-desc">El Guernica de Picasso. El cuadro más poderoso del siglo XX, pintado tras el bombardeo de 1937. También Dalí, Miró y las vanguardias del siglo XX.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 12 adulto</span>
+          <span class="price-free">Gratis menores de 18</span>
+          <span class="price-free">Gratis sábados 19hs</span>
+        </div>
+        <div class="place-tip">El Guernica está en la segunda planta — imprescindible. Los sábados a las 19hs es gratis pero con cola.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Museo+Reina+Sofia+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro — Gran Vía</div>
+        <h3>Espectáculo de Flamenco</h3>
+        <p class="place-desc">El flamenco auténtico en tablao. Corral de la Morería (desde 1956, en Gran Vía) o Las Tablas son las mejores opciones del centro.</p>
+        <div class="place-badges">
+          <span class="price-paid">~EUR 45 pp (solo show)</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">El Corral de la Morería tiene shows a las 20hs y 22hs. La cena adicional es cara — ir solo al show.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Corral+de+la+Moreria+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">La Latina / Lavapiés</div>
+        <h3>El Rastro — Mercado de pulgas</h3>
+        <p class="place-desc">El mercadillo más famoso de España desde el siglo XVIII. 3500 puestos de antigüedades, ropa vintage, vinilos y objetos únicos. 14 feb 2027 es domingo.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis · Solo domingos y festivos</span>
+        </div>
+        <div class="place-tip">El 14 de febrero cae domingo — ideal para cerrar el viaje con El Rastro antes del vuelo de regreso.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=El+Rastro+Madrid" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
   </div>
 
   <!-- MIRADORES -->
