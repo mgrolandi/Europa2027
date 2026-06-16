@@ -280,10 +280,11 @@ export default function CityDetail() {
 
       {/* Section nav */}
       <nav className="flex gap-2 overflow-x-auto pb-3 mb-5 border-b border-cream-dark -mx-4 px-4" style={{scrollbarWidth:'none',msOverflowStyle:'none'}}>
-        {[['#alojamiento','Alojamiento'],['#transporte','Transporte'],['#actividades','Actividades'],['#guia','Guía']].map(([href, label]) => (
-          <a key={href} href={href}
-            className="whitespace-nowrap px-5 py-2 rounded-full font-mono text-xs border border-ink/20 bg-white text-ink shadow-sm hover:bg-ink hover:text-cream hover:border-ink transition-colors shrink-0"
-          >{label}</a>
+        {[['alojamiento','Alojamiento'],['transporte','Transporte'],['actividades','Actividades'],['guia','Guía']].map(([id, label]) => (
+          <button key={id}
+            onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
+            className="whitespace-nowrap px-5 py-2 rounded-full font-mono text-xs border border-ink/20 bg-white text-ink shadow-sm hover:bg-ink hover:text-cream hover:border-ink transition-colors shrink-0 cursor-pointer"
+          >{label}</button>
         ))}
       </nav>
 
