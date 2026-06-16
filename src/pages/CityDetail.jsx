@@ -389,9 +389,24 @@ export default function CityDetail() {
           const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase()
 
           const transDay = {}
-          // Llegadas: anclar al primer día de la ciudad (el vuelo puede salir el día anterior)
-          entrada.forEach(v => { const day = ficha.fecha_llegada; if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Llegada' }) } })
-          salida.forEach(v  => { const day = v.fecha?.slice(0,10); if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Salida'  }) } })
+          // Llegadas: siempre en el primer día de la ciudad (el vuelo puede salir el día anterior)
+          entrada.forEach(v => {
+            const day = ficha.fecha_llegada
+            if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Llegada' }) }
+          })
+          // Salidas: en la fecha real del vuelo/tren
+          salida.forEach(v => {
+            const day = v.fecha?.slice(0,10)
+            if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Salida' }) }
+          })
+          // Ordenar por hora dentro de cada día
+          Object.keys(transDay).forEach(day => {
+            transDay[day].sort((a, b) => {
+              const ha = a.tag === 'Llegada' ? (a.llegada ?? '') : (a.salida ?? '')
+              const hb = b.tag === 'Llegada' ? (b.llegada ?? '') : (b.salida ?? '')
+              return ha.localeCompare(hb)
+            })
+          })
 
           return (
             <>

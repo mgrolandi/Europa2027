@@ -241,22 +241,34 @@ function GlobalAgenda({ ciudades, actividades, vuelos }) {
     actByDate[day].sort((a, b) => (a.hora ?? '').localeCompare(b.hora ?? ''))
   }
 
-  // Vuelos/trenes: llegadas ancladas al primer día de la ciudad destino,
-  // salidas ancladas al último día de la ciudad origen (= fecha del vuelo)
+  // Vuelos/trenes: cada transporte aparece UNA sola vez.
+  // Si sale y llega el mismo día calendario → mostrar en ese día con hora de salida.
+  // Si llega al día siguiente (ej: vuelo nocturno) → mostrar en el primer día de la ciudad destino.
   const transByDate = {}
   for (const v of (vuelos ?? [])) {
     const ciudadLlegada = v.ciudad_llegada ?? cityOf(v.destino)
     const ciudadSalida  = v.ciudad_salida  ?? cityOf(v.origen)
-    if (EUROPEAN_CITIES.has(ciudadLlegada) && cityFirstDay[ciudadLlegada]) {
-      const day = cityFirstDay[ciudadLlegada]
-      if (!transByDate[day]) transByDate[day] = []
-      transByDate[day].push({ ...v, tag: 'Llegada', horaEvento: v.llegada })
+    const fechaVuelo    = v.fecha?.slice(0, 10)
+    const diaLlegada    = cityFirstDay[ciudadLlegada]
+    const esNocturno    = fechaVuelo && diaLlegada && fechaVuelo !== diaLlegada
+
+    if (esNocturno) {
+      // Vuelo nocturno (ej: SAO-LON): mostrar en el primer día de destino
+      if (EUROPEAN_CITIES.has(ciudadLlegada) && diaLlegada) {
+        if (!transByDate[diaLlegada]) transByDate[diaLlegada] = []
+        transByDate[diaLlegada].push({ ...v, tag: 'Llegada', horaEvento: v.llegada })
+      }
+    } else if (fechaVuelo) {
+      // Mismo día: mostrar una sola vez con hora de salida
+      if (!transByDate[fechaVuelo]) transByDate[fechaVuelo] = []
+      const tag = EUROPEAN_CITIES.has(ciudadSalida) ? 'Salida' : 'Llegada'
+      const hora = EUROPEAN_CITIES.has(ciudadSalida) ? v.salida : v.llegada
+      transByDate[fechaVuelo].push({ ...v, tag, horaEvento: hora })
     }
-    if (EUROPEAN_CITIES.has(ciudadSalida) && v.fecha) {
-      const day = v.fecha.slice(0, 10)
-      if (!transByDate[day]) transByDate[day] = []
-      transByDate[day].push({ ...v, tag: 'Salida', horaEvento: v.salida })
-    }
+  }
+  // Ordenar eventos de transporte por hora dentro de cada día
+  for (const day of Object.keys(transByDate)) {
+    transByDate[day].sort((a, b) => (a.horaEvento ?? '').localeCompare(b.horaEvento ?? ''))
   }
 
   let prevCity = null
