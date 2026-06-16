@@ -279,10 +279,10 @@ export default function CityDetail() {
       )}
 
       {/* Section nav */}
-      <nav className="flex gap-2 overflow-x-auto pb-3 mb-4 border-b border-cream-dark -mx-4 px-4" style={{scrollbarWidth:'none'}}>
+      <nav className="flex gap-2 overflow-x-auto pb-3 mb-5 border-b border-cream-dark -mx-4 px-4" style={{scrollbarWidth:'none',msOverflowStyle:'none'}}>
         {[['#alojamiento','Alojamiento'],['#transporte','Transporte'],['#actividades','Actividades'],['#guia','Guía']].map(([href, label]) => (
           <a key={href} href={href}
-            className="whitespace-nowrap px-4 py-1.5 rounded-full font-mono text-xs border border-cream-dark bg-cream text-ink-light hover:bg-ink hover:text-cream hover:border-ink transition-colors shrink-0"
+            className="whitespace-nowrap px-5 py-2 rounded-full font-mono text-xs border border-ink/20 bg-white text-ink shadow-sm hover:bg-ink hover:text-cream hover:border-ink transition-colors shrink-0"
           >{label}</a>
         ))}
       </nav>
@@ -307,19 +307,6 @@ export default function CityDetail() {
             ))}
           </div>
 
-          {ficha.emergencias && Object.keys(ficha.emergencias).length > 0 && (
-            <div className="rounded-lg bg-red-50 border border-red-200 p-3">
-              <p className="font-mono text-[10px] text-red-700 uppercase tracking-wider mb-1">Emergencias</p>
-              <div className="flex flex-wrap gap-4">
-                {Object.entries(ficha.emergencias).map(([k, v]) => (
-                  <span key={k} className="font-mono text-sm">
-                    <span className="text-ink-light">{k}:</span>{' '}
-                    <strong className="text-ink">{v}</strong>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </section>
       )}
 
