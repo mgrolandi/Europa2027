@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Londres — Europa 2027</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a1a18">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    :root{--ink:#1a1a18;--paper:#f5f0e8;--cream:#ede7d9;--red:#c0392b;--gold:#b8860b;--muted:#7a7468;--border:#c8bfaa}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--paper);color:var(--ink);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6}
+    h1,h2,h3,h4{font-family:'Playfair Display',serif}
+    .city-nav{background:var(--ink);padding:10px 20px;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+    .city-nav a{color:var(--paper);text-decoration:none;padding:5px 14px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:background .15s}
+    .city-nav a:hover{background:rgba(255,255,255,.12)}
+    .city-nav a.active{background:var(--gold);color:var(--ink);font-weight:500}
+    .nav-brand{font-family:'Playfair Display',serif!important;font-size:15px;font-weight:700;color:var(--paper);margin-right:8px;text-decoration:none}
+    .page{max-width:960px;margin:0 auto;padding:0 24px 80px}
+    .city-header{padding:52px 0 36px;border-bottom:2px solid var(--border);margin-bottom:40px}
+    .city-header .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .city-header h1{font-size:52px;font-weight:700;line-height:1.05;margin-bottom:10px}
+    .city-header .dates{font-size:13px;color:var(--muted)}
+    .section{margin-bottom:52px}
+    .section-title{font-size:24px;font-weight:600;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .section-title small{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.06em}
+    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .hotel-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:20px}
+    .hotel-card .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px}
+    .hotel-card h3{font-size:15px;margin-bottom:4px}
+    .hotel-card .hotel-addr{font-size:12px;color:var(--muted);margin-bottom:14px}
+    .hotel-card .hotel-meta{font-size:12px;color:var(--muted);line-height:1.9}
+    .hotel-card .hotel-meta strong{color:var(--ink)}
+    .hotel-card .hotel-tip{margin-top:14px;padding:10px 14px;background:var(--cream);border-left:3px solid var(--gold);font-size:12px;line-height:1.5}
+    .hotel-card a{color:var(--red);font-size:12px;text-decoration:none}
+    .hotel-card a:hover{text-decoration:underline}
+    .info-box{padding:16px 20px;background:var(--cream);border-left:4px solid var(--gold);border-radius:0 6px 6px 0;font-size:13px;line-height:1.6;margin-bottom:20px}
+    .info-box strong{color:var(--ink)}
+    .transport-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .transport-list li{padding:12px 16px;background:var(--cream);border-left:3px solid var(--gold);font-size:13px;line-height:1.5}
+    .pend-grid{display:flex;flex-direction:column;gap:8px}
+    .pend-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:4px}
+    .pend-item.urgente{border-left:4px solid var(--red)}
+    .pend-item.proximo{border-left:4px solid var(--gold)}
+    .pend-item.ok{border-left:4px solid #27ae60}
+    .pend-circle{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px}
+    .pend-circle.done{background:#27ae60;border-color:#27ae60}
+    .pend-name{font-size:13px;font-weight:500;margin-bottom:4px}
+    .pend-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:3px;margin-right:4px}
+    .pend-badge.urgente{background:#fde8e8;color:var(--red)}
+    .pend-badge.proximo{background:#fff3cd;color:#6b4c00}
+    .pend-badge.ok{background:#d4edda;color:#1e5c2e}
+    .pend-obs{font-size:11px;color:var(--muted);margin-top:4px}
+    .places-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+    .place-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:18px;display:flex;flex-direction:column}
+    .place-zona{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+    .place-card h3{font-size:16px;margin-bottom:8px}
+    .place-desc{font-size:12px;line-height:1.65;color:#383834;margin-bottom:12px;flex:1}
+    .place-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .price-free{background:#d4edda;color:#1e5c2e;border:1px solid #a3d4ac;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-paid{background:#fde8e8;color:#7a1f1f;border:1px solid #f0aaaa;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-reservation{background:#fff3cd;color:#6b4c00;border:1px solid #e6cc80;padding:2px 8px;border-radius:3px;font-size:11px}
+    .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
+    a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
+    a.maps-link:hover{text-decoration:underline}
+    .section-nav{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0 32px;margin-bottom:8px}
+    .snav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:all .2s;border:2px solid var(--ink)}
+    .snav-btn:hover{background:transparent;color:var(--ink)}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}.section-nav{gap:8px}.snav-btn{padding:9px 16px;font-size:11px}}
+  </style>
+</head>
+<body>
+
+<nav class="city-nav">
+  <a href="index.html" class="nav-brand">Europa 2027</a>
+  <a href="londres-guia.html" class="active">Londres</a>
+  <a href="paris-guia.html">París</a>
+  <a href="bruselas-guia.html">Bruselas</a>
+  <a href="roma-guia.html">Roma</a>
+  <a href="madrid-guia.html">Madrid</a>
+</nav>
+
+<div class="page">
+
+  <div class="city-header">
+    <div class="label">Europa 2027 · Etapa 1 de 5</div>
+    <h1>Londres</h1>
+    <div class="dates">29 ene — 02 feb 2027 · 4 noches · Urban Chic Shaftesbury</div>
+  </div>
+
+  <!-- NAV INTERNO -->
+  <div class="section-nav">
+    <a href="#alojamiento" class="snav-btn">🏨 Alojamiento</a>
+    <a href="#transporte" class="snav-btn">🚇 Transporte</a>
+    <a href="#actividades" class="snav-btn">🎭 Actividades</a>
+    <a href="#guia" class="snav-btn">📋 Guía</a>
+  </div>
+
+  <!-- ALOJAMIENTO -->
+  <div class="section" id="alojamiento">
+    <div class="section-title">Alojamiento <small>Urban Chic - Shaftesbury · W1D 5EB</small></div>
+    <div class="hotel-grid">
+
+      <div class="hotel-card">
+        <div class="family-badge">Familia Barrera</div>
+        <h3>Urban Chic - Shaftesbury</h3>
+        <div class="hotel-addr">Shaftesbury Ave, London W1D 5EB</div>
+        <div class="hotel-meta">
+          <strong>Check-in:</strong> 29 ene 2027<br>
+          <strong>Check-out:</strong> 02 feb 2027<br>
+          <strong>Confirmación:</strong> 73412725729257<br>
+          <strong>Precio:</strong> USD 1421.53
+        </div>
+        <a href="https://maps.google.com/?q=Shaftesbury+Ave+London+W1D+5EB" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Familia Nader</div>
+        <h3>Urban Chic - Shaftesbury</h3>
+        <div class="hotel-addr">Shaftesbury Ave, London W1D 5EB</div>
+        <div class="hotel-meta">
+          <strong>Check-in:</strong> 29 ene 2027<br>
+          <strong>Check-out:</strong> 02 feb 2027<br>
+          <strong>Confirmación:</strong> 73412569141433<br>
+          <strong>Precio:</strong> USD 1599.21
+        </div>
+        <a href="https://maps.google.com/?q=Shaftesbury+Ave+London+W1D+5EB" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Familia Ahmad</div>
+        <h3>Urban Chic - Shaftesbury</h3>
+        <div class="hotel-addr">Shaftesbury Ave, London W1D 5EB</div>
+        <div class="hotel-meta">
+          <strong>Check-in:</strong> 29 ene 2027<br>
+          <strong>Check-out:</strong> 02 feb 2027<br>
+          <strong>Confirmación:</strong> 73412571168271<br>
+          <strong>Precio:</strong> USD 1163.17
+        </div>
+        <a href="https://maps.google.com/?q=Shaftesbury+Ave+London+W1D+5EB" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AEROPUERTO -->
+  <div class="section">
+    <div class="section-title">Cómo llegar desde el aeropuerto <small>LHR → hotel</small></div>
+    <div class="info-box">
+      Desde <strong>LHR</strong> tomar Underground <strong>Piccadilly Line</strong> hasta <strong>Piccadilly Circus</strong> o <strong>Leicester Square</strong>.<br>
+      <strong>NO tomar la Elizabeth Line.</strong> Marcar la tarjeta al entrar Y al salir — sin salida se cobra tarifa máxima.<br>
+      El hotel está en Shaftesbury Ave, a pocos minutos caminando desde Leicester Square.
+    </div>
+  </div>
+
+  <!-- TRANSPORTE -->
+  <div class="section" id="transporte">
+    <div class="section-title">Transporte en la ciudad</div>
+    <ul class="transport-list">
+      <li><strong>Oyster card o contactless.</strong> Marcar al ENTRAR y al SALIR en cada viaje en tube — sin salida se cobra la tarifa máxima del día.</li>
+      <li><strong>Desde LHR:</strong> Piccadilly Line directo hasta Piccadilly Circus o Leicester Square. NO tomar la Elizabeth Line.</li>
+      <li><strong>El bus es más barato que el tube</strong> y permite ver la ciudad. Mismo sistema contactless — marcar solo al subir.</li>
+    </ul>
+  </div>
+
+  <!-- PENDIENTES LONDRES -->
+  <div class="section" id="guia">
+    <div class="section-title">Pendientes — Londres</div>
+    <div class="pend-grid">
+
+      <div class="pend-item urgente">
+        <div class="pend-circle"></div>
+        <div>
+          <div class="pend-name">Entradas Premier League — partido en Londres</div>
+          <span class="pend-badge urgente">URGENTE</span><span class="pend-badge urgente">19/06/2026</span>
+          <div class="pend-obs">Las entradas salen el 19/06/2026. Comprar apenas estén disponibles — se agotan en horas.</div>
+        </div>
+      </div>
+
+      <div class="pend-item proximo">
+        <div class="pend-circle"></div>
+        <div>
+          <div class="pend-name">Natural History Museum — Reserva de entrada</div>
+          <span class="pend-badge proximo">PRÓXIMO</span><span class="pend-badge proximo">Antes 29/07/2026</span>
+          <div class="pend-obs">Gratis con reserva online. Reservar para evitar fila. Puede haber pista de hielo en febrero.</div>
+        </div>
+      </div>
+
+      <div class="pend-item ok">
+        <div class="pend-circle"></div>
+        <div>
+          <div class="pend-name">British Museum — Reserva de entrada</div>
+          <span class="pend-badge ok">Antes 29/10/2026</span>
+          <div class="pend-obs">Gratis con reserva. Entrar por puerta trasera Montague Place — menos cola.</div>
+        </div>
+      </div>
+
+      <div class="pend-item ok">
+        <div class="pend-circle"></div>
+        <div>
+          <div class="pend-name">Sky Garden — Reserva de entrada</div>
+          <span class="pend-badge ok">Antes 01/01/2027</span>
+          <div class="pend-obs">Gratis con reserva. Se agota rápido — hacerlo con anticipación.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="actividades">
+    <h2 class="section-title">Actividades <small>ENTRADAS & EXPERIENCIAS</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">West End · Covent Garden</div>
+        <h3>Mamma Mia! — El Musical</h3>
+        <p class="place-desc">El hit de ABBA en escena. 25 años ininterrumpidos en el West End. Teatro Novello, Aldwych WC2B 4LD. Canciones, baile y color desde la primera canción.</p>
+        <div class="place-badges">
+          <span class="price-paid">Desde £25 · Mejores butacas £80–120</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">El Teatro Novello está a 10 min caminando desde el hotel. Reservar con anticipación — sold out en fines de semana.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Novello+Theatre+Aldwych+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Kensington</div>
+        <h3>Natural History Museum</h3>
+        <p class="place-desc">Esqueleto de dinosaurio en la entrada, ballena azul suspendida, meteoritos y gemas. Imprescindible con chicos. Gratis.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis con reserva</span>
+          <span class="price-reservation">Reservar online</span>
+        </div>
+        <div class="place-tip">En febrero puede haber pista de hielo en el jardín exterior. Reservar entrada con anticipación.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Natural+History+Museum+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Bloomsbury</div>
+        <h3>British Museum</h3>
+        <p class="place-desc">Piedra Rosetta, momias egipcias, mármoles del Partenón. 8 millones de objetos. Uno de los museos más importantes del mundo.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis con reserva</span>
+          <span class="price-reservation">Reservar online</span>
+        </div>
+        <div class="place-tip">Entrar por la puerta trasera de Montague Place — menos cola que la entrada principal.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=British+Museum+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Tower Hill</div>
+        <h3>Tower of London</h3>
+        <p class="place-desc">Fortaleza del siglo XI, prisión real, sede de las Joyas de la Corona. Los Beefeaters (guardias reales) dan tours a pie incluidos.</p>
+        <div class="place-badges">
+          <span class="price-paid">~£30 adulto · £15 niño</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">El tour de los Beefeaters es gratis con la entrada — muy entretenido para los chicos.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Tower+of+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">White City / Premier League</div>
+        <h3>Premier League — Partido</h3>
+        <p class="place-desc">Fútbol inglés en vivo. Estadios de Chelsea (Stamford Bridge), Arsenal (Emirates) o Tottenham según el fixture de febrero 2027.</p>
+        <div class="place-badges">
+          <span class="price-paid">Desde £50 — variable</span>
+          <span class="price-reservation">Entradas 19/06/2026</span>
+        </div>
+        <div class="place-tip">Las entradas salen el 19/06/2026 y se agotan en horas. Revisar fixture para saber qué equipos juegan en casa.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Stamford+Bridge+London" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MIRADORES -->
+  <div class="section">
+    <div class="section-title">Miradores <small>7 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">City of London</div>
+        <h3>Sky Garden</h3>
+        <div class="place-desc">Jardín en la cima del 20 Fenchurch St con vista panorámica de 360° sobre la City.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar antes del viaje — se agota rápido.</div>
+        <a href="https://maps.google.com/?q=Sky+Garden+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">City of London</div>
+        <h3>One New Change — Rooftop</h3>
+        <div class="place-desc">Terraza abierta directamente frente a St Paul's Cathedral. Vista frontal sin obstáculos. Sin costo, sin reserva.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Acceso libre todo el día.</div>
+        <a href="https://maps.google.com/?q=One+New+Change+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">South Bank</div>
+        <h3>Tate Modern — Terraza nivel 10</h3>
+        <div class="place-desc">Mirador gratuito con vistas del Támesis, St Paul's y el Millennium Bridge.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Ideal al atardecer.</div>
+        <a href="https://maps.google.com/?q=Tate+Modern+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Greenwich</div>
+        <h3>Greenwich Park — Royal Observatory</h3>
+        <div class="place-desc">Colina del Observatorio Real. El Meridiano de Greenwich cruza aquí.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Llevar termo — frío en febrero.</div>
+        <a href="https://maps.google.com/?q=Royal+Observatory+Greenwich" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">London Bridge</div>
+        <h3>The Shard — Viewing Gallery</h3>
+        <div class="place-desc">El punto más alto de Londres. Piso 68-69 al aire libre.</div>
+        <div class="place-badges">
+          <span class="price-paid">Pago ~£32</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Mejor de noche.</div>
+        <a href="https://maps.google.com/?q=The+Shard+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Primrose Hill</div>
+        <h3>Primrose Hill</h3>
+        <div class="place-desc">Colina con panorámica del skyline. Ambiente local, sin turistas.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">A 10 min de Camden.</div>
+        <a href="https://maps.google.com/?q=Primrose+Hill+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">City of London</div>
+        <h3>Monument to the Great Fire</h3>
+        <div class="place-desc">311 escalones hasta la cúpula con vistas del centro histórico.</div>
+        <div class="place-badges">
+          <span class="price-paid">Pago ~£6</span>
+        </div>
+        <div class="place-tip">Hay diploma al llegar arriba — les encanta a los chicos.</div>
+        <a href="https://maps.google.com/?q=Monument+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BARES & PUBS -->
+  <div class="section">
+    <div class="section-title">Bares &amp; Pubs <small>7 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Covent Garden</div>
+        <h3>Lamb &amp; Flag</h3>
+        <div class="place-desc">Pub histórico de 1772 en callejón adoquinado.</div>
+        <div class="place-badges">
+          <span class="price-free">~£6-8 pinta</span>
+        </div>
+        <div class="place-tip">El pub que todo londinense ama mostrar.</div>
+        <a href="https://maps.google.com/?q=Lamb+and+Flag+Covent+Garden+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Soho</div>
+        <h3>Swift Bar</h3>
+        <div class="place-desc">Bar de cócteles de dos niveles. Whisky y clásicos. Solo adultos.</div>
+        <div class="place-badges">
+          <span class="price-paid">Cócteles ~£14-18</span>
+        </div>
+        <div class="place-tip">Para la noche sin los chicos.</div>
+        <a href="https://maps.google.com/?q=Swift+Bar+Soho+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">South Bank</div>
+        <h3>Anchor Bankside</h3>
+        <div class="place-desc">Pub histórico sobre el Támesis frente al Tate Modern.</div>
+        <div class="place-badges">
+          <span class="price-free">~£6-8 pinta</span>
+        </div>
+        <div class="place-tip">Terraza sobre el río — llevar abrigo.</div>
+        <a href="https://maps.google.com/?q=Anchor+Bankside+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Shoreditch</div>
+        <h3>Nightjar</h3>
+        <div class="place-desc">Speakeasy subterráneo. Jazz en vivo jue-dom. World's 50 Best Bars.</div>
+        <div class="place-badges">
+          <span class="price-paid">Cócteles ~£16-22</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Reservar semanas antes. Dress code elegante.</div>
+        <a href="https://maps.google.com/?q=Nightjar+Bar+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Camden</div>
+        <h3>The Blues Kitchen Camden</h3>
+        <div class="place-desc">BBQ americano y música en vivo: blues, soul, R&amp;B. Ideal para grupos.</div>
+        <div class="place-badges">
+          <span class="price-free">Sin entrada</span>
+          <span class="price-free">~£8-12 consumición</span>
+        </div>
+        <div class="place-tip">Perfecto para todos juntos.</div>
+        <a href="https://maps.google.com/?q=Blues+Kitchen+Camden+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Mayfair</div>
+        <h3>Dukes Bar</h3>
+        <div class="place-desc">Bar que inspiró los martinis de James Bond. Se preparan en carrito junto a la mesa.</div>
+        <div class="place-badges">
+          <span class="price-paid">Martini ~£25-30</span>
+        </div>
+        <div class="place-tip">Solo un martini — son brutalmente fuertes.</div>
+        <a href="https://maps.google.com/?q=Dukes+Bar+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Borough Market</div>
+        <h3>The Market Porter</h3>
+        <div class="place-desc">Pub victoriano junto al mercado. Aparece en Harry Potter.</div>
+        <div class="place-badges">
+          <span class="price-free">~£6-8 pinta</span>
+        </div>
+        <div class="place-tip">Combinarlo con el Borough Market.</div>
+        <a href="https://maps.google.com/?q=The+Market+Porter+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LUGARES ICONICOS -->
+  <div class="section">
+    <div class="section-title">Lugares Icónicos <small>8 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">City of London</div>
+        <h3>Tower of London</h3>
+        <div class="place-desc">Fortaleza medieval con las Joyas de la Corona y guardias Beefeater.</div>
+        <div class="place-badges">
+          <span class="price-paid">~£34 adulto / £17 niño</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Tickets online con anticipación.</div>
+        <a href="https://maps.google.com/?q=Tower+of+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Westminster</div>
+        <h3>Westminster Abbey</h3>
+        <div class="place-desc">Catedral de las coronaciones. Enterrados Darwin, Newton, Dickens.</div>
+        <div class="place-badges">
+          <span class="price-paid">~£27 adulto</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Reservar online.</div>
+        <a href="https://maps.google.com/?q=Westminster+Abbey+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Bloomsbury</div>
+        <h3>British Museum</h3>
+        <div class="place-desc">Piedra Rosetta, momias egipcias, esculturas del Partenón.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Entrar por Montague Place (puerta trasera) — menos cola.</div>
+        <a href="https://maps.google.com/?q=British+Museum+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">South Bank</div>
+        <h3>Shakespeare's Globe</h3>
+        <div class="place-desc">Réplica del teatro isabelino. Tour disponible. Funciones en febrero.</div>
+        <div class="place-badges">
+          <span class="price-paid">Tour ~£18</span>
+          <span class="price-paid">Función desde £5 standing</span>
+        </div>
+        <div class="place-tip">Ver cartelera de febrero.</div>
+        <a href="https://maps.google.com/?q=Shakespeare+Globe+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Notting Hill</div>
+        <h3>Portobello Road Market</h3>
+        <div class="place-desc">Mercado de antigüedades y vintage. Sábados es el día fuerte.</div>
+        <div class="place-badges">
+          <span class="price-free">Entrada gratis</span>
+        </div>
+        <div class="place-tip">1 feb es sábado — perfecto.</div>
+        <a href="https://maps.google.com/?q=Portobello+Road+Market+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Camden</div>
+        <h3>Camden Market</h3>
+        <div class="place-desc">Mercado alternativo con food hall, ropa, vinilos, artesanías.</div>
+        <div class="place-badges">
+          <span class="price-free">Entrada gratis</span>
+        </div>
+        <div class="place-tip">Con adolescentes es el favorito.</div>
+        <a href="https://maps.google.com/?q=Camden+Market+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">South Kensington</div>
+        <h3>Natural History Museum</h3>
+        <div class="place-desc">Dinosaurio gigante en el hall. Fascinante para todas las edades.</div>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Puede quedar pista de hielo en febrero. Reservar para evitar fila.</div>
+        <a href="https://maps.google.com/?q=Natural+History+Museum+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">East London</div>
+        <h3>Columbia Road Flower Market</h3>
+        <div class="place-desc">Solo domingos. Mercado de flores en calle victoriana estrecha.</div>
+        <div class="place-badges">
+          <span class="price-free">Entrada gratis</span>
+        </div>
+        <div class="place-tip">Ir temprano — abre 8am y se llena al mediodía.</div>
+        <a href="https://maps.google.com/?q=Columbia+Road+Flower+Market+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MUSICA & SHOWS -->
+  <div class="section">
+    <div class="section-title">Música &amp; Shows <small>6 lugares</small></div>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Soho</div>
+        <h3>Ronnie Scott's Jazz Club</h3>
+        <div class="place-desc">El club de jazz más famoso del mundo desde 1959. Miles Davis, Amy Winehouse tocaron aquí.</div>
+        <div class="place-badges">
+          <span class="price-paid">~£35-60</span>
+          <span class="price-reservation">Reserva recomendada</span>
+        </div>
+        <div class="place-tip">Reservar — sold out frecuente.</div>
+        <a href="https://maps.google.com/?q=Ronnie+Scotts+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Camden</div>
+        <h3>Electric Ballroom</h3>
+        <div class="place-desc">Sala emblemática de Camden. Rock, indie, electrónica. Noche retro los sábados.</div>
+        <div class="place-badges">
+          <span class="price-paid">~£10-20</span>
+        </div>
+        <div class="place-tip">Revisar agenda en febrero.</div>
+        <a href="https://maps.google.com/?q=Electric+Ballroom+Camden+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">South Bank</div>
+        <h3>Royal Festival Hall</h3>
+        <div class="place-desc">Sala del Southbank Centre. Bar exterior con vista al Támesis, libre y gratuito.</div>
+        <div class="place-badges">
+          <span class="price-free">Bar gratis</span>
+          <span class="price-paid">Concierto varía</span>
+        </div>
+        <div class="place-tip">Revisar programa en southbankcentre.co.uk</div>
+        <a href="https://maps.google.com/?q=Royal+Festival+Hall+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Soho</div>
+        <h3>100 Club</h3>
+        <div class="place-desc">Sala donde tocaron Rolling Stones, Sex Pistols y Oasis.</div>
+        <div class="place-badges">
+          <span class="price-paid">~£10-20</span>
+        </div>
+        <div class="place-tip">Tickets baratos, ambiente auténtico.</div>
+        <a href="https://maps.google.com/?q=100+Club+Oxford+Street+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Covent Garden</div>
+        <h3>Royal Opera House</h3>
+        <div class="place-desc">Ópera y ballet. Cafetería abierta al público sin entrada.</div>
+        <div class="place-badges">
+          <span class="price-free">Cafetería gratis</span>
+          <span class="price-paid">Función desde £5 standing</span>
+        </div>
+        <div class="place-tip">Standing disponible el día de la función.</div>
+        <a href="https://maps.google.com/?q=Royal+Opera+House+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Brixton</div>
+        <h3>O2 Academy Brixton</h3>
+        <div class="place-desc">5000 personas, acústica perfecta. Shows internacionales frecuentes.</div>
+        <div class="place-badges">
+          <span class="price-paid">Varía según artista</span>
+        </div>
+        <div class="place-tip">Ver agenda en febrero.</div>
+        <a href="https://maps.google.com/?q=O2+Academy+Brixton+London" class="maps-link" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

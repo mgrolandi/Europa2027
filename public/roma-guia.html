@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roma — Europa 2027</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    :root{--ink:#1a1a18;--paper:#f5f0e8;--cream:#ede7d9;--red:#c0392b;--gold:#b8860b;--muted:#7a7468;--border:#c8bfaa}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--paper);color:var(--ink);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6}
+    h1,h2,h3,h4{font-family:'Playfair Display',serif}
+    .city-nav{background:var(--ink);padding:10px 20px;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+    .city-nav a{color:var(--paper);text-decoration:none;padding:5px 14px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:background .15s}
+    .city-nav a:hover{background:rgba(255,255,255,.12)}
+    .city-nav a.active{background:var(--gold);color:var(--ink);font-weight:500}
+    .nav-brand{font-family:'Playfair Display',serif!important;font-size:15px;font-weight:700;color:var(--paper);margin-right:8px;text-decoration:none}
+    .page{max-width:960px;margin:0 auto;padding:0 24px 80px}
+    .city-header{padding:52px 0 36px;border-bottom:2px solid var(--border);margin-bottom:40px}
+    .city-header .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .city-header h1{font-size:52px;font-weight:700;line-height:1.05;margin-bottom:10px}
+    .city-header .dates{font-size:13px;color:var(--muted)}
+    .section{margin-bottom:52px}
+    .section-title{font-size:24px;font-weight:600;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .section-title small{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.06em}
+    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .hotel-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:20px}
+    .hotel-card .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px}
+    .hotel-card h3{font-size:15px;margin-bottom:4px}
+    .hotel-card .hotel-addr{font-size:12px;color:var(--muted);margin-bottom:14px}
+    .hotel-card .hotel-meta{font-size:12px;color:var(--muted);line-height:1.9}
+    .hotel-card .hotel-meta strong{color:var(--ink)}
+    .hotel-card .hotel-tip{margin-top:14px;padding:10px 14px;background:var(--cream);border-left:3px solid var(--gold);font-size:12px;line-height:1.5}
+    .hotel-card a{color:var(--red);font-size:12px;text-decoration:none}
+    .hotel-card a:hover{text-decoration:underline}
+    .pending-hotel{background:var(--cream);border:1px dashed var(--border);border-radius:6px;padding:20px;color:var(--muted);font-size:13px;font-style:italic}
+    .pending-hotel .family-badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--muted);color:var(--paper);padding:2px 8px;border-radius:2px;margin-bottom:12px;font-style:normal}
+    .transport-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .transport-list li{padding:12px 16px;background:var(--cream);border-left:3px solid var(--gold);font-size:13px;line-height:1.5}
+    .pend-grid{display:flex;flex-direction:column;gap:8px}
+    .pend-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:4px}
+    .pend-item.urgente{border-left:4px solid var(--red)}
+    .pend-item.proximo{border-left:4px solid var(--gold)}
+    .pend-item.ok{border-left:4px solid #27ae60}
+    .pend-circle{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px}
+    .pend-circle.done{background:#27ae60;border-color:#27ae60}
+    .pend-name{font-size:13px;font-weight:500;margin-bottom:4px}
+    .pend-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:3px;margin-right:4px}
+    .pend-badge.urgente{background:#fde8e8;color:var(--red)}
+    .pend-badge.proximo{background:#fff3cd;color:#6b4c00}
+    .pend-badge.ok{background:#d4edda;color:#1e5c2e}
+    .pend-obs{font-size:11px;color:var(--muted);margin-top:4px}
+    .places-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+    .place-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:18px;display:flex;flex-direction:column}
+    .place-zona{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+    .place-card h3{font-size:16px;margin-bottom:8px}
+    .place-desc{font-size:12px;line-height:1.65;color:#383834;margin-bottom:12px;flex:1}
+    .place-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .price-free{background:#d4edda;color:#1e5c2e;border:1px solid #a3d4ac;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-paid{background:#fde8e8;color:#7a1f1f;border:1px solid #f0aaaa;padding:2px 8px;border-radius:3px;font-size:11px}
+    .price-reservation{background:#fff3cd;color:#6b4c00;border:1px solid #e6cc80;padding:2px 8px;border-radius:3px;font-size:11px}
+    .place-tip{padding:8px 12px;background:var(--cream);border-left:3px solid var(--gold);font-size:11px;line-height:1.5;margin-bottom:10px}
+    a.maps-link{color:var(--red);font-size:11px;text-decoration:none;letter-spacing:.03em}
+    a.maps-link:hover{text-decoration:underline}
+    .section-nav{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0 32px;margin-bottom:8px}
+    .snav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;transition:all .2s;border:2px solid var(--ink)}
+    .snav-btn:hover{background:transparent;color:var(--ink)}
+    @media(max-width:640px){.city-header h1{font-size:36px}.places-grid,.hotel-grid{grid-template-columns:1fr}.section-nav{gap:8px}.snav-btn{padding:9px 16px;font-size:11px}}
+  </style>
+</head>
+<body>
+
+<nav class="city-nav">
+  <a href="index.html" class="nav-brand">Europa 2027</a>
+  <a href="londres-guia.html">Londres</a>
+  <a href="paris-guia.html">París</a>
+  <a href="bruselas-guia.html">Bruselas</a>
+  <a href="roma-guia.html" class="active">Roma</a>
+  <a href="madrid-guia.html">Madrid</a>
+</nav>
+
+<div class="page">
+
+  <div class="city-header">
+    <div class="label">Europa 2027 — Etapa 04</div>
+    <h1>Roma</h1>
+    <div class="dates">07 — 11 feb 2027 &nbsp;·&nbsp; 4 noches &nbsp;·&nbsp; Italia</div>
+  </div>
+
+  <!-- NAV INTERNO -->
+  <div class="section-nav">
+    <a href="#alojamiento" class="snav-btn">🏨 Alojamiento</a>
+    <a href="#transporte" class="snav-btn">🚇 Transporte</a>
+    <a href="#actividades" class="snav-btn">🎭 Actividades</a>
+    <a href="#guia" class="snav-btn">📋 Guía</a>
+  </div>
+
+  <!-- ALOJAMIENTO -->
+  <div class="section" id="alojamiento">
+    <h2 class="section-title">Alojamiento <small>HOTEL SCALINATA DI SPAGNA</small></h2>
+    <div class="hotel-grid">
+
+      <div class="hotel-card">
+        <div class="family-badge">Barrera</div>
+        <h3>Hotel Scalinata di Spagna</h3>
+        <div class="hotel-addr">
+          <a href="https://maps.google.com/?q=Piazza+Trinita+dei+Monti+17+Roma" target="_blank" rel="noopener">Piazza Trinita dei Monti 17, 00187 Roma</a>
+        </div>
+        <div class="hotel-meta">
+          <div><strong>Confirmacion:</strong> 070227</div>
+          <div><strong>Habitacion:</strong> Family Suite con balcone 5 pax</div>
+          <div><strong>Total:</strong> EUR 1.340,00</div>
+        </div>
+        <div class="hotel-tip">Sin asignacion individual aun.</div>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Nader</div>
+        <h3>Hotel Scalinata di Spagna</h3>
+        <div class="hotel-addr">
+          <a href="https://maps.google.com/?q=Piazza+Trinita+dei+Monti+17+Roma" target="_blank" rel="noopener">Piazza Trinita dei Monti 17, 00187 Roma</a>
+        </div>
+        <div class="hotel-meta">
+          <div><strong>Confirmacion:</strong> 070227</div>
+          <div><strong>Habitacion:</strong> Appartamento Grand Tour 5 pax</div>
+          <div><strong>Total:</strong> EUR 1.090,00</div>
+        </div>
+      </div>
+
+      <div class="hotel-card">
+        <div class="family-badge">Ahmad</div>
+        <h3>Hotel Scalinata di Spagna</h3>
+        <div class="hotel-addr">
+          <a href="https://maps.google.com/?q=Piazza+Trinita+dei+Monti+17+Roma" target="_blank" rel="noopener">Piazza Trinita dei Monti 17, 00187 Roma</a>
+        </div>
+        <div class="hotel-meta">
+          <div><strong>Confirmacion:</strong> 070227</div>
+          <div><strong>Habitacion:</strong> Camera Quadrupla 4 pax</div>
+          <div><strong>Total:</strong> EUR 840,00</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:16px">
+      <ul class="transport-list">
+        <li><strong>Traslado aeropuerto FCO:</strong> Traslado privado con Monza/Downtown Travel. Alternativa: Leonardo Express hasta Roma Termini.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TRANSPORTE -->
+  <div class="section" id="transporte">
+    <h2 class="section-title">Transporte en la ciudad</h2>
+    <ul class="transport-list">
+      <li>Validar el ticket al subir al bus o tranvia — inspectores frecuentes.</li>
+      <li>Traslado FCO: Monza/Downtown Travel (a confirmar).</li>
+      <li>Leonardo Express: FCO a Roma Termini en 32 min, cada 30 min.</li>
+    </ul>
+  </div>
+
+  <!-- PENDIENTES -->
+  <div class="section" id="guia">
+    <h2 class="section-title">Pendientes <small>ENTRADAS & RESERVAS</small></h2>
+    <div class="pend-grid">
+
+      <div class="pend-item ok">
+        <div class="pend-circle done"></div>
+        <div>
+          <div class="pend-name">Coliseo Roma</div>
+          <span class="pend-badge ok">OK</span>
+          <span style="font-size:11px;color:var(--muted)">Antes del 07/11/2026 — 3 meses antes</span>
+          <div class="pend-obs">Incluye Foro Romano y Palatino.</div>
+        </div>
+      </div>
+
+      <div class="pend-item ok">
+        <div class="pend-circle done"></div>
+        <div>
+          <div class="pend-name">Panteón Roma</div>
+          <span class="pend-badge ok">OK</span>
+          <span style="font-size:11px;color:var(--muted)">Antes del 01/01/2027</span>
+          <div class="pend-obs">Entrada gratuita pero reserva obligatoria online.</div>
+        </div>
+      </div>
+
+      <div class="pend-item ok">
+        <div class="pend-circle done"></div>
+        <div>
+          <div class="pend-name">Fontana di Trevi Roma</div>
+          <span class="pend-badge ok">OK</span>
+          <span style="font-size:11px;color:var(--muted)">Sin fecha</span>
+          <div class="pend-obs">Sin reserva necesaria.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="actividades">
+    <h2 class="section-title">Actividades <small>ENTRADAS & EXPERIENCIAS</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro Storico</div>
+        <h3>Coliseo + Foro Romano + Palatino</h3>
+        <p class="place-desc">El anfiteatro más icónico del mundo (siglo I). El ticket combinado incluye el Foro Romano y el Monte Palatino — medio día de historia romana completa.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 18 (entrada combinada)</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar con 3 meses de anticipación — se agota. Entrar por el lado del Meta Sudans para menos cola.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Colosseo+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Vaticano</div>
+        <h3>Museos Vaticanos + Capilla Sixtina</h3>
+        <p class="place-desc">La Creación de Miguel Ángel en el techo de la Sixtina. La basílica más grande del mundo. Los Museos Vaticanos tienen 54km de salas de arte.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 20 adulto</span>
+          <span class="price-free">Gratis 1er domingo del mes</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Sin reserva: 2–3 horas de cola. Con reserva: entrada directa. El 1er domingo gratis es caótico.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Vatican+Museum+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Villa Borghese</div>
+        <h3>Galería Borghese</h3>
+        <p class="place-desc">La mejor colección privada de Bernini y Caravaggio del mundo. Aforo muy limitado — máximo 360 personas por turno de 2 horas. Una joya oculta de Roma.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 13 adulto</span>
+          <span class="price-reservation">Reserva obligatoria · turnos de 2hs</span>
+        </div>
+        <div class="place-tip">Se agota semanas antes. El Apolo y Dafne de Bernini en mármol blanco es una de las mejores esculturas del mundo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Galleria+Borghese+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Piazza della Rotonda</div>
+        <h3>Panteón</h3>
+        <p class="place-desc">Templo romano del siglo II perfectamente conservado. La cúpula de 43m con el óculo abierto al cielo sigue siendo un prodigio de ingeniería sin explicación total.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis con reserva obligatoria</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">La reserva es gratuita pero imprescindible online. Si llueve el agua cae por el óculo y desaparece por el suelo — espectacular.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Pantheon+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MIRADORES -->
+  <div class="section">
+    <h2 class="section-title">Miradores <small>VISTAS DE LA CIUDAD ETERNA</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Trastevere</div>
+        <h3>Gianicolo</h3>
+        <p class="place-desc">La mejor vista panoramica de Roma, gratis. Colina con canon que dispara a mediodia (tradicion desde 1846).</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Ir al mediodia para ver el canon — los ninos quedan impactados.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Gianicolo+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Prati</div>
+        <h3>Castel Sant'Angelo — Terraza</h3>
+        <p class="place-desc">Fortaleza del siglo II convertida en castillo papal. La terraza ofrece vista sobre el Tiber, el Vaticano y el centro historico.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 15 adulto</span>
+          <span class="price-free">Gratis -18 UE</span>
+        </div>
+        <div class="place-tip">Subir al atardecer para los mejores colores sobre el Vaticano.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Castel+Sant+Angelo+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Villa Borghese</div>
+        <h3>Pincio — Terraza del Pincio</h3>
+        <p class="place-desc">Terraza romantica dentro del parque Villa Borghese. Vista clasica sobre la Piazza del Popolo y las cupulas de Roma.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">A 10 min caminando desde Piazza di Spagna. Perfecto para picnic.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Terrazza+del+Pincio+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro Storico</div>
+        <h3>Vittoriano — Altare della Patria</h3>
+        <p class="place-desc">El "pastel de bodas" del centro. Ascensor hasta la terraza con vista 360 sobre los Foros, el Capitolio y el skyline.</p>
+        <div class="place-badges">
+          <span class="price-paid">Ascensor ~EUR 7</span>
+        </div>
+        <div class="place-tip">El ascensor exterior es la experiencia — vistas increibles en ascenso.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Altare+della+Patria+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BARES & APERITIVOS -->
+  <div class="section">
+    <h2 class="section-title">Bares & Aperitivos <small>VIDA NOCTURNA ROMANA</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Trastevere</div>
+        <h3>Freni e Frizioni</h3>
+        <p class="place-desc">El aperitivo aperol con buffet incluido mas famoso de Roma. En un garage vintage reconvertido con jardin.</p>
+        <div class="place-badges">
+          <span class="price-paid">Aperitivo ~EUR 10 (incluye buffet)</span>
+        </div>
+        <div class="place-tip">Llegar entre 18:30–19:30 para el aperitivo — buffet abundante.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Freni+e+Frizioni+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Trastevere</div>
+        <h3>Bar San Calisto</h3>
+        <p class="place-desc">El bar mas humilde y genuino de Trastevere. Grappa, vino local y conversacion con romanos de toda la vida.</p>
+        <div class="place-badges">
+          <span class="price-paid">Consumicion ~EUR 2–4</span>
+        </div>
+        <div class="place-tip">Sin turistas, todo locales — el bar "secreto" que no sale en guias.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Bar+San+Calisto+Trastevere+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Pigneto</div>
+        <h3>Rec 23</h3>
+        <p class="place-desc">Cocteleria artesanal en el barrio mas hipster de Roma. Diseno industrial, DJ sets y cocteles de autor.</p>
+        <div class="place-badges">
+          <span class="price-paid">Cocteles ~EUR 10–14</span>
+        </div>
+        <div class="place-tip">El barrio Pigneto es la alternativa romana a Brooklyn.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Rec+23+Pigneto+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Prati</div>
+        <h3>Il Sorpasso</h3>
+        <p class="place-desc">Bar de dia y bistro de noche. Vermut y aperitivos perfectos antes de cenar. Muy popular entre romanos.</p>
+        <div class="place-badges">
+          <span class="price-paid">Aperitivo ~EUR 8–12</span>
+        </div>
+        <div class="place-tip">El barrio Prati es tranquilo y autentico, cerca del Vaticano.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Il+Sorpasso+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LUGARES ICONICOS -->
+  <div class="section">
+    <h2 class="section-title">Lugares Icónicos <small>LO ESENCIAL DE ROMA</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Centro Storico</div>
+        <h3>Coliseo + Foro Romano + Palatino</h3>
+        <p class="place-desc">El anfiteatro del siglo I donde luchaban los gladiadores. El ticket incluye Foro Romano y Monte Palatino — medio dia de historia.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 18 (entrada combinada)</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar con 3 meses de anticipacion — se agota. Entrar por el lado del Meta Sudans.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Colosseo+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Piazza della Rotonda</div>
+        <h3>Panteón</h3>
+        <p class="place-desc">Templo romano del siglo II perfectamente conservado. La cupula de 43m con el oculo abierto al cielo sigue siendo un prodigio ingenieril.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis con reserva obligatoria</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">La reserva es gratuita pero obligatoria online. Lluvia + oculo = espectaculo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Pantheon+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Trevi</div>
+        <h3>Fontana di Trevi</h3>
+        <p class="place-desc">La fuente barroca mas grande de Roma (1762). Tirar una moneda garantiza el regreso a Roma segun la leyenda.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Ir antes de las 8am o despues de las 23pm para evitar la multitud.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Fontana+di+Trevi+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Trastevere</div>
+        <h3>Trastevere</h3>
+        <p class="place-desc">El barrio mas romantico de Roma. Callecitas medievales, trattorias con mesas en la calle, iglesias barrocas.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Cenar aqui — la trattoria Da Enzo al 29 tiene la cacio e pepe definitiva.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Trastevere+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Vaticano</div>
+        <h3>Ciudad del Vaticano + Capilla Sixtina</h3>
+        <p class="place-desc">La Creacion de Miguel Angel en el techo. La basilica mas grande del mundo. Los Museos Vaticanos tienen 54km de salas.</p>
+        <div class="place-badges">
+          <span class="price-paid">EUR 20</span>
+          <span class="price-free">Gratis 1er domingo del mes</span>
+          <span class="price-reservation">Reserva obligatoria</span>
+        </div>
+        <div class="place-tip">Reservar online obligatorio. Cola sin reserva: 2–3 horas. Con reserva: entrar directo.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Vatican+Museum+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro Storico</div>
+        <h3>Piazza Navona</h3>
+        <p class="place-desc">La plaza mas bella de Roma. Tres fuentes de Bernini incluyendo la Fuente de los Cuatro Rios.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">El gelato de La Romana (a 2 cuadras) es el mejor del centro.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Piazza+Navona+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Centro Storico</div>
+        <h3>Campo de' Fiori</h3>
+        <p class="place-desc">Mercado matutino con fruta y flores desde el s.XVI. De noche se transforma en epicentro de la vida nocturna.</p>
+        <div class="place-badges">
+          <span class="price-free">Gratis</span>
+        </div>
+        <div class="place-tip">Mercado de 8am a 13pm. De noche: terrazas y aperitivos.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Campo+de+Fiori+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MUSICA & SHOWS -->
+  <div class="section">
+    <h2 class="section-title">Música & Shows <small>AGENDA CULTURAL</small></h2>
+    <div class="places-grid">
+
+      <div class="place-card">
+        <div class="place-zona">Prati</div>
+        <h3>Alexanderplatz Jazz Club</h3>
+        <p class="place-desc">El club de jazz mas famoso de Roma, activo desde 1984. Musicos internacionales todos los miercoles a domingos.</p>
+        <div class="place-badges">
+          <span class="price-paid">Entrada ~EUR 10–20</span>
+          <span class="price-reservation">Reservar mesa</span>
+        </div>
+        <div class="place-tip">Reservar mesa — se llena los fines de semana.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Alexanderplatz+Jazz+Club+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Trastevere</div>
+        <h3>Big Mama</h3>
+        <p class="place-desc">Blues y soul en vivo desde 1984 en una bodega de Trastevere. El antro de referencia del blues romano.</p>
+        <div class="place-badges">
+          <span class="price-paid">Entrada ~EUR 5–10</span>
+        </div>
+        <div class="place-tip">Combinarlo con la cena en Trastevere — abre a las 21hs.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Big+Mama+Trastevere+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+      <div class="place-card">
+        <div class="place-zona">Flaminio</div>
+        <h3>Auditorium Parco della Musica</h3>
+        <p class="place-desc">Complejo musical de Renzo Piano. Tres salas con programa de jazz, clasica y world music de primer nivel.</p>
+        <div class="place-badges">
+          <span class="price-paid">Entrada desde EUR 15</span>
+        </div>
+        <div class="place-tip">Revisar programa en auditorium.com — siempre hay algo interesante en febrero.</div>
+        <a class="maps-link" href="https://maps.google.com/?q=Auditorium+Parco+della+Musica+Roma" target="_blank" rel="noopener">Ver en Google Maps →</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
