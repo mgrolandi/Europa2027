@@ -331,6 +331,141 @@ export default function CityDetail() {
         ))}
       </div>
 
+      {/* Agenda */}
+      <section className="mb-6" id="actividades">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="section-title mb-0">Agenda</h2>
+          <button
+            onClick={() => setShowAddActividad(v => !v)}
+            className="font-mono text-xs text-ink-light border border-cream-dark rounded-lg px-3 py-1.5 hover:border-ink hover:text-ink transition-colors"
+          >
+            {showAddActividad ? 'Cancelar' : '+ Agregar'}
+          </button>
+        </div>
+
+        {showAddActividad && (
+          <form onSubmit={handleAddActividad} className="card mb-4 space-y-2">
+            <input
+              value={newActividad.nombre}
+              onChange={e => setNewActividad(v => ({ ...v, nombre: e.target.value }))}
+              placeholder="Nombre de la actividad o entrada…"
+              required
+              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink transition-colors"
+            />
+            <div className="grid grid-cols-3 gap-2">
+              <input type="date" value={newActividad.fecha} onChange={e => setNewActividad(v => ({ ...v, fecha: e.target.value }))} className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink" />
+              <input type="time" value={newActividad.hora ?? ''} onChange={e => setNewActividad(v => ({ ...v, hora: e.target.value }))} className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink" />
+              <input value={newActividad.precio} onChange={e => setNewActividad(v => ({ ...v, precio: e.target.value }))} placeholder="Precio" className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <input value={newActividad.confirmacion} onChange={e => setNewActividad(v => ({ ...v, confirmacion: e.target.value }))} placeholder="N° de confirmación" className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink" />
+              <label className="flex items-center gap-2 cursor-pointer px-3">
+                <input type="checkbox" checked={newActividad.confirmada} onChange={e => setNewActividad(v => ({ ...v, confirmada: e.target.checked }))} className="w-4 h-4 rounded" />
+                <span className="font-mono text-sm text-ink">Confirmada</span>
+              </label>
+            </div>
+            <button type="submit" disabled={addActividad.isPending} className="w-full py-2 rounded-lg bg-ink text-cream font-mono text-xs hover:bg-ink/90 transition-colors disabled:opacity-50">
+              {addActividad.isPending ? 'Guardando…' : 'Agregar'}
+            </button>
+          </form>
+        )}
+
+        {ficha && (() => {
+          const days = []
+          const d = new Date(ficha.fecha_llegada + 'T12:00:00')
+          const end = new Date(ficha.fecha_salida + 'T12:00:00')
+          while (d <= end) { days.push(d.toISOString().slice(0, 10)); d.setDate(d.getDate() + 1) }
+
+          const agendadas = (actividades ?? []).filter(a => a.fecha && a.confirmada)
+          const opciones  = (actividades ?? []).filter(a => !a.fecha || !a.confirmada)
+
+          const byDay = {}
+          agendadas.forEach(a => {
+            if (!byDay[a.fecha]) byDay[a.fecha] = []
+            byDay[a.fecha].push(a)
+            byDay[a.fecha].sort((x, y) => (x.hora ?? '').localeCompare(y.hora ?? ''))
+          })
+
+          const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase()
+
+          const transDay = {}
+          entrada.forEach(v => { const day = v.fecha?.slice(0,10); if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Llegada' }) } })
+          salida.forEach(v  => { const day = v.fecha?.slice(0,10); if (day) { if (!transDay[day]) transDay[day] = []; transDay[day].push({ ...v, tag: 'Salida'  }) } })
+
+          return (
+            <>
+              <div className="border border-cream-dark rounded-xl overflow-hidden mb-6">
+                {days.map((day, i) => {
+                  const acts   = byDay[day] ?? []
+                  const trans  = transDay[day] ?? []
+                  const hasAny = acts.length > 0 || trans.length > 0
+                  return (
+                    <div key={day} className={i > 0 ? 'border-t border-cream-dark' : ''}>
+                      <div className={`flex items-center gap-3 px-4 py-2 ${hasAny ? 'bg-ink' : 'bg-cream-dark/40'}`}>
+                        <span className={`font-mono text-xs font-semibold tracking-wider ${hasAny ? 'text-gold' : 'text-ink-light'}`}>{fmtDay(day)}</span>
+                        {!hasAny && <span className="font-mono text-[10px] text-ink-light/60">día libre</span>}
+                      </div>
+                      {trans.map(v => (
+                        <div key={v.id + v.tag} className="px-4 py-3 flex items-start gap-3 border-t border-cream-dark/50 bg-blue-50/40">
+                          <div className="font-mono text-sm text-blue-500 font-semibold w-12 shrink-0 pt-0.5">
+                            {v.tag === 'Llegada' ? (v.llegada ?? '—') : (v.salida ?? '—')}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-ink">{v.tag === 'Llegada' ? '✈️ Llegada — ' : '🚄 Salida — '}{v.origen} → {v.destino}</p>
+                            <p className="font-mono text-xs text-ink-light mt-0.5">{[v.empresa, v.numero].filter(Boolean).join(' · ')}</p>
+                          </div>
+                          <span className={`font-mono text-[10px] px-2 py-0.5 rounded border shrink-0 ${v.confirmado ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
+                            {v.confirmado ? '✓' : 'Pendiente'}
+                          </span>
+                        </div>
+                      ))}
+                      {acts.map(a => {
+                        const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
+                        return (
+                          <div key={a.id} className="px-4 py-3 flex items-start gap-3 border-t border-cream-dark/50 bg-white/60">
+                            <div className="font-mono text-sm text-gold font-semibold w-12 shrink-0 pt-0.5">{a.hora ? a.hora.slice(0,5) : '—'}</div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-ink">{a.nombre}</p>
+                              <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
+                                {a.precio && <span className="font-mono text-xs text-ink-light">{a.precio}</span>}
+                                {a.confirmacion && <span className="font-mono text-xs text-ink-light">#{a.confirmacion}</span>}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {actDocs.length > 0
+                                ? <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-green-100 text-green-700 border-green-200">✓ Voucher</span>
+                                : <VoucherBtn a={a} uploadDoc={uploadDoc} />
+                              }
+                              <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-green-100 text-green-700 border-green-200">Confirmada ✓</span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )
+                })}
+              </div>
+              {opciones.length > 0 && (
+                <div>
+                  <p className="font-mono text-[10px] text-ink-light uppercase tracking-wider mb-3">Ideas · sin fecha comprometida</p>
+                  <div className="space-y-1.5">
+                    {opciones.map(a => {
+                      const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
+                      return (
+                        <ActividadCard key={a.id} a={a} hasVoucher={actDocs.length > 0}
+                          onToggleConfirm={() => updateActividad.mutate({ id: a.id, updates: { confirmada: !a.confirmada } })}
+                          onUploadVoucher={(file) => uploadDoc.mutate({ file, entidad_id: a.id, tipo_doc: 'voucher', entidad_tipo: 'actividad' })}
+                        />
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </>
+          )
+        })()}
+      </section>
+
       {/* Family filter */}
       <FamilyFilter className="mb-6" />
 
@@ -382,200 +517,6 @@ export default function CityDetail() {
             </ul>
           </div>
         )}
-      </section>
-
-      {/* Agenda */}
-      <section className="mb-6" id="actividades">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="section-title mb-0">Agenda</h2>
-          <button
-            onClick={() => setShowAddActividad(v => !v)}
-            className="font-mono text-xs text-ink-light border border-cream-dark rounded-lg px-3 py-1.5 hover:border-ink hover:text-ink transition-colors"
-          >
-            {showAddActividad ? 'Cancelar' : '+ Agregar'}
-          </button>
-        </div>
-
-        {showAddActividad && (
-          <form onSubmit={handleAddActividad} className="card mb-4 space-y-2">
-            <input
-              value={newActividad.nombre}
-              onChange={e => setNewActividad(v => ({ ...v, nombre: e.target.value }))}
-              placeholder="Nombre de la actividad o entrada…"
-              required
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink transition-colors"
-            />
-            <div className="grid grid-cols-3 gap-2">
-              <input
-                type="date"
-                value={newActividad.fecha}
-                onChange={e => setNewActividad(v => ({ ...v, fecha: e.target.value }))}
-                className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink"
-              />
-              <input
-                type="time"
-                value={newActividad.hora ?? ''}
-                onChange={e => setNewActividad(v => ({ ...v, hora: e.target.value }))}
-                className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink"
-              />
-              <input
-                value={newActividad.precio}
-                onChange={e => setNewActividad(v => ({ ...v, precio: e.target.value }))}
-                placeholder="Precio"
-                className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <input
-                value={newActividad.confirmacion}
-                onChange={e => setNewActividad(v => ({ ...v, confirmacion: e.target.value }))}
-                placeholder="N° de confirmación"
-                className="border border-cream-dark rounded-lg px-3 py-2 text-sm font-mono bg-white/60 focus:outline-none focus:border-ink"
-              />
-              <label className="flex items-center gap-2 cursor-pointer px-3">
-                <input
-                  type="checkbox"
-                  checked={newActividad.confirmada}
-                  onChange={e => setNewActividad(v => ({ ...v, confirmada: e.target.checked }))}
-                  className="w-4 h-4 rounded"
-                />
-                <span className="font-mono text-sm text-ink">Confirmada</span>
-              </label>
-            </div>
-            <button
-              type="submit"
-              disabled={addActividad.isPending}
-              className="w-full py-2 rounded-lg bg-ink text-cream font-mono text-xs hover:bg-ink/90 transition-colors disabled:opacity-50"
-            >
-              {addActividad.isPending ? 'Guardando…' : 'Agregar'}
-            </button>
-          </form>
-        )}
-
-        {/* Agenda — días de la estadía con actividades confirmadas */}
-        {ficha && (() => {
-          const days = []
-          const d = new Date(ficha.fecha_llegada + 'T12:00:00')
-          const end = new Date(ficha.fecha_salida + 'T12:00:00')
-          while (d <= end) { days.push(d.toISOString().slice(0, 10)); d.setDate(d.getDate() + 1) }
-
-          const agendadas = (actividades ?? []).filter(a => a.fecha && a.confirmada)
-          const opciones  = (actividades ?? []).filter(a => !a.fecha || !a.confirmada)
-
-          const byDay = {}
-          agendadas.forEach(a => {
-            if (!byDay[a.fecha]) byDay[a.fecha] = []
-            byDay[a.fecha].push(a)
-            byDay[a.fecha].sort((x, y) => (x.hora ?? '').localeCompare(y.hora ?? ''))
-          })
-
-          const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase()
-
-          const firstDay = days[0]
-          const lastDay  = days[days.length - 1]
-
-          // Transportes del día: llegada en primer día, salida en último
-          const transDay = {}
-          entrada.forEach(v => {
-            const d = v.fecha?.slice(0, 10)
-            if (d) { if (!transDay[d]) transDay[d] = []; transDay[d].push({ ...v, tag: 'Llegada' }) }
-          })
-          salida.forEach(v => {
-            const d = v.fecha?.slice(0, 10)
-            if (d) { if (!transDay[d]) transDay[d] = []; transDay[d].push({ ...v, tag: 'Salida' }) }
-          })
-
-          return (
-            <>
-              {/* Timeline de días */}
-              <div className="border border-cream-dark rounded-xl overflow-hidden mb-6">
-                {days.map((day, i) => {
-                  const acts   = byDay[day] ?? []
-                  const trans  = transDay[day] ?? []
-                  const hasAny = acts.length > 0 || trans.length > 0
-                  return (
-                    <div key={day} className={`${i > 0 ? 'border-t border-cream-dark' : ''}`}>
-                      <div className={`flex items-center gap-3 px-4 py-2 ${hasAny ? 'bg-ink text-cream' : 'bg-cream-dark/40'}`}>
-                        <span className={`font-mono text-xs font-semibold tracking-wider ${hasAny ? 'text-gold' : 'text-ink-light'}`}>
-                          {fmtDay(day)}
-                        </span>
-                        {!hasAny && <span className="font-mono text-[10px] text-ink-light/60">día libre</span>}
-                      </div>
-                      {trans.map(v => (
-                        <div key={v.id + v.tag} className="px-4 py-3 flex items-start gap-3 border-t border-cream-dark/50 bg-blue-50/40">
-                          <div className="font-mono text-sm text-blue-500 font-semibold w-12 shrink-0 pt-0.5">
-                            {v.tag === 'Llegada' ? (v.llegada ?? '—') : (v.salida ?? '—')}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-ink">
-                              {v.tag === 'Llegada' ? '✈️ Llegada — ' : '🚄 Salida — '}
-                              {v.origen} → {v.destino}
-                            </p>
-                            <p className="font-mono text-xs text-ink-light mt-0.5">
-                              {[v.empresa, v.numero].filter(Boolean).join(' · ')}
-                              {v.tag === 'Llegada' && v.llegada ? ` · Llega ${v.llegada}` : ''}
-                              {v.tag === 'Salida'  && v.salida  ? ` · Sale ${v.salida}`   : ''}
-                            </p>
-                          </div>
-                          <span className={`font-mono text-[10px] px-2 py-0.5 rounded border shrink-0 ${v.confirmado ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
-                            {v.confirmado ? '✓' : 'Pendiente'}
-                          </span>
-                        </div>
-                      ))}
-                      {acts.map(a => {
-                        const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
-                        return (
-                          <div key={a.id} className="px-4 py-3 flex items-start gap-3 border-t border-cream-dark/50 bg-white/60">
-                            <div className="font-mono text-sm text-gold font-semibold w-12 shrink-0 pt-0.5">
-                              {a.hora ? a.hora.slice(0,5) : '—'}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-ink">{a.nombre}</p>
-                              <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
-                                {a.precio && <span className="font-mono text-xs text-ink-light">{a.precio}</span>}
-                                {a.confirmacion && <span className="font-mono text-xs text-ink-light">#{a.confirmacion}</span>}
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              {actDocs.length > 0
-                                ? <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-green-100 text-green-700 border-green-200">✓ Voucher</span>
-                                : <VoucherBtn a={a} uploadDoc={uploadDoc} />
-                              }
-                              <span className="font-mono text-[10px] px-2 py-0.5 rounded border bg-green-100 text-green-700 border-green-200">
-                                Confirmada ✓
-                              </span>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )
-                })}
-              </div>
-
-              {/* Opciones / ideas sin fecha comprometida */}
-              {opciones.length > 0 && (
-                <div>
-                  <p className="font-mono text-[10px] text-ink-light uppercase tracking-wider mb-3">Ideas · sin fecha comprometida</p>
-                  <div className="space-y-1.5">
-                    {opciones.map(a => {
-                      const actDocs = (documentos ?? []).filter(d => d.entidad_id === a.id && d.tipo_doc === 'voucher')
-                      return (
-                        <ActividadCard
-                          key={a.id}
-                          a={a}
-                          hasVoucher={actDocs.length > 0}
-                          onToggleConfirm={() => updateActividad.mutate({ id: a.id, updates: { confirmada: !a.confirmada } })}
-                          onUploadVoucher={(file) => uploadDoc.mutate({ file, entidad_id: a.id, tipo_doc: 'voucher', entidad_tipo: 'actividad' })}
-                        />
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-            </>
-          )
-        })()}
       </section>
 
       {/* City pendientes */}
