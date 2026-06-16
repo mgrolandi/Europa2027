@@ -267,7 +267,7 @@ export default function CityDetail() {
       {loadF ? (
         <div className="mb-6 space-y-2"><Skeleton /><Skeleton /></div>
       ) : (
-        <div className="mb-6">
+        <div className="mb-4">
           <h1 className="font-serif text-4xl text-ink">{ciudad}</h1>
           {ficha && (
             <p className="font-mono text-sm text-ink-light mt-1">
@@ -277,6 +277,15 @@ export default function CityDetail() {
           )}
         </div>
       )}
+
+      {/* Section nav */}
+      <nav className="flex gap-2 overflow-x-auto pb-3 mb-4 border-b border-cream-dark -mx-4 px-4" style={{scrollbarWidth:'none'}}>
+        {[['#alojamiento','Alojamiento'],['#transporte','Transporte'],['#actividades','Actividades'],['#guia','Guía']].map(([href, label]) => (
+          <a key={href} href={href}
+            className="whitespace-nowrap px-4 py-1.5 rounded-full font-mono text-xs border border-cream-dark bg-cream text-ink-light hover:bg-ink hover:text-cream hover:border-ink transition-colors shrink-0"
+          >{label}</a>
+        ))}
+      </nav>
 
       {/* Ficha ciudad */}
       {ficha && (
@@ -318,7 +327,7 @@ export default function CityDetail() {
       <FamilyFilter className="mb-6" />
 
       {/* Hotels */}
-      <section className="mb-6">
+      <section id="alojamiento" className="mb-6">
         <h2 className="section-title">Alojamiento</h2>
         {hotelesFiltered.length === 0 ? (
           <p className="text-sm text-ink-light italic">Sin reservas{selectedFamily ? ` para ${selectedFamily}` : ''}</p>
@@ -342,7 +351,7 @@ export default function CityDetail() {
 
       {/* Transport */}
       {(entrada.length > 0 || salida.length > 0) && (
-        <section className="mb-6">
+        <section id="transporte" className="mb-6">
           <h2 className="section-title">Transporte</h2>
           <div className="space-y-3">
             {entrada.map(v => <VueloCard key={v.id} v={v} tag="Llegada" />)}
@@ -367,7 +376,7 @@ export default function CityDetail() {
       )}
 
       {/* Entradas y actividades */}
-      <section className="mb-6">
+      <section id="actividades" className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h2 className="section-title mb-0">Entradas y actividades</h2>
           <button
@@ -525,7 +534,7 @@ export default function CityDetail() {
       </section>
 
       {/* Places */}
-      <section>
+      <section id="guia">
         <h2 className="section-title">Qué hacer</h2>
 
         {/* Category tabs */}
