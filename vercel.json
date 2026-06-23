@@ -1,3 +1,11 @@
 {
-  "rewrites": [{ "source": "/((?!.*\\.html$).*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/ciudad/:path*",   "destination": "/index.html" },
+    { "source": "/familias",        "destination": "/index.html" },
+    { "source": "/reservas",        "destination": "/index.html" },
+    { "source": "/transportes",     "destination": "/index.html" },
+    { "source": "/documentacion",   "destination": "/index.html" },
+    { "source": "/gastos",          "destination": "/index.html" },
+    { "source": "/pendientes",      "destination": "/index.html" }
+  ]
 }
