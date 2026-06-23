@@ -621,7 +621,7 @@ export default function CityDetail() {
           <section className="mb-6">
             <h2 className="section-title">Atlas</h2>
             <iframe
-              src={`https://europa2027.vercel.app/${slug}.html`}
+              src={`https://europa2027.vercel.app/${slug}-guia.html`}
               title={`Atlas · ${ciudad}`}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

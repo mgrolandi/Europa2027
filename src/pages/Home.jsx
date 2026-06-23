@@ -390,7 +390,7 @@ export default function Home() {
       <section className="mb-8">
         <h2 className="section-title">Atlas del viaje</h2>
         <iframe
-          src="https://europa2027.vercel.app/"
+          src="https://europa2027.vercel.app/index-legacy.html"
           title="Atlas del viaje · Europa 2027"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
