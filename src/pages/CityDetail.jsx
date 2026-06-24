@@ -7,6 +7,20 @@ import FamilyFilter from '../components/FamilyFilter'
 import FamiliaBadge from '../components/FamiliaBadge'
 import LugarCard from '../components/LugarCard'
 import SupabaseBanner from '../components/SupabaseBanner'
+import CityAtlas from '../components/atlas/CityAtlas'
+import atlasLondres from '../data/atlas-londres'
+import atlasParis from '../data/atlas-paris'
+import atlasBruselas from '../data/atlas-bruselas'
+import atlasRoma from '../data/atlas-roma'
+import atlasMadrid from '../data/atlas-madrid'
+
+const ATLAS_DATA = {
+  Londres: atlasLondres,
+  Paris: atlasParis,
+  Bruselas: atlasBruselas,
+  Roma: atlasRoma,
+  Madrid: atlasMadrid,
+}
 
 const CATS = {
   miradores: 'Miradores',
@@ -613,23 +627,12 @@ export default function CityDetail() {
       </section>
 
       {/* Atlas interactivo */}
-      {(() => {
-        const ATLAS_SLUG = { Londres: 'londres', Paris: 'paris', Bruselas: 'bruselas', Roma: 'roma', Madrid: 'madrid' }
-        const slug = ATLAS_SLUG[ciudad]
-        if (!slug) return null
-        return (
-          <section className="mb-6">
-            <h2 className="section-title">Atlas</h2>
-            <iframe
-              src={`https://europa2027.vercel.app/${slug}-guia.html`}
-              title={`Atlas · ${ciudad}`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              style={{ width: '100%', height: '85vh', minHeight: 600, border: 'none', borderRadius: 12, display: 'block' }}
-            />
-          </section>
-        )
-      })()}
+      {ATLAS_DATA[ciudad] && (
+        <section className="mb-6">
+          <h2 className="section-title">Atlas</h2>
+          <CityAtlas city={ATLAS_DATA[ciudad]} />
+        </section>
+      )}
 
       {/* Places */}
       <section>
