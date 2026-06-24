@@ -132,7 +132,7 @@ const CITY = {
     { name: 'Bolsa de Londres', type: 'otro', coords: [51.5152, -0.0976], note: 'London Stock Exchange, en Paternoster Square.' },
     { name: 'Five Guys · Tower of London', type: 'comida', coords: [51.5096, -0.0806], note: 'Hamburguesas frente a la Torre de Londres (Tower Place).' },
     { name: 'Bunga 90', type: 'comida', coords: [51.5151, -0.1204], note: 'Bar temático todo ambientado en los años 90. 167 Drury Ln.' },
-    { name: 'Urban Chic Serviced Apartments', type: 'hotel', star: true, coords: [51.5114, -0.1305], note: 'Vuestro alojamiento en Londres · 50 Shaftesbury Ave, W1D 6LP (junto a Chinatown y Piccadilly).' }
+    { name: 'Urban Chic Serviced Apartments', type: 'hotel', star: true, coords: [51.5114, -0.1328], note: 'Vuestro alojamiento en Londres · 50 Shaftesbury Ave, W1D 6LP (junto a Chinatown y Piccadilly).' }
   ]
 };
 export default CITY
