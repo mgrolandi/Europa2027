@@ -45,7 +45,20 @@ const CITY = {
   spots: [
     /* ---- tus lugares · Bruselas ---- */
     { name: 'NH Brussels Carrefour de l\'Europe', type: 'hotel', coords: [50.8466,4.3556], note: 'Hotel a un paso de la Grand-Place y la Gare Centrale.' },
-    { name: 'Delirium Café (Tremens)', type: 'comida', coords: [50.8487,4.3537], note: 'El bar del récord Guinness: +2.000 cervezas. Impasse de la Fidélité 4.' }
+    { name: 'Delirium Café (Tremens)', type: 'comida', coords: [50.8487,4.3537], note: 'El bar del récord Guinness: +2.000 cervezas. Impasse de la Fidélité 4.' },
+    /* ---- bares (de la lista "Qué hacer") ---- */
+    { name: 'A la Mort Subite', type: 'comida', coords: [50.8493,4.3559], note: 'Pub belga de 1910 con interior art deco intacto. Lambic y gueuze de fermentación espontánea.' },
+    { name: 'Moeder Lambic Fontainas', type: 'comida', coords: [50.8448,4.3505], note: 'Bar de culto con 50 cervezas de barril rotativas, solo belgas independientes.' },
+    { name: 'Mappa Mundo', type: 'comida', coords: [50.8459,4.3473], note: 'Bar cosmopolita en la rue du Marché au Charbon, la calle con 10 bares seguidos.' },
+    /* ---- miradores ---- */
+    { name: 'Palais de Justice — Terraza', type: 'monumento', coords: [50.8358,4.3500], note: 'Tribunales neoclásicos enormes con terraza libre y vista sobre los tejados de Bruselas.' },
+    { name: 'Place Royale — Barrio Real', type: 'monumento', coords: [50.8429,4.3577], note: 'Centro neoclásico con vista sobre el skyline; rodeado de los mejores museos.' },
+    /* ---- icónicos ---- */
+    { name: 'Musée Magritte', type: 'monumento', coords: [50.8425,4.3577], note: 'La colección más grande del mundo del surrealista belga René Magritte.' },
+    { name: 'Barrio de las Marolles', type: 'ocio', coords: [50.8377,4.3447], note: 'Barrio popular y bohemio; el mercado del Jeu de Balle abre desde las 6 am.' },
+    /* ---- música ---- */
+    { name: 'Ancienne Belgique (AB)', type: 'ocio', coords: [50.8488,4.3514], note: 'La sala de conciertos más importante de Bélgica: indie, rock, folk internacional.' },
+    { name: 'Bozar', type: 'ocio', coords: [50.8443,4.3589], note: 'Centro de bellas artes con programa de clásica, jazz y música experimental.' }
   ]
 };
 export default CITY

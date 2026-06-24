@@ -144,6 +144,7 @@ const CITY = {
     /* alojamiento */
     { name: 'Ritz Paris', type: 'hotel', coords: [48.8682,2.3284], note: 'El legendario hotel de la Place Vendôme.' },
     { name: 'Sweett · Pavillon Opéra', type: 'hotel', star: true, coords: [48.8684, 2.3345], note: 'Alojamiento de 2 de las 3 familias · 7 Rue Monsigny, 75002 (junto a la Ópera).' },
+    { name: 'Sublime Apartment Louvre Concorde', type: 'hotel', star: true, coords: [48.8615, 2.3385], note: 'Alojamiento de los Ahmad · Rue de l\'Oratoire 6, 75001 (junto al Louvre).' },
     /* otros */
     { name: 'Cámara de Notarios de París', type: 'otro', coords: [48.8576,2.3465], note: 'Edificio institucional junto al Châtelet.' },
     { name: 'Tribunal de Commerce', type: 'otro', coords: [48.8560,2.3452], note: 'Tribunal de comercio en la Île de la Cité.' }
