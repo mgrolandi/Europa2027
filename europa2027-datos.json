@@ -33,7 +33,7 @@
   "vuelos": [
     { "id": "SAO-LON", "tipo": "vuelo", "origen": "Sao Paulo (GRU)", "destino": "Londres (LHR)", "fecha": "2027-01-28", "aerolinea": "British Airways", "numero": "BA0246", "salida": "16:25", "llegada": "06:45+1", "confirmado": false, "pnr": { "Barrera": null, "Nader": "YV77JC", "Ahmad": null } },
     { "id": "LON-PAR", "tipo": "tren", "origen": "Londres (St Pancras)", "destino": "Paris (Gare du Nord)", "fecha": "2027-02-02", "empresa": "Eurostar", "numero": null, "salida": "12:30", "llegada": "16:00", "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
-    { "id": "PAR-BRU", "tipo": "tren", "origen": "Paris", "destino": "Bruselas", "fecha": "2027-02-06", "empresa": "Thalys", "numero": null, "salida": null, "llegada": null, "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
+    { "id": "PAR-BRU", "tipo": "tren", "origen": "Paris (Gare du Nord)", "destino": "Bruselas (Brussels-Midi)", "fecha": "2027-02-06", "empresa": "Eurorail", "numero": null, "salida": "08:55", "llegada": "10:16", "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
     { "id": "BRU-ROM", "tipo": "vuelo", "origen": "Bruselas (BRU)", "destino": "Roma (FCO)", "fecha": "2027-02-07", "aerolinea": null, "numero": null, "salida": null, "llegada": null, "confirmado": false, "pnr": { "Barrera": null, "Nader": null, "Ahmad": null } },
     { "id": "ROM-MAD", "tipo": "vuelo", "origen": "Roma (FCO)", "destino": "Madrid (MAD)", "fecha": "2027-02-11", "aerolinea": "Iberia", "numero": "IB0648", "salida": "12:00", "llegada": "14:35", "confirmado": true, "pnr": { "Barrera": null, "Nader": "J5SQ1", "Ahmad": null } },
     { "id": "MAD-EZE", "tipo": "vuelo", "origen": "Madrid (MAD)", "destino": "Buenos Aires (EZE)", "fecha": "2027-02-15", "aerolinea": "Iberia", "numero": "IB0101", "salida": "01:05", "llegada": "08:45+1", "confirmado": true, "pnr": { "Barrera": null, "Nader": "NZB0P", "Ahmad": null } }
@@ -133,8 +133,8 @@
   },
 
   "meta": {
-    "version": "1.4",
-    "ultima_actualizacion": "2026-06-14",
-    "notas": "v1.4: Hotel Bruselas confirmado (NH Brussels). Pendientes actualizados formato flat."
+    "version": "1.5",
+    "ultima_actualizacion": "2026-06-25",
+    "notas": "v1.5: Tren Eurorail Paris-Bruselas con horario (sale 08:55 Gare du Nord, llega 10:16 Brussels-Midi)."
   }
 }
