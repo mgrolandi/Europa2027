@@ -80,7 +80,8 @@
     { "archivo": "patch-all-pending.sql","descripcion": "RLS policies, pendientes por ciudad, ETA/ETIAS, Eurostar Nader PNR, autorizacion_status" },
     { "archivo": "patch-v1.7.sql",       "descripcion": "Columnas pasaporte_numero + pasaporte_vencimiento en personas" },
     { "archivo": "patch-v1.8.sql",       "descripcion": "Datos pasaporte Nader (Gaby/Francisco/Juan José) + entradas en pendientes" },
-    { "archivo": "patch-v1.9.sql",       "descripcion": "CREATE TABLE actividades + RLS + 16 actividades seed + gastos hoteles" }
+    { "archivo": "patch-v1.9.sql",       "descripcion": "CREATE TABLE actividades + RLS + 16 actividades seed + gastos hoteles" },
+    { "archivo": "patch-v2.0.sql",       "descripcion": "PNR familia Barrera: SAO-LON/MAD-EZE (YVJ37M), ROM-MAD (M4WBN), Eurostar LON-PAR (2NCQG7), Thalys PAR-BRU (3 reservas separadas)" }
   ],
 
   "paginas": [
@@ -165,7 +166,13 @@
   "transportes": {
     "eurostar": {
       "ruta": "Londres → París",
-      "pnr": { "Nader": "RZN7P2", "Ahmad": "pendiente", "Barrera": "pendiente" }
+      "pnr": { "Nader": "RZN7P2", "Ahmad": "pendiente", "Barrera": "2NCQG7" }
+    },
+    "otros_pnr_barrera": {
+      "SAO-LON":  "YVJ37M",
+      "MAD-EZE":  "YVJ37M",
+      "ROM-MAD":  "M4WBN",
+      "PAR-BRU":  "TKTP2J / 7HFW7N / NYJQRP (3 reservas separadas, grupos de pasajeros por confirmar)"
     }
   },
 
@@ -191,7 +198,8 @@
   "pendiente_futuro": [
     "Guía por ciudad (mapa + zonas de interés)",
     "Paris Barrera: cargar precio de hotel cuando se confirme",
-    "PNR Eurostar Ahmad y Barrera pendientes",
+    "PNR Eurostar Ahmad pendiente",
+    "Tren PAR-BRU Barrera: confirmar qué integrantes viajan en cada uno de los 3 localizadores (TKTP2J / 7HFW7N / NYJQRP)",
     "Completar confirmaciones de vuelos a medida que lleguen",
     "Cargar montos reales de entradas a medida que se reserven",
     "Pasaportes Tomas y Santiago Nader: renovar antes del viaje"
