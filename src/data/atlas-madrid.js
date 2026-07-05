@@ -121,6 +121,7 @@ const CITY = {
     { name: 'Bar Cock', type: 'comida', coords: [40.419881,-3.698842], note: 'Coctelería histórica (parada de Velvet).' },
     { name: 'Café Comercial', type: 'comida', coords: [40.4287137,-3.7019997], note: 'Café de 1887 en Bilbao.' },
     { name: 'Café del Botánico / 100 Montaditos (Sol)', type: 'comida', coords: [40.416356,-3.7070573], note: 'Montaditos baratos junto a la Plaza Mayor.' },
+    { name: 'Mesón del Champiñón', type: 'comida', coords: [40.4149,-3.7086], note: 'Champiñones a la plancha con chorizo, desde 1964. Cava de San Miguel 17.' },
     { name: '100 Montaditos (Gran Vía)', type: 'comida', coords: [40.4190582,-3.7018755], note: 'Otra sucursal cerca de Gran Vía.' },
     /* compras */
     { name: 'El Corte Inglés (Preciados)', type: 'tienda', coords: [40.4174231,-3.7044847], note: 'Los grandes almacenes junto a Sol.' },
